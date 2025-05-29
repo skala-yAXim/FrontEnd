@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const handleMicrosoftLogin = () => {
@@ -16,7 +17,7 @@ export default function LoginPage() {
       </div>
 
       {/* 좌측 브랜딩 영역 */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-purple-700 dark:from-blue-800 dark:to-purple-900 items-center justify-center p-12">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-red-600 to-orange-500 dark:from-red-600 dark:to-orange-500 items-center justify-center p-12">
         <div className="text-center text-white">
           <div className="mb-8">
             {/* X 로고 */}
@@ -102,8 +103,9 @@ export default function LoginPage() {
 
           {/* 소셜 로그인 버튼들 */}
           <div className="space-y-3">
-            <button
+            <Button
               onClick={handleMicrosoftLogin}
+              variant="outline"
               className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <svg className="w-5 h-5 mr-3" viewBox="0 0 21 21">
@@ -113,7 +115,7 @@ export default function LoginPage() {
                 <rect x="12" y="12" width="9" height="9" fill="#7fba00" />
               </svg>
               Sign in with Microsoft
-            </button>
+            </Button>
           </div>
         </div>
       </div>
