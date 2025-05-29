@@ -1,10 +1,14 @@
+// app/layout.tsx
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
-import "./globals.css";
+import { Inter } from "next/font/google";
+import "./globals.css"; // 전역 스타일
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "My App",
-  description: "간단한 Next.js 앱",
+  title: "yAXim | 사내 주간 보고서 자동 생성 서비스",
+  description: "사내 주간 보고서 자동 생성 서비스",
 };
 
 export default function RootLayout({
@@ -14,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className="antialiased min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      <body className={inter.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
