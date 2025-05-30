@@ -1,9 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus } from "lucide-react";
-import WeeklyReportTable, { WeeklyReportItem } from "./WeeklyReportTable";
-import WeeklyReportPagination from "./WeeklyReportPagination";
+import { CardContent } from "@/components/ui/card";
 import { ReportStatus } from "./ReportStatusBadge";
+import WeeklyReportPagination from "./WeeklyReportPagination";
+import WeeklyReportTable, { WeeklyReportItem } from "./WeeklyReportTable";
 
 interface WeeklyReportListPageProps {
   title?: string;
@@ -30,24 +28,10 @@ export default function WeeklyReportListPage({
   itemsPerPage,
   onPageChange,
   isLoading = false,
-  emptyMessage = "아직 생성된 위클리 보고서가 없습니다."
+  emptyMessage = "아직 생성된 위클리 보고서가 없습니다.",
 }: WeeklyReportListPageProps) {
   return (
     <div>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>{title}</CardTitle>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={onCreateNew}
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              {createButtonText}
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
       <CardContent>
         <WeeklyReportTable
           reports={reports}
