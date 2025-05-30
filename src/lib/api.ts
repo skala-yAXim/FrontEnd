@@ -1,0 +1,25 @@
+// lib/api.ts
+
+import { customFetch } from "./fetcher";
+
+export const api = {
+  get: <T>(url: string) => customFetch<T>(url),
+
+  post: <T>(url: string, body: any) =>
+    customFetch<T>(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  put: <T>(url: string, body: any) =>
+    customFetch<T>(url, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    }),
+
+  delete: <T>(url: string) => customFetch<T>(url, { method: "DELETE" }),
+};
+
+// 사용 예시
+// const user = await api.get<User>('/api/me');
+// await api.post<User>('/api/login', { email, password });
