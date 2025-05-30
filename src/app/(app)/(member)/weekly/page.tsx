@@ -1,9 +1,10 @@
 // TODO: 리팩토링 (use client 남발, 더미 데이터 사용)
 "use client";
 
+import PageHeader from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import {
   ChevronLeft,
   ChevronRight,
@@ -162,19 +163,15 @@ export default function WeeklyReportsPage() {
 
   return (
     <div>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>보고서 목록</CardTitle>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={handleCreateNew}
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />새 보고서 생성
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
+      <PageHeader
+        title="보고서 목록"
+        description="지난 주간 보고서들을 확인하고 새로운 보고서를 작성할 수 있습니다."
+        buttonElement={
+          <Button onClick={handleCreateNew} className="flex items-center gap-2">
+            <Plus className="w-4 h-4" />새 보고서 생성
+          </Button>
+        }
+      />
       <CardContent>
         {/* 테이블 */}
         <div className="overflow-x-auto">
