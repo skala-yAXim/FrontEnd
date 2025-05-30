@@ -1,21 +1,22 @@
 // TODO: API 연동 필요 (팀원 목록, 필터링된 보고서 목록)
 "use client";
 
+import PageHeader from "@/components/PageHeader";
+import { WeeklyReportItem, WeeklyReportTable } from "@/components/reports";
+import WeeklyReportPagination from "@/components/reports/WeeklyReportPagination";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
-import { WeeklyReportTable, WeeklyReportItem } from "@/components/reports";
-import WeeklyReportPagination from "@/components/reports/WeeklyReportPagination";
-import { ChevronDown, Users } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -49,7 +50,7 @@ const generateFilteredReports = (filters: FilterState): WeeklyReportItem[] => {
   const statuses: ("completed" | "generating" | "draft" | "error")[] = [
     "completed",
     "generating",
-    "draft", 
+    "draft",
     "error",
   ];
 
@@ -65,7 +66,7 @@ const generateFilteredReports = (filters: FilterState): WeeklyReportItem[] => {
 
       reports.push({
         id: `${memberId}-${filters.reportType}-${i}`,
-        title: `${member.name} 2025년 ${month}월 ${week}주차 ${filters.reportType === 'weekly' ? '위클리' : '데일리'} 보고서`,
+        title: `${member.name} 2025년 ${month}월 ${week}주차 ${filters.reportType === "weekly" ? "위클리" : "데일리"} 보고서`,
         createdAt: date.toISOString().split("T")[0],
         status: statuses[(memberIndex + i) % statuses.length], // 고정된 패턴 사용
       });
@@ -105,7 +106,7 @@ export default function ManagerWeeklyPage() {
       ...prev,
       selectedMembers: prev.selectedMembers.includes(memberId)
         ? prev.selectedMembers.filter(id => id !== memberId)
-        : [...prev.selectedMembers, memberId]
+        : [...prev.selectedMembers, memberId],
     }));
     setCurrentPage(1); // 필터 변경시 첫 페이지로
   };
@@ -147,20 +148,10 @@ export default function ManagerWeeklyPage() {
 
   return (
     <div>
-      {/* 기존 더미 내용 */}
-      <h1 className="text-2xl font-semibold mb-4">Manager Weekly</h1>
-      <p className="mb-6">환영합니다! 여기는 Manager Weekly 페이지입니다.</p>
-      
-      {/* 3번 페이지 내용 */}
-      <div className="w-full">
-        <Card className="w-full max-w-none">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              팀원 위클리 목록
-            </CardTitle>
-          </CardHeader>
-          
+      <PageHeader title="팀원 위클리" description="팀원 위클리 보고서 목록" />
+
+      <div className="w-full mt-6">
+        <div className="w-full max-w-none">
           <CardContent className="space-y-6">
             {/* 필터 영역 */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -169,7 +160,10 @@ export default function ManagerWeeklyPage() {
                 <Label>팀원 선택</Label>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="w-full justify-between">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-between"
+                    >
                       <span className="truncate">
                         {selectedMemberNames || "팀원을 선택하세요"}
                       </span>
@@ -187,7 +181,9 @@ export default function ManagerWeeklyPage() {
                       >
                         <div>
                           <div className="font-medium">{member.name}</div>
-                          <div className="text-sm text-muted-foreground">{member.role}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {member.role}
+                          </div>
                         </div>
                       </DropdownMenuCheckboxItem>
                     ))}
@@ -200,14 +196,18 @@ export default function ManagerWeeklyPage() {
                 <Label>보고서 타입</Label>
                 <div className="flex border rounded-md">
                   <Button
-                    variant={filters.reportType === "weekly" ? "default" : "ghost"}
+                    variant={
+                      filters.reportType === "weekly" ? "default" : "ghost"
+                    }
                     className="flex-1 rounded-r-none border-r"
                     onClick={() => handleReportTypeChange("weekly")}
                   >
                     위클리
                   </Button>
                   <Button
-                    variant={filters.reportType === "daily" ? "default" : "ghost"}
+                    variant={
+                      filters.reportType === "daily" ? "default" : "ghost"
+                    }
                     className="flex-1 rounded-l-none"
                     onClick={() => handleReportTypeChange("daily")}
                   >
@@ -223,7 +223,7 @@ export default function ManagerWeeklyPage() {
                   id="startDate"
                   type="date"
                   value={filters.startDate}
-                  onChange={(e) => handleDateChange("startDate", e.target.value)}
+                  onChange={e => handleDateChange("startDate", e.target.value)}
                   max={filters.endDate} // 종료 날짜보다 늦을 수 없음
                 />
               </div>
@@ -235,7 +235,7 @@ export default function ManagerWeeklyPage() {
                   id="endDate"
                   type="date"
                   value={filters.endDate}
-                  onChange={(e) => handleDateChange("endDate", e.target.value)}
+                  onChange={e => handleDateChange("endDate", e.target.value)}
                   min={filters.startDate} // 시작 날짜보다 빠를 수 없음
                 />
               </div>
@@ -244,9 +244,12 @@ export default function ManagerWeeklyPage() {
             {/* 선택 요약 */}
             <div className="text-sm text-muted-foreground bg-muted/30 p-3 rounded-md">
               <p>
-                <strong>{filters.selectedMembers.length}명</strong>의 팀원, {" "}
-                <strong>{filters.reportType === "weekly" ? "위클리" : "데일리"}</strong> 보고서, {" "}
-                <strong>{filters.startDate}</strong> ~ <strong>{filters.endDate}</strong> 기간
+                <strong>{filters.selectedMembers.length}명</strong>의 팀원,{" "}
+                <strong>
+                  {filters.reportType === "weekly" ? "위클리" : "데일리"}
+                </strong>{" "}
+                보고서, <strong>{filters.startDate}</strong> ~{" "}
+                <strong>{filters.endDate}</strong> 기간
               </p>
             </div>
 
@@ -265,7 +268,7 @@ export default function ManagerWeeklyPage() {
               onPageChange={handlePageChange}
             />
           </CardContent>
-        </Card>
+        </div>
       </div>
     </div>
   );

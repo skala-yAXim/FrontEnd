@@ -1,7 +1,10 @@
 // TODO: 리팩토링 (use client 남발, 더미 데이터 사용)
 "use client";
 
-import { WeeklyReportListPage, WeeklyReportItem } from "@/components/reports";
+import PageHeader from "@/components/PageHeader";
+import { WeeklyReportItem, WeeklyReportListPage } from "@/components/reports";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -10,7 +13,7 @@ const generateTeamWeeklyReports = (): WeeklyReportItem[] => {
   const reports: WeeklyReportItem[] = [];
   const statuses: ("completed" | "generating" | "draft" | "error")[] = [
     "completed",
-    "generating", 
+    "generating",
     "draft",
     "error",
   ];
@@ -64,12 +67,23 @@ export default function TeamWeeklyPage() {
     setCurrentPage(page);
   };
 
+  const MyButton = () => {
+    return (
+      <Button onClick={handleCreateNew} className="flex items-center gap-2">
+        <Plus className="w-4 h-4" />새 보고서 생성
+      </Button>
+    );
+  };
+
   return (
     <div>
       {/* 기존 더미 내용 */}
-      <h1 className="text-2xl font-semibold mb-4">Team Weekly Report</h1>
-      <p className="mb-6">환영합니다! 여기는 Team Weekly Report 페이지입니다.</p>
-      
+      <PageHeader
+        title="팀 위클리"
+        description="팀 위클리 보고서 목록"
+        buttonElement={<MyButton />}
+      />
+
       {/* 보고서 목록 */}
       <WeeklyReportListPage
         title="팀 위클리 보고서 목록"

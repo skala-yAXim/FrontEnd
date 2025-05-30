@@ -1,19 +1,19 @@
 // TODO: API 연동 필요 (프로젝트 목록, 프로젝트 삭제)
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import PageHeader from "@/components/PageHeader";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  Plus, 
-  FolderOpen, 
-  Trash2, 
-  Eye,
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { CardContent } from "@/components/ui/card";
+import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
-  ChevronsRight 
+  ChevronsRight,
+  Eye,
+  Plus,
+  Trash2,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -33,7 +33,12 @@ interface Project {
 // 더미 프로젝트 데이터 생성
 const generateDummyProjects = (): Project[] => {
   const projects: Project[] = [];
-  const statuses: ("진행중" | "완료" | "대기" | "중단")[] = ["진행중", "완료", "대기", "중단"];
+  const statuses: ("진행중" | "완료" | "대기" | "중단")[] = [
+    "진행중",
+    "완료",
+    "대기",
+    "중단",
+  ];
   const projectNames = [
     "사용자 인증 시스템 개발",
     "모바일 앱 UI/UX 개선",
@@ -49,27 +54,29 @@ const generateDummyProjects = (): Project[] => {
     "푸시 알림 시스템",
     "파일 업로드 기능",
     "실시간 채팅 시스템",
-    "관리자 대시보드"
+    "관리자 대시보드",
   ];
 
   for (let i = 0; i < 25; i++) {
     const startMonth = (i % 6) + 1; // 고정된 값 사용
     const duration = (i % 4) + 1; // 고정된 값 사용
     const endMonth = Math.min(startMonth + duration, 12);
-    
+
     projects.push({
       id: `project-${i + 1}`,
       name: projectNames[i % projectNames.length],
       description: `${projectNames[i % projectNames.length]}에 대한 상세 설명입니다.`,
       status: statuses[i % statuses.length], // 고정된 패턴 사용
-      startDate: `2025-${startMonth.toString().padStart(2, '0')}-01`,
-      endDate: `2025-${endMonth.toString().padStart(2, '0')}-28`,
+      startDate: `2025-${startMonth.toString().padStart(2, "0")}-01`,
+      endDate: `2025-${endMonth.toString().padStart(2, "0")}-28`,
       teamMembers: ["김개발", "이기획", "박디자인"].slice(0, (i % 3) + 1), // 고정된 패턴
       progress: (i * 4) % 101, // 고정된 진행률
     });
   }
 
-  return projects.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+  return projects.sort(
+    (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+  );
 };
 
 const dummyProjects = generateDummyProjects();
@@ -92,7 +99,7 @@ const getStatusColor = (status: string): string => {
 
 export default function ProjectManagementPage() {
   const router = useRouter();
-  
+
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 10;
@@ -105,7 +112,9 @@ export default function ProjectManagementPage() {
   );
 
   // 삭제 확인 상태
-  const [projectToDelete, setProjectToDelete] = React.useState<string | null>(null);
+  const [projectToDelete, setProjectToDelete] = React.useState<string | null>(
+    null
+  );
 
   // 프로젝트 추가 핸들러
   const handleAddProject = () => {
@@ -181,25 +190,22 @@ export default function ProjectManagementPage() {
   return (
     <div>
       {/* 기존 더미 내용 */}
-      <h1 className="text-2xl font-semibold mb-4">Project Management</h1>
-      <p className="mb-6">환영합니다! 여기는 Project Management 페이지입니다.</p>
-      
+      <PageHeader
+        title="팀 진행 프로젝트 목록"
+        buttonElement={
+          <Button
+            onClick={handleAddProject}
+            className="flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            프로젝트 추가
+          </Button>
+        }
+      />
+
       {/* 4번 페이지 내용 */}
       <div className="w-full">
-        <Card className="w-full max-w-none">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <FolderOpen className="w-5 h-5" />
-                팀 진행 프로젝트 목록
-              </CardTitle>
-              <Button onClick={handleAddProject} className="flex items-center gap-2">
-                <Plus className="w-4 h-4" />
-                프로젝트 추가
-              </Button>
-            </div>
-          </CardHeader>
-          
+        <div className="w-full max-w-none">
           <CardContent className="p-0">
             {/* 삭제 확인 메시지 */}
             {projectToDelete && projectToDeleteInfo && (
@@ -208,14 +214,24 @@ export default function ProjectManagementPage() {
                   <AlertDescription>
                     <div className="space-y-3">
                       <p>
-                        <strong>"{projectToDeleteInfo.name}"</strong> 프로젝트를 삭제하시겠습니까?
-                        <br />삭제된 프로젝트는 복구할 수 없습니다.
+                        <strong>"{projectToDeleteInfo.name}"</strong> 프로젝트를
+                        삭제하시겠습니까?
+                        <br />
+                        삭제된 프로젝트는 복구할 수 없습니다.
                       </p>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="destructive" onClick={handleDeleteConfirm}>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={handleDeleteConfirm}
+                        >
                           삭제
                         </Button>
-                        <Button size="sm" variant="outline" onClick={handleDeleteCancel}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={handleDeleteCancel}
+                        >
                           취소
                         </Button>
                       </div>
@@ -230,18 +246,33 @@ export default function ProjectManagementPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b bg-muted/30">
-                    <th className="text-left py-3 px-4 font-semibold text-sm">프로젝트명</th>
-                    <th className="text-left py-3 px-4 font-semibold text-sm">상태</th>
-                    <th className="text-left py-3 px-4 font-semibold text-sm">진행률</th>
-                    <th className="text-left py-3 px-4 font-semibold text-sm">기간</th>
-                    <th className="text-left py-3 px-4 font-semibold text-sm">팀원</th>
-                    <th className="text-center py-3 px-4 font-semibold text-sm">작업</th>
+                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                      프로젝트명
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                      상태
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                      진행률
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                      기간
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                      팀원
+                    </th>
+                    <th className="text-center py-3 px-4 font-semibold text-sm">
+                      작업
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedProjects.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="text-center py-8 text-muted-foreground">
+                      <td
+                        colSpan={6}
+                        className="text-center py-8 text-muted-foreground"
+                      >
                         아직 프로젝트가 없습니다.
                       </td>
                     </tr>
@@ -267,8 +298,8 @@ export default function ProjectManagementPage() {
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-2">
                             <div className="w-16 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
-                              <div 
-                                className="bg-blue-600 h-2 rounded-full" 
+                              <div
+                                className="bg-blue-600 h-2 rounded-full"
                                 style={{ width: `${project.progress}%` }}
                               ></div>
                             </div>
@@ -279,14 +310,23 @@ export default function ProjectManagementPage() {
                         </td>
                         <td className="py-3 px-4 text-sm text-muted-foreground">
                           <div>
-                            {new Date(project.startDate).toLocaleDateString("ko-KR", { 
-                              year: 'numeric', month: 'short'
-                            })} ~ 
+                            {new Date(project.startDate).toLocaleDateString(
+                              "ko-KR",
+                              {
+                                year: "numeric",
+                                month: "short",
+                              }
+                            )}{" "}
+                            ~
                           </div>
                           <div>
-                            {new Date(project.endDate).toLocaleDateString("ko-KR", { 
-                              year: 'numeric', month: 'short'
-                            })}
+                            {new Date(project.endDate).toLocaleDateString(
+                              "ko-KR",
+                              {
+                                year: "numeric",
+                                month: "short",
+                              }
+                            )}
                           </div>
                         </td>
                         <td className="py-3 px-4">
@@ -344,7 +384,7 @@ export default function ProjectManagementPage() {
                   </Button>
 
                   <Button
-                    variant="outline"  
+                    variant="outline"
                     size="sm"
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
@@ -389,7 +429,7 @@ export default function ProjectManagementPage() {
 
                   <Button
                     variant="outline"
-                    size="sm" 
+                    size="sm"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
@@ -410,7 +450,7 @@ export default function ProjectManagementPage() {
               </div>
             )}
           </CardContent>
-        </Card>
+        </div>
       </div>
     </div>
   );

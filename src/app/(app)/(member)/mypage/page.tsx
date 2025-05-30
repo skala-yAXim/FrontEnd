@@ -226,7 +226,7 @@ export default function ProfilePage() {
               <Button
                 onClick={handleGitConnect}
                 disabled={isConnecting}
-                className="w-full flex items-center gap-2"
+                className="w-full flex items-center gap-2 bg-[#24292e] hover:bg-[#1b1f23] text-white"
               >
                 <Github className="w-4 h-4" />
                 {isConnecting ? "GitHub 연동 중..." : "GitHub 연동하기"}
