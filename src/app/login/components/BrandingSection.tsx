@@ -16,7 +16,7 @@ export function BrandingSection() {
         </div>
         <h1 className="text-4xl font-bold mb-4">yAXim</h1>
         <p className="text-xl opacity-90 mb-8">
-          현대적이고 안전한 플랫폼에 오신 것을 환영합니다
+          SK AX 보고서 자동 생성 플랫폼에 오신 것을 환영합니다
         </p>
         <div className="space-y-4 text-left">
           <div className="flex items-center space-x-3">
@@ -29,7 +29,7 @@ export function BrandingSection() {
                 />
               </svg>
             </div>
-            <span>보안 강화된 인증 시스템</span>
+            <span>강력한 보안의 Microsoft Teams 인증 시스템</span>
           </div>
           <div className="flex items-center space-x-3">
             <div className="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center">
@@ -41,7 +41,7 @@ export function BrandingSection() {
                 />
               </svg>
             </div>
-            <span>직관적인 사용자 경험</span>
+            <span>개인 데일리 보고서 자동 생성</span>
           </div>
           <div className="flex items-center space-x-3">
             <div className="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center">
@@ -53,7 +53,7 @@ export function BrandingSection() {
                 />
               </svg>
             </div>
-            <span>다크모드 완벽 지원</span>
+            <span>위클리 보고서 팀별 자동 관리</span>
           </div>
         </div>
       </div>

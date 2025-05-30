@@ -1,11 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const router = useRouter();
+
   const handleMicrosoftLogin = () => {
     console.log("Microsoft 로그인");
     // Microsoft OAuth 로직
+    router.push("/dashboard");
   };
 
   return (
