@@ -34,7 +34,7 @@ export default function LeaderGroupLayout({
 
   if (isLoadingAuth) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className='flex h-screen items-center justify-center'>
         <p>Loading authentication (Leader Layout)...</p>
       </div>
     );
@@ -46,7 +46,7 @@ export default function LeaderGroupLayout({
 
   if (userRole !== "LEADER") {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className='flex h-screen items-center justify-center'>
         <p>Access Denied. Checking permissions...</p>
       </div>
     );

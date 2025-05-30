@@ -164,27 +164,27 @@ export default function WeeklyReportsPage() {
   return (
     <div>
       <PageHeader
-        title="보고서 목록"
-        description="지난 주간 보고서들을 확인하고 새로운 보고서를 작성할 수 있습니다."
+        title='보고서 목록'
+        description='지난 주간 보고서들을 확인하고 새로운 보고서를 작성할 수 있습니다.'
         buttonElement={
-          <Button onClick={handleCreateNew} className="flex items-center gap-2">
-            <Plus className="w-4 h-4" />새 보고서 생성
+          <Button onClick={handleCreateNew} className='flex items-center gap-2'>
+            <Plus className='w-4 h-4' />새 보고서 생성
           </Button>
         }
       />
       <CardContent>
         {/* 테이블 */}
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div className='overflow-x-auto'>
+          <table className='w-full'>
             <thead>
-              <tr className="border-b">
-                <th className="text-left py-3 px-4 font-semibold text-sm">
+              <tr className='border-b'>
+                <th className='text-left py-3 px-4 font-semibold text-sm'>
                   제목
                 </th>
-                <th className="text-left py-3 px-4 font-semibold text-sm">
+                <th className='text-left py-3 px-4 font-semibold text-sm'>
                   생성일자
                 </th>
-                <th className="text-left py-3 px-4 font-semibold text-sm">
+                <th className='text-left py-3 px-4 font-semibold text-sm'>
                   상태
                 </th>
               </tr>
@@ -194,7 +194,7 @@ export default function WeeklyReportsPage() {
                 <tr>
                   <td
                     colSpan={3}
-                    className="text-center py-8 text-muted-foreground"
+                    className='text-center py-8 text-muted-foreground'
                   >
                     아직 생성된 위클리 보고서가 없습니다.
                   </td>
@@ -215,13 +215,13 @@ export default function WeeklyReportsPage() {
                         : "완료된 보고서만 볼 수 있습니다"
                     }
                   >
-                    <td className="py-3 px-4">
-                      <div className="font-medium">{report.title}</div>
+                    <td className='py-3 px-4'>
+                      <div className='font-medium'>{report.title}</div>
                     </td>
-                    <td className="py-3 px-4 text-sm text-muted-foreground">
+                    <td className='py-3 px-4 text-sm text-muted-foreground'>
                       {new Date(report.createdAt).toLocaleDateString("ko-KR")}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className='py-3 px-4'>
                       <Badge className={getStatusColor(report.status)}>
                         {getStatusText(report.status)}
                       </Badge>
@@ -235,9 +235,9 @@ export default function WeeklyReportsPage() {
 
         {/* 개선된 페이지네이션 */}
         {totalPages > 1 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t">
+          <div className='flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t'>
             {/* 결과 정보 */}
-            <div className="text-sm text-muted-foreground">
+            <div className='text-sm text-muted-foreground'>
               총 <strong>{totalItems.toLocaleString()}</strong>개 중{" "}
               <strong>{(currentPage - 1) * itemsPerPage + 1}</strong>-
               <strong>
@@ -247,37 +247,37 @@ export default function WeeklyReportsPage() {
             </div>
 
             {/* 페이지네이션 컨트롤 */}
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               {/* 첫 페이지 */}
               <Button
-                variant="outline"
-                size="sm"
+                variant='outline'
+                size='sm'
                 onClick={() => handlePageChange(1)}
                 disabled={currentPage === 1}
-                className="hidden sm:flex"
+                className='hidden sm:flex'
               >
-                <ChevronsLeft className="w-4 h-4" />
+                <ChevronsLeft className='w-4 h-4' />
               </Button>
 
               {/* 이전 페이지 */}
               <Button
-                variant="outline"
-                size="sm"
+                variant='outline'
+                size='sm'
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
-                <ChevronLeft className="w-4 h-4" />
-                <span className="hidden sm:inline ml-1">이전</span>
+                <ChevronLeft className='w-4 h-4' />
+                <span className='hidden sm:inline ml-1'>이전</span>
               </Button>
 
               {/* 페이지 번호들 */}
-              <div className="flex items-center gap-1">
+              <div className='flex items-center gap-1'>
                 {visiblePages.map((page, index) => {
                   if (page === "...") {
                     return (
                       <span
                         key={`dots-${index}`}
-                        className="px-2 py-1 text-muted-foreground"
+                        className='px-2 py-1 text-muted-foreground'
                       >
                         ...
                       </span>
@@ -291,7 +291,7 @@ export default function WeeklyReportsPage() {
                     <Button
                       key={pageNumber}
                       variant={isCurrentPage ? "default" : "outline"}
-                      size="sm"
+                      size='sm'
                       onClick={() => handlePageChange(pageNumber)}
                       className={`min-w-[32px] h-8 ${
                         isCurrentPage
@@ -307,32 +307,32 @@ export default function WeeklyReportsPage() {
 
               {/* 다음 페이지 */}
               <Button
-                variant="outline"
-                size="sm"
+                variant='outline'
+                size='sm'
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
-                <span className="hidden sm:inline mr-1">다음</span>
-                <ChevronRight className="w-4 h-4" />
+                <span className='hidden sm:inline mr-1'>다음</span>
+                <ChevronRight className='w-4 h-4' />
               </Button>
 
               {/* 마지막 페이지 */}
               <Button
-                variant="outline"
-                size="sm"
+                variant='outline'
+                size='sm'
                 onClick={() => handlePageChange(totalPages)}
                 disabled={currentPage === totalPages}
-                className="hidden sm:flex"
+                className='hidden sm:flex'
               >
-                <ChevronsRight className="w-4 h-4" />
+                <ChevronsRight className='w-4 h-4' />
               </Button>
             </div>
           </div>
         )}
 
         {/* 페이지 정보 (모바일용) */}
-        <div className="flex justify-center mt-4 sm:hidden">
-          <span className="text-sm text-muted-foreground">
+        <div className='flex justify-center mt-4 sm:hidden'>
+          <span className='text-sm text-muted-foreground'>
             {currentPage} / {totalPages} 페이지
           </span>
         </div>

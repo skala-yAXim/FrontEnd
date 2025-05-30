@@ -14,11 +14,11 @@ export default function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <CardHeader>
-      <div className="flex items-center justify-between">
+      <div className='flex items-center justify-between'>
         <div>
           <CardTitle>{title}</CardTitle>
           {description && (
-            <p className="mt-1 mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <p className='mt-1 mt-2 text-sm text-gray-600 dark:text-gray-400'>
               {description}
             </p>
           )}

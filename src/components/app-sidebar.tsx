@@ -22,8 +22,6 @@ import { AuthState, useAuthStore } from "@/store/authStore";
 
 // Nav 컴포넌트 import (정의는 사용자 프로젝트 내에 있다고 가정)
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
-import { NavSecondary } from "@/components/nav-secondary";
 // import { NavUser } from "@/components/nav-user"; // UserDisplay로 대체
 
 import {
@@ -61,8 +59,8 @@ const UserFooterDisplay = () => {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton className="w-full justify-start">
-            <UserCircle className="mr-2 size-4" />
+          <SidebarMenuButton className='w-full justify-start'>
+            <UserCircle className='mr-2 size-4' />
             로그인 필요
           </SidebarMenuButton>
         </SidebarMenuItem>
@@ -80,16 +78,16 @@ const UserFooterDisplay = () => {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size="lg" className="w-full">
-          <div className="bg-muted text-muted-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-            <UserCircle className="size-4" />
+        <SidebarMenuButton size='lg' className='w-full'>
+          <div className='bg-muted text-muted-foreground flex aspect-square size-8 items-center justify-center rounded-lg'>
+            <UserCircle className='size-4' />
           </div>
-          <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-medium">
+          <div className='grid flex-1 text-left text-sm leading-tight'>
+            <span className='truncate font-medium'>
               {/* 실제 사용자 이름이 있다면 표시, 여기서는 displayName 사용 */}
               {displayName}
             </span>
-            <span className="truncate text-xs capitalize">
+            <span className='truncate text-xs capitalize'>
               {userRole.toLowerCase()}
             </span>
           </div>
@@ -150,18 +148,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navSecondaryItems: any[] = [];
 
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar variant='inset' {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <Command className="size-4" />
+            <SidebarMenuButton size='lg' asChild>
+              <Link href='/dashboard'>
+                <div className='bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg'>
+                  <Command className='size-4' />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">주간 보고서</span>
-                  <span className="truncate text-xs">메인</span>
+                <div className='grid flex-1 text-left text-sm leading-tight'>
+                  <span className='truncate font-medium'>yAXim</span>
+                  <span className='truncate text-xs'>
+                    사내 주간 보고서 자동 생성 서비스
+                  </span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -170,12 +170,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        <NavMain items={memberMenuItems} groupLabel="개인 메뉴" />
+        <NavMain items={memberMenuItems} groupLabel='개인 메뉴' />
         {userRole === "LEADER" && (
-          <NavMain items={leaderMenuItems} groupLabel="팀장 메뉴" />
+          <NavMain items={leaderMenuItems} groupLabel='팀장 메뉴' />
         )}
-        <NavProjects projects={navProjectsItems} />
-        <NavSecondary items={navSecondaryItems} className="mt-auto" />
+        {/* <NavProjects projects={navProjectsItems} /> */}
+        {/* <NavSecondary items={navSecondaryItems} className="mt-auto" /> */}
       </SidebarContent>
 
       <SidebarFooter>

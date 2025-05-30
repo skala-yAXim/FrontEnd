@@ -148,29 +148,29 @@ export default function ManagerWeeklyPage() {
 
   return (
     <div>
-      <PageHeader title="팀원 위클리" description="팀원 위클리 보고서 목록" />
+      <PageHeader title='팀원 위클리' description='팀원 위클리 보고서 목록' />
 
-      <div className="w-full mt-6">
-        <div className="w-full max-w-none">
-          <CardContent className="space-y-6">
+      <div className='w-full mt-6'>
+        <div className='w-full max-w-none'>
+          <CardContent className='space-y-6'>
             {/* 필터 영역 */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
               {/* 팀원 다중 선택 */}
-              <div className="space-y-2">
+              <div className='space-y-2'>
                 <Label>팀원 선택</Label>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
-                      variant="outline"
-                      className="w-full justify-between"
+                      variant='outline'
+                      className='w-full justify-between'
                     >
-                      <span className="truncate">
+                      <span className='truncate'>
                         {selectedMemberNames || "팀원을 선택하세요"}
                       </span>
-                      <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+                      <ChevronDown className='h-4 w-4 shrink-0 opacity-50' />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full">
+                  <DropdownMenuContent className='w-full'>
                     <DropdownMenuLabel>팀원 선택</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {dummyTeamMembers.map(member => (
@@ -180,8 +180,8 @@ export default function ManagerWeeklyPage() {
                         onCheckedChange={() => handleMemberToggle(member.id)}
                       >
                         <div>
-                          <div className="font-medium">{member.name}</div>
-                          <div className="text-sm text-muted-foreground">
+                          <div className='font-medium'>{member.name}</div>
+                          <div className='text-sm text-muted-foreground'>
                             {member.role}
                           </div>
                         </div>
@@ -192,14 +192,14 @@ export default function ManagerWeeklyPage() {
               </div>
 
               {/* 보고서 타입 토글 */}
-              <div className="space-y-2">
+              <div className='space-y-2'>
                 <Label>보고서 타입</Label>
-                <div className="flex border rounded-md">
+                <div className='flex border rounded-md'>
                   <Button
                     variant={
                       filters.reportType === "weekly" ? "default" : "ghost"
                     }
-                    className="flex-1 rounded-r-none border-r"
+                    className='flex-1 rounded-r-none border-r'
                     onClick={() => handleReportTypeChange("weekly")}
                   >
                     위클리
@@ -208,7 +208,7 @@ export default function ManagerWeeklyPage() {
                     variant={
                       filters.reportType === "daily" ? "default" : "ghost"
                     }
-                    className="flex-1 rounded-l-none"
+                    className='flex-1 rounded-l-none'
                     onClick={() => handleReportTypeChange("daily")}
                   >
                     데일리
@@ -217,11 +217,11 @@ export default function ManagerWeeklyPage() {
               </div>
 
               {/* 시작 날짜 */}
-              <div className="space-y-2">
-                <Label htmlFor="startDate">시작 날짜</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='startDate'>시작 날짜</Label>
                 <Input
-                  id="startDate"
-                  type="date"
+                  id='startDate'
+                  type='date'
                   value={filters.startDate}
                   onChange={e => handleDateChange("startDate", e.target.value)}
                   max={filters.endDate} // 종료 날짜보다 늦을 수 없음
@@ -229,11 +229,11 @@ export default function ManagerWeeklyPage() {
               </div>
 
               {/* 종료 날짜 */}
-              <div className="space-y-2">
-                <Label htmlFor="endDate">종료 날짜</Label>
+              <div className='space-y-2'>
+                <Label htmlFor='endDate'>종료 날짜</Label>
                 <Input
-                  id="endDate"
-                  type="date"
+                  id='endDate'
+                  type='date'
                   value={filters.endDate}
                   onChange={e => handleDateChange("endDate", e.target.value)}
                   min={filters.startDate} // 시작 날짜보다 빠를 수 없음
@@ -242,7 +242,7 @@ export default function ManagerWeeklyPage() {
             </div>
 
             {/* 선택 요약 */}
-            <div className="text-sm text-muted-foreground bg-muted/30 p-3 rounded-md">
+            <div className='text-sm text-muted-foreground bg-muted/30 p-3 rounded-md'>
               <p>
                 <strong>{filters.selectedMembers.length}명</strong>의 팀원,{" "}
                 <strong>

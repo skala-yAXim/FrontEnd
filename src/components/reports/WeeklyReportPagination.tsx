@@ -17,7 +17,7 @@ export default function WeeklyReportPagination({
   currentPage,
   totalItems,
   itemsPerPage,
-  onPageChange
+  onPageChange,
 }: WeeklyReportPaginationProps) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -62,49 +62,47 @@ export default function WeeklyReportPagination({
   return (
     <>
       {/* 개선된 페이지네이션 */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t">
+      <div className='flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t'>
         {/* 결과 정보 */}
-        <div className="text-sm text-muted-foreground">
+        <div className='text-sm text-muted-foreground'>
           총 <strong>{totalItems.toLocaleString()}</strong>개 중{" "}
           <strong>{(currentPage - 1) * itemsPerPage + 1}</strong>-
-          <strong>
-            {Math.min(currentPage * itemsPerPage, totalItems)}
-          </strong>
-          개 표시
+          <strong>{Math.min(currentPage * itemsPerPage, totalItems)}</strong>개
+          표시
         </div>
 
         {/* 페이지네이션 컨트롤 */}
-        <div className="flex items-center gap-2">
+        <div className='flex items-center gap-2'>
           {/* 첫 페이지 */}
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => onPageChange(1)}
             disabled={currentPage === 1}
-            className="hidden sm:flex"
+            className='hidden sm:flex'
           >
-            <ChevronsLeft className="w-4 h-4" />
+            <ChevronsLeft className='w-4 h-4' />
           </Button>
 
           {/* 이전 페이지 */}
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
           >
-            <ChevronLeft className="w-4 h-4" />
-            <span className="hidden sm:inline ml-1">이전</span>
+            <ChevronLeft className='w-4 h-4' />
+            <span className='hidden sm:inline ml-1'>이전</span>
           </Button>
 
           {/* 페이지 번호들 */}
-          <div className="flex items-center gap-1">
+          <div className='flex items-center gap-1'>
             {visiblePages.map((page, index) => {
               if (page === "...") {
                 return (
                   <span
                     key={`dots-${index}`}
-                    className="px-2 py-1 text-muted-foreground"
+                    className='px-2 py-1 text-muted-foreground'
                   >
                     ...
                   </span>
@@ -118,7 +116,7 @@ export default function WeeklyReportPagination({
                 <Button
                   key={pageNumber}
                   variant={isCurrentPage ? "default" : "outline"}
-                  size="sm"
+                  size='sm'
                   onClick={() => onPageChange(pageNumber)}
                   className={`min-w-[32px] h-8 ${
                     isCurrentPage
@@ -134,31 +132,31 @@ export default function WeeklyReportPagination({
 
           {/* 다음 페이지 */}
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
           >
-            <span className="hidden sm:inline mr-1">다음</span>
-            <ChevronRight className="w-4 h-4" />
+            <span className='hidden sm:inline mr-1'>다음</span>
+            <ChevronRight className='w-4 h-4' />
           </Button>
 
           {/* 마지막 페이지 */}
           <Button
-            variant="outline"
-            size="sm"
+            variant='outline'
+            size='sm'
             onClick={() => onPageChange(totalPages)}
             disabled={currentPage === totalPages}
-            className="hidden sm:flex"
+            className='hidden sm:flex'
           >
-            <ChevronsRight className="w-4 h-4" />
+            <ChevronsRight className='w-4 h-4' />
           </Button>
         </div>
       </div>
 
       {/* 페이지 정보 (모바일용) */}
-      <div className="flex justify-center mt-4 sm:hidden">
-        <span className="text-sm text-muted-foreground">
+      <div className='flex justify-center mt-4 sm:hidden'>
+        <span className='text-sm text-muted-foreground'>
           {currentPage} / {totalPages} 페이지
         </span>
       </div>

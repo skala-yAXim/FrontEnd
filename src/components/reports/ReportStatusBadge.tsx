@@ -38,8 +38,6 @@ const getStatusText = (status: ReportStatus): string => {
 
 export default function ReportStatusBadge({ status }: ReportStatusBadgeProps) {
   return (
-    <Badge className={getStatusColor(status)}>
-      {getStatusText(status)}
-    </Badge>
+    <Badge className={getStatusColor(status)}>{getStatusText(status)}</Badge>
   );
 }

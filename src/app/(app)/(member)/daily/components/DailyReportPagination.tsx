@@ -6,10 +6,10 @@ interface DailyReportPaginationProps {
   onPageChange: (page: number) => void;
 }
 
-export function DailyReportPagination({ 
-  currentPage, 
-  totalPages, 
-  onPageChange 
+export function DailyReportPagination({
+  currentPage,
+  totalPages,
+  onPageChange,
 }: DailyReportPaginationProps) {
   // 표시할 페이지 번호 범위 계산
   const getVisiblePages = () => {
@@ -26,7 +26,7 @@ export function DailyReportPagination({
     }
 
     if (currentPage - delta > 2) {
-      rangeWithDots.push(1, '...');
+      rangeWithDots.push(1, "...");
     } else {
       rangeWithDots.push(1);
     }
@@ -34,7 +34,7 @@ export function DailyReportPagination({
     rangeWithDots.push(...range);
 
     if (currentPage + delta < totalPages - 1) {
-      rangeWithDots.push('...', totalPages);
+      rangeWithDots.push("...", totalPages);
     } else if (totalPages > 1) {
       rangeWithDots.push(totalPages);
     }
@@ -45,7 +45,7 @@ export function DailyReportPagination({
   const visiblePages = getVisiblePages();
 
   const handlePageClick = (page: number | string) => {
-    if (typeof page === 'number' && page !== currentPage) {
+    if (typeof page === "number" && page !== currentPage) {
       onPageChange(page);
     }
   };
@@ -67,11 +67,11 @@ export function DailyReportPagination({
   }
 
   return (
-    <div className="flex items-center justify-center space-x-2">
+    <div className='flex items-center justify-center space-x-2'>
       {/* 이전 페이지 버튼 */}
       <Button
-        variant="outline"
-        size="sm"
+        variant='outline'
+        size='sm'
         onClick={handlePreviousPage}
         disabled={currentPage === 1}
       >
@@ -79,15 +79,15 @@ export function DailyReportPagination({
       </Button>
 
       {/* 페이지 번호들 */}
-      <div className="flex space-x-1">
+      <div className='flex space-x-1'>
         {visiblePages.map((page, index) => (
           <Button
             key={index}
             variant={page === currentPage ? "default" : "outline"}
-            size="sm"
+            size='sm'
             onClick={() => handlePageClick(page)}
-            disabled={page === '...'}
-            className={page === '...' ? 'cursor-default' : ''}
+            disabled={page === "..."}
+            className={page === "..." ? "cursor-default" : ""}
           >
             {page}
           </Button>
@@ -96,8 +96,8 @@ export function DailyReportPagination({
 
       {/* 다음 페이지 버튼 */}
       <Button
-        variant="outline"
-        size="sm"
+        variant='outline'
+        size='sm'
         onClick={handleNextPage}
         disabled={currentPage === totalPages}
       >
@@ -105,7 +105,7 @@ export function DailyReportPagination({
       </Button>
 
       {/* 페이지 정보 */}
-      <div className="ml-4 text-sm text-muted-foreground">
+      <div className='ml-4 text-sm text-muted-foreground'>
         {currentPage} / {totalPages} 페이지
       </div>
     </div>

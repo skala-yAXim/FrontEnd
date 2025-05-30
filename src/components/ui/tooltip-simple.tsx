@@ -1,56 +1,54 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface TooltipProviderProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 interface TooltipProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 interface TooltipTriggerProps {
-  asChild?: boolean
-  children: React.ReactNode
+  asChild?: boolean;
+  children: React.ReactNode;
 }
 
 interface TooltipContentProps {
-  className?: string
-  children: React.ReactNode
+  className?: string;
+  children: React.ReactNode;
 }
 
 const TooltipContext = React.createContext<{
-  isOpen: boolean
-  setIsOpen: (open: boolean) => void
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }>({
   isOpen: false,
   setIsOpen: () => {},
-})
+});
 
 const TooltipProvider = ({ children }: TooltipProviderProps) => {
-  return <>{children}</>
-}
+  return <>{children}</>;
+};
 
 const Tooltip = ({ children }: TooltipProps) => {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <TooltipContext.Provider value={{ isOpen, setIsOpen }}>
-      <div className="relative inline-block">
-        {children}
-      </div>
+      <div className='relative inline-block'>{children}</div>
     </TooltipContext.Provider>
-  )
-}
+  );
+};
 
 const TooltipTrigger = React.forwardRef<HTMLDivElement, TooltipTriggerProps>(
   ({ asChild, children, ...props }, ref) => {
-    const { setIsOpen } = React.useContext(TooltipContext)
+    const { setIsOpen } = React.useContext(TooltipContext);
 
-    const handleMouseEnter = () => setIsOpen(true)
-    const handleMouseLeave = () => setIsOpen(false)
+    const handleMouseEnter = () => setIsOpen(true);
+    const handleMouseLeave = () => setIsOpen(false);
 
     if (asChild && React.isValidElement(children)) {
       return React.cloneElement(children, {
@@ -58,7 +56,7 @@ const TooltipTrigger = React.forwardRef<HTMLDivElement, TooltipTriggerProps>(
         ref,
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
-      })
+      });
     }
 
     return (
@@ -70,16 +68,16 @@ const TooltipTrigger = React.forwardRef<HTMLDivElement, TooltipTriggerProps>(
       >
         {children}
       </div>
-    )
+    );
   }
-)
-TooltipTrigger.displayName = "TooltipTrigger"
+);
+TooltipTrigger.displayName = "TooltipTrigger";
 
 const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
   ({ className, children, ...props }, ref) => {
-    const { isOpen } = React.useContext(TooltipContext)
+    const { isOpen } = React.useContext(TooltipContext);
 
-    if (!isOpen) return null
+    if (!isOpen) return null;
 
     return (
       <div
@@ -91,11 +89,11 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
         {...props}
       >
         {children}
-        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-popover" />
+        <div className='absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-popover' />
       </div>
-    )
+    );
   }
-)
-TooltipContent.displayName = "TooltipContent"
+);
+TooltipContent.displayName = "TooltipContent";
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };

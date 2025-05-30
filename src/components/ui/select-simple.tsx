@@ -1,57 +1,57 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ChevronDown } from "lucide-react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface SelectProps {
-  value?: string
-  onValueChange?: (value: string) => void
-  children: React.ReactNode
+  value?: string;
+  onValueChange?: (value: string) => void;
+  children: React.ReactNode;
 }
 
-interface SelectTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode
+interface SelectTriggerProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
 }
 
 interface SelectContentProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-interface SelectItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  value: string
-  children: React.ReactNode
+interface SelectItemProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  value: string;
+  children: React.ReactNode;
 }
 
 interface SelectValueProps {
-  placeholder?: string
+  placeholder?: string;
 }
 
 const SelectContext = React.createContext<{
-  value?: string
-  onValueChange?: (value: string) => void
-  isOpen: boolean
-  setIsOpen: (open: boolean) => void
+  value?: string;
+  onValueChange?: (value: string) => void;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }>({
   isOpen: false,
   setIsOpen: () => {},
-})
+});
 
 const Select = ({ value, onValueChange, children }: SelectProps) => {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <SelectContext.Provider value={{ value, onValueChange, isOpen, setIsOpen }}>
-      <div className="relative">
-        {children}
-      </div>
+      <div className='relative'>{children}</div>
     </SelectContext.Provider>
-  )
-}
+  );
+};
 
 const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
   ({ className, children, ...props }, ref) => {
-    const { isOpen, setIsOpen } = React.useContext(SelectContext)
+    const { isOpen, setIsOpen } = React.useContext(SelectContext);
 
     return (
       <button
@@ -64,55 +64,53 @@ const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
         {...props}
       >
         {children}
-        <ChevronDown className="h-4 w-4 opacity-50" />
+        <ChevronDown className='h-4 w-4 opacity-50' />
       </button>
-    )
+    );
   }
-)
-SelectTrigger.displayName = "SelectTrigger"
+);
+SelectTrigger.displayName = "SelectTrigger";
 
 const SelectValue = ({ placeholder }: SelectValueProps) => {
-  const { value } = React.useContext(SelectContext)
-  return <span>{value || placeholder}</span>
-}
+  const { value } = React.useContext(SelectContext);
+  return <span>{value || placeholder}</span>;
+};
 
 const SelectContent = ({ children }: SelectContentProps) => {
-  const { isOpen, setIsOpen } = React.useContext(SelectContext)
+  const { isOpen, setIsOpen } = React.useContext(SelectContext);
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element
-      if (!target.closest('[data-select]')) {
-        setIsOpen(false)
+      const target = event.target as Element;
+      if (!target.closest("[data-select]")) {
+        setIsOpen(false);
       }
-    }
+    };
 
     if (isOpen) {
-      document.addEventListener('click', handleClickOutside)
+      document.addEventListener("click", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }, [isOpen, setIsOpen])
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isOpen, setIsOpen]);
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <div
       data-select
-      className="absolute top-full z-50 mt-1 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md"
+      className='absolute top-full z-50 mt-1 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md'
     >
-      <div className="p-1">
-        {children}
-      </div>
+      <div className='p-1'>{children}</div>
     </div>
-  )
-}
+  );
+};
 
 const SelectItem = React.forwardRef<HTMLButtonElement, SelectItemProps>(
   ({ className, children, value, ...props }, ref) => {
-    const { onValueChange, setIsOpen } = React.useContext(SelectContext)
+    const { onValueChange, setIsOpen } = React.useContext(SelectContext);
 
     return (
       <button
@@ -122,22 +120,16 @@ const SelectItem = React.forwardRef<HTMLButtonElement, SelectItemProps>(
           className
         )}
         onClick={() => {
-          onValueChange?.(value)
-          setIsOpen(false)
+          onValueChange?.(value);
+          setIsOpen(false);
         }}
         {...props}
       >
         {children}
       </button>
-    )
+    );
   }
-)
-SelectItem.displayName = "SelectItem"
+);
+SelectItem.displayName = "SelectItem";
 
-export {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-}
+export { Select, SelectTrigger, SelectValue, SelectContent, SelectItem };

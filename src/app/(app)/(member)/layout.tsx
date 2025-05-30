@@ -36,7 +36,7 @@ export default function MemberGroupLayout({
   // 하지만, 안전을 위해 또는 독립적으로 이 레이아웃을 테스트하기 위해 체크할 수 있습니다.
   if (isLoadingAuth) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className='flex h-screen items-center justify-center'>
         <p>Loading authentication (Member Layout)...</p>
       </div>
     );
@@ -50,7 +50,7 @@ export default function MemberGroupLayout({
   if (userRole !== "MEMBER" && userRole !== "LEADER") {
     // useEffect에서 리다이렉션이 발생할 때까지 보여줄 간단한 메시지 또는 로더
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className='flex h-screen items-center justify-center'>
         <p>Checking permissions...</p>
       </div>
     );
