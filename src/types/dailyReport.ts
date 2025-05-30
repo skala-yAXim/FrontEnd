@@ -10,7 +10,7 @@ export interface DailyReport {
     name: string;
     email: string;
   };
-  status: 'draft' | 'published' | 'archived';
+  status: "draft" | "published" | "archived";
   createdAt: string;
   updatedAt: string;
   tags?: string[];
@@ -42,14 +42,15 @@ export interface CreateDailyReportRequest {
   tags?: string[];
 }
 
-export interface UpdateDailyReportRequest extends Partial<CreateDailyReportRequest> {
+export interface UpdateDailyReportRequest
+  extends Partial<CreateDailyReportRequest> {
   id: string;
-  status?: DailyReport['status'];
+  status?: DailyReport["status"];
 }
 
 // 필터 및 정렬 옵션
 export interface DailyReportFilters {
-  status?: DailyReport['status'][];
+  status?: DailyReport["status"][];
   dateFrom?: string;
   dateTo?: string;
   author?: string;
@@ -58,6 +59,6 @@ export interface DailyReportFilters {
 }
 
 export interface DailyReportSortOptions {
-  field: 'date' | 'title' | 'createdAt' | 'updatedAt';
-  direction: 'asc' | 'desc';
+  field: "date" | "title" | "createdAt" | "updatedAt";
+  direction: "asc" | "desc";
 }

@@ -40,7 +40,7 @@ export default function AppGroupLayout({
 
   if (isLoadingAuth) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className='flex h-screen items-center justify-center'>
         <p>Loading authentication...</p>
       </div>
     );
@@ -52,7 +52,7 @@ export default function AppGroupLayout({
 
   if (userRole === undefined || userRole === null) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className='flex h-screen items-center justify-center'>
         <p>Loading user role...</p>
       </div>
     );
@@ -63,23 +63,23 @@ export default function AppGroupLayout({
       <AppSidebar />
       <SidebarInset>
         {/* 헤더 */}
-        <header className="flex h-16 shrink-0 items-center border-b">
-          <div className="flex h-full w-full items-center justify-between px-4">
+        <header className='flex h-16 shrink-0 items-center border-b'>
+          <div className='flex h-full w-full items-center justify-between px-4'>
             {/* 왼쪽 요소 그룹 */}
-            <div className="flex items-center gap-2">
-              <SidebarTrigger className="-ml-1" />
+            <div className='flex items-center gap-2'>
+              <SidebarTrigger className='-ml-1' />
               <Separator
-                orientation="vertical"
-                className="mr-2 data-[orientation=vertical]:h-4"
+                orientation='vertical'
+                className='mr-2 data-[orientation=vertical]:h-4'
               />
               <Breadcrumb>
                 <BreadcrumbList>
-                  <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="#">
+                  <BreadcrumbItem className='hidden md:block'>
+                    <BreadcrumbLink href='#'>
                       Building Your Application
                     </BreadcrumbLink>
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator className="hidden md:block" />
+                  <BreadcrumbSeparator className='hidden md:block' />
                   <BreadcrumbItem>
                     <BreadcrumbPage>Data Fetching</BreadcrumbPage>
                   </BreadcrumbItem>
@@ -88,13 +88,13 @@ export default function AppGroupLayout({
             </div>
 
             {/* 오른쪽 요소 그룹 (다크모드 버튼) */}
-            <div className="flex items-center">
+            <div className='flex items-center'>
               <ThemeToggle />
             </div>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
-          <main className="flex flex-1 flex-col bg-muted/30 dark:bg-muted/50 rounded-2xl">
+        <div className='flex flex-1 flex-col gap-4 p-4'>
+          <main className='flex flex-1 flex-col bg-muted/30 dark:bg-muted/50 rounded-2xl'>
             {children}
           </main>
         </div>

@@ -4,9 +4,9 @@ import { LoginForm } from "./components/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex">
+    <div className='min-h-screen flex'>
       {/* 테마 토글 */}
-      <div className="absolute top-4 right-4">
+      <div className='absolute top-4 right-4'>
         <ThemeToggle />
       </div>
 

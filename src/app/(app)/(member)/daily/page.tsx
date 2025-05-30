@@ -48,28 +48,28 @@ export default function DailyReportsPage() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6 p-6">
+      <div className='space-y-6 p-6'>
         {/* 헤더 스켈레톤 */}
-        <div className="flex items-center justify-between">
-          <div className="space-y-2">
-            <Skeleton className="h-8 w-48" />
-            <Skeleton className="h-4 w-96" />
+        <div className='flex items-center justify-between'>
+          <div className='space-y-2'>
+            <Skeleton className='h-8 w-48' />
+            <Skeleton className='h-4 w-96' />
           </div>
-          <Skeleton className="h-10 w-10 rounded-md" />
+          <Skeleton className='h-10 w-10 rounded-md' />
         </div>
 
         {/* 카드 스켈레톤 */}
-        <div className="space-y-4">
+        <div className='space-y-4'>
           {[...Array(5)].map((_, i) => (
             <Card key={i}>
               <CardHeader>
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className='h-6 w-3/4' />
+                <Skeleton className='h-4 w-1/2' />
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-full" />
-                  <Skeleton className="h-4 w-2/3" />
+                <div className='space-y-2'>
+                  <Skeleton className='h-4 w-full' />
+                  <Skeleton className='h-4 w-2/3' />
                 </div>
               </CardContent>
             </Card>
@@ -80,18 +80,18 @@ export default function DailyReportsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <PageHeader
-        title="데일리 보고서"
-        description="자동으로 생성된 개인 데일리 보고서 목록입니다"
+        title='데일리 보고서'
+        description='자동으로 생성된 개인 데일리 보고서 목록입니다'
       />
-      <div className="p-6 pt-0">
+      <div className='p-6 pt-0'>
         {/* 에러 상태 */}
         {error && (
-          <Alert variant="destructive">
-            <AlertDescription className="flex items-center justify-between">
+          <Alert variant='destructive'>
+            <AlertDescription className='flex items-center justify-between'>
               <span>{error}</span>
-              <Button variant="ghost" size="sm" onClick={clearError}>
+              <Button variant='ghost' size='sm' onClick={clearError}>
                 ✕
               </Button>
             </AlertDescription>
@@ -101,11 +101,11 @@ export default function DailyReportsPage() {
         {/* 메인 콘텐츠 */}
         {totalCount === 0 ? (
           <Card>
-            <CardContent className="flex flex-col items-center justify-center py-16">
-              <CardTitle className="mb-2">
+            <CardContent className='flex flex-col items-center justify-center py-16'>
+              <CardTitle className='mb-2'>
                 아직 생성된 데일리 보고서가 없습니다.
               </CardTitle>
-              <p className="text-muted-foreground mb-6 text-center max-w-md">
+              <p className='text-muted-foreground mb-6 text-center max-w-md'>
                 데일리 보고서는 자동으로 생성됩니다. 잠시 후 다시 확인해보세요.
               </p>
             </CardContent>
@@ -113,14 +113,14 @@ export default function DailyReportsPage() {
         ) : (
           <>
             {/* 결과 요약 */}
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">
-                총 <span className="font-semibold">{totalCount}</span>개의
+            <div className='flex items-center justify-between'>
+              <p className='text-sm text-muted-foreground'>
+                총 <span className='font-semibold'>{totalCount}</span>개의
                 보고서
               </p>
 
               {/* 정렬 정보 */}
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant='secondary' className='text-xs'>
                 최신순
               </Badge>
             </div>

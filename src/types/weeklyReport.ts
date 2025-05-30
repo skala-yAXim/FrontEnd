@@ -3,16 +3,16 @@
 export interface WeeklyReport {
   id: string;
   userId: string;
-  weekNumber: number;        // 주차 (예: 21주차)
-  year: number;             // 연도 (예: 2025)
-  weekStartDate: string;    // 주 시작일 (ISO 8601)
-  weekEndDate: string;      // 주 종료일 (ISO 8601)
-  keyMetrics: string;       // 주요 업무 지표 (최대 1,000자)
-  content?: string;         // AI 생성된 보고서 내용
+  weekNumber: number; // 주차 (예: 21주차)
+  year: number; // 연도 (예: 2025)
+  weekStartDate: string; // 주 시작일 (ISO 8601)
+  weekEndDate: string; // 주 종료일 (ISO 8601)
+  keyMetrics: string; // 주요 업무 지표 (최대 1,000자)
+  content?: string; // AI 생성된 보고서 내용
   sources?: ReportSource[]; // 보고서 출처 정보
   status: WeeklyReportStatus;
-  createdAt: string;        // ISO 8601
-  updatedAt: string;        // ISO 8601
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
 }
 
 export interface WeeklyReportCreateRequest {
@@ -29,7 +29,7 @@ export interface WeeklyReportUpdateRequest {
 
 export interface ReportSource {
   id: string;
-  type: 'git' | 'teams' | 'outlook' | 'manual';
+  type: "git" | "teams" | "outlook" | "manual";
   title: string;
   url?: string;
   timestamp: string;
@@ -37,10 +37,10 @@ export interface ReportSource {
 }
 
 export enum WeeklyReportStatus {
-  DRAFT = 'draft',           // 초안
-  GENERATING = 'generating', // 생성 중
-  COMPLETED = 'completed',   // 생성 완료
-  ERROR = 'error'           // 오류 발생
+  DRAFT = "draft", // 초안
+  GENERATING = "generating", // 생성 중
+  COMPLETED = "completed", // 생성 완료
+  ERROR = "error", // 오류 발생
 }
 
 // API 응답 타입들
@@ -67,8 +67,8 @@ export interface WeeklyReportFilters {
 }
 
 export interface WeeklyReportSortOptions {
-  field: 'createdAt' | 'weekNumber' | 'year';
-  direction: 'asc' | 'desc';
+  field: "createdAt" | "weekNumber" | "year";
+  direction: "asc" | "desc";
 }
 
 // 페이지네이션 파라미터

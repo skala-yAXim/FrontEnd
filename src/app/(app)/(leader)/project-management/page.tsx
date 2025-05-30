@@ -191,45 +191,45 @@ export default function ProjectManagementPage() {
     <div>
       {/* 기존 더미 내용 */}
       <PageHeader
-        title="팀 진행 프로젝트 목록"
+        title='팀 진행 프로젝트 목록'
         buttonElement={
           <Button
             onClick={handleAddProject}
-            className="flex items-center gap-2"
+            className='flex items-center gap-2'
           >
-            <Plus className="w-4 h-4" />
+            <Plus className='w-4 h-4' />
             프로젝트 추가
           </Button>
         }
       />
 
       {/* 4번 페이지 내용 */}
-      <div className="w-full">
-        <div className="w-full max-w-none">
-          <CardContent className="p-0">
+      <div className='w-full'>
+        <div className='w-full max-w-none'>
+          <CardContent className='p-0'>
             {/* 삭제 확인 메시지 */}
             {projectToDelete && projectToDeleteInfo && (
-              <div className="p-6 border-b">
-                <Alert variant="destructive">
+              <div className='p-6 border-b'>
+                <Alert variant='destructive'>
                   <AlertDescription>
-                    <div className="space-y-3">
+                    <div className='space-y-3'>
                       <p>
                         <strong>"{projectToDeleteInfo.name}"</strong> 프로젝트를
                         삭제하시겠습니까?
                         <br />
                         삭제된 프로젝트는 복구할 수 없습니다.
                       </p>
-                      <div className="flex gap-2">
+                      <div className='flex gap-2'>
                         <Button
-                          size="sm"
-                          variant="destructive"
+                          size='sm'
+                          variant='destructive'
                           onClick={handleDeleteConfirm}
                         >
                           삭제
                         </Button>
                         <Button
-                          size="sm"
-                          variant="outline"
+                          size='sm'
+                          variant='outline'
                           onClick={handleDeleteCancel}
                         >
                           취소
@@ -242,26 +242,26 @@ export default function ProjectManagementPage() {
             )}
 
             {/* 프로젝트 테이블 */}
-            <div className="overflow-x-auto">
-              <table className="w-full">
+            <div className='overflow-x-auto'>
+              <table className='w-full'>
                 <thead>
-                  <tr className="border-b bg-muted/30">
-                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                  <tr className='border-b bg-muted/30'>
+                    <th className='text-left py-3 px-4 font-semibold text-sm'>
                       프로젝트명
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                    <th className='text-left py-3 px-4 font-semibold text-sm'>
                       상태
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                    <th className='text-left py-3 px-4 font-semibold text-sm'>
                       진행률
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                    <th className='text-left py-3 px-4 font-semibold text-sm'>
                       기간
                     </th>
-                    <th className="text-left py-3 px-4 font-semibold text-sm">
+                    <th className='text-left py-3 px-4 font-semibold text-sm'>
                       팀원
                     </th>
-                    <th className="text-center py-3 px-4 font-semibold text-sm">
+                    <th className='text-center py-3 px-4 font-semibold text-sm'>
                       작업
                     </th>
                   </tr>
@@ -271,7 +271,7 @@ export default function ProjectManagementPage() {
                     <tr>
                       <td
                         colSpan={6}
-                        className="text-center py-8 text-muted-foreground"
+                        className='text-center py-8 text-muted-foreground'
                       >
                         아직 프로젝트가 없습니다.
                       </td>
@@ -280,35 +280,35 @@ export default function ProjectManagementPage() {
                     paginatedProjects.map(project => (
                       <tr
                         key={project.id}
-                        className="border-b hover:bg-muted/20 transition-colors"
+                        className='border-b hover:bg-muted/20 transition-colors'
                       >
-                        <td className="py-3 px-4">
+                        <td className='py-3 px-4'>
                           <div>
-                            <div className="font-medium">{project.name}</div>
-                            <div className="text-sm text-muted-foreground">
+                            <div className='font-medium'>{project.name}</div>
+                            <div className='text-sm text-muted-foreground'>
                               {project.description}
                             </div>
                           </div>
                         </td>
-                        <td className="py-3 px-4">
+                        <td className='py-3 px-4'>
                           <Badge className={getStatusColor(project.status)}>
                             {project.status}
                           </Badge>
                         </td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center gap-2">
-                            <div className="w-16 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                        <td className='py-3 px-4'>
+                          <div className='flex items-center gap-2'>
+                            <div className='w-16 bg-gray-200 rounded-full h-2 dark:bg-gray-700'>
                               <div
-                                className="bg-blue-600 h-2 rounded-full"
+                                className='bg-blue-600 h-2 rounded-full'
                                 style={{ width: `${project.progress}%` }}
                               ></div>
                             </div>
-                            <span className="text-sm text-muted-foreground">
+                            <span className='text-sm text-muted-foreground'>
                               {project.progress}%
                             </span>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-sm text-muted-foreground">
+                        <td className='py-3 px-4 text-sm text-muted-foreground'>
                           <div>
                             {new Date(project.startDate).toLocaleDateString(
                               "ko-KR",
@@ -329,27 +329,27 @@ export default function ProjectManagementPage() {
                             )}
                           </div>
                         </td>
-                        <td className="py-3 px-4">
-                          <div className="text-sm">
+                        <td className='py-3 px-4'>
+                          <div className='text-sm'>
                             {project.teamMembers.join(", ")}
                           </div>
                         </td>
-                        <td className="py-3 px-4">
-                          <div className="flex items-center justify-center gap-2">
+                        <td className='py-3 px-4'>
+                          <div className='flex items-center justify-center gap-2'>
                             <Button
-                              size="sm"
-                              variant="outline"
+                              size='sm'
+                              variant='outline'
                               onClick={() => handleProjectDetail(project.id)}
                             >
-                              <Eye className="w-3 h-3" />
+                              <Eye className='w-3 h-3' />
                             </Button>
                             <Button
-                              size="sm"
-                              variant="outline"
+                              size='sm'
+                              variant='outline'
                               onClick={() => handleDeleteRequest(project.id)}
                               disabled={projectToDelete !== null}
                             >
-                              <Trash2 className="w-3 h-3" />
+                              <Trash2 className='w-3 h-3' />
                             </Button>
                           </div>
                         </td>
@@ -362,8 +362,8 @@ export default function ProjectManagementPage() {
 
             {/* 페이지네이션 */}
             {totalPages > 1 && (
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 border-t">
-                <div className="text-sm text-muted-foreground">
+              <div className='flex flex-col sm:flex-row items-center justify-between gap-4 p-6 border-t'>
+                <div className='text-sm text-muted-foreground'>
                   총 <strong>{totalItems.toLocaleString()}</strong>개 중{" "}
                   <strong>{(currentPage - 1) * itemsPerPage + 1}</strong>-
                   <strong>
@@ -372,34 +372,34 @@ export default function ProjectManagementPage() {
                   개 표시
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className='flex items-center gap-2'>
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => handlePageChange(1)}
                     disabled={currentPage === 1}
-                    className="hidden sm:flex"
+                    className='hidden sm:flex'
                   >
-                    <ChevronsLeft className="w-4 h-4" />
+                    <ChevronsLeft className='w-4 h-4' />
                   </Button>
 
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    <ChevronLeft className="w-4 h-4" />
-                    <span className="hidden sm:inline ml-1">이전</span>
+                    <ChevronLeft className='w-4 h-4' />
+                    <span className='hidden sm:inline ml-1'>이전</span>
                   </Button>
 
-                  <div className="flex items-center gap-1">
+                  <div className='flex items-center gap-1'>
                     {visiblePages.map((page, index) => {
                       if (page === "...") {
                         return (
                           <span
                             key={`dots-${index}`}
-                            className="px-2 py-1 text-muted-foreground"
+                            className='px-2 py-1 text-muted-foreground'
                           >
                             ...
                           </span>
@@ -413,7 +413,7 @@ export default function ProjectManagementPage() {
                         <Button
                           key={pageNumber}
                           variant={isCurrentPage ? "default" : "outline"}
-                          size="sm"
+                          size='sm'
                           onClick={() => handlePageChange(pageNumber)}
                           className={`min-w-[32px] h-8 ${
                             isCurrentPage
@@ -428,23 +428,23 @@ export default function ProjectManagementPage() {
                   </div>
 
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
-                    <span className="hidden sm:inline mr-1">다음</span>
-                    <ChevronRight className="w-4 h-4" />
+                    <span className='hidden sm:inline mr-1'>다음</span>
+                    <ChevronRight className='w-4 h-4' />
                   </Button>
 
                   <Button
-                    variant="outline"
-                    size="sm"
+                    variant='outline'
+                    size='sm'
                     onClick={() => handlePageChange(totalPages)}
                     disabled={currentPage === totalPages}
-                    className="hidden sm:flex"
+                    className='hidden sm:flex'
                   >
-                    <ChevronsRight className="w-4 h-4" />
+                    <ChevronsRight className='w-4 h-4' />
                   </Button>
                 </div>
               </div>

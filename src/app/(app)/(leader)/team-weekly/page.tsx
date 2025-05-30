@@ -69,8 +69,8 @@ export default function TeamWeeklyPage() {
 
   const MyButton = () => {
     return (
-      <Button onClick={handleCreateNew} className="flex items-center gap-2">
-        <Plus className="w-4 h-4" />새 보고서 생성
+      <Button onClick={handleCreateNew} className='flex items-center gap-2'>
+        <Plus className='w-4 h-4' />새 보고서 생성
       </Button>
     );
   };
@@ -79,15 +79,15 @@ export default function TeamWeeklyPage() {
     <div>
       {/* 기존 더미 내용 */}
       <PageHeader
-        title="팀 위클리"
-        description="팀 위클리 보고서 목록"
+        title='팀 위클리'
+        description='팀 위클리 보고서 목록'
         buttonElement={<MyButton />}
       />
 
       {/* 보고서 목록 */}
       <WeeklyReportListPage
-        title="팀 위클리 보고서 목록"
-        createButtonText="새 보고서 생성"
+        title='팀 위클리 보고서 목록'
+        createButtonText='새 보고서 생성'
         onCreateNew={handleCreateNew}
         reports={paginatedReports}
         onRowClick={handleRowClick}
@@ -95,7 +95,7 @@ export default function TeamWeeklyPage() {
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         onPageChange={handlePageChange}
-        emptyMessage="아직 생성된 팀 위클리 보고서가 없습니다."
+        emptyMessage='아직 생성된 팀 위클리 보고서가 없습니다.'
       />
     </div>
   );
