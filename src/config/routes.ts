@@ -51,14 +51,14 @@ export const sidebarRoutes: RouteConfig[] = [
   },
   {
     path: "/team-weekly",
-    name: "팀 Weekly",
+    name: "팀 위클리",
     icon: "FolderKanban", // 예시
     roles: ["LEADER"],
     viewType: "LEADER_MENU",
   },
   {
     path: "/manager-weekly",
-    name: "매니저 Weekly",
+    name: "매니저 위클리",
     icon: "FolderKanban", // 예시
     roles: ["LEADER"],
     viewType: "LEADER_MENU",
