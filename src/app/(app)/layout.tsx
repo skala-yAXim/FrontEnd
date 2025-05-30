@@ -93,8 +93,8 @@ export default function AppGroupLayout({
             </div>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <main className="flex flex-1 flex-col bg-muted/30 dark:bg-muted/50">
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          <main className="flex flex-1 flex-col bg-muted/30 dark:bg-muted/50 rounded-2xl">
             {children}
           </main>
         </div>
