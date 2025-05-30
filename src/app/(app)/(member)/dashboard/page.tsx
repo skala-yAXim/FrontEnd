@@ -1,10 +1,12 @@
-// app/(app)/dashboard/page.tsx
+import PageHeader from "@/components/PageHeader";
+
 export default function DashboardPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-semibold mb-4">대시보드</h1>
-      {/* 대시보드 컨텐츠 */}
-      <p>환영합니다! 여기는 대시보드 페이지입니다.</p>
+    <div className="space-y-6">
+      <PageHeader
+        title="대시보드"
+        description="환영합니다! 여기는 대시보드 페이지입니다."
+      />
     </div>
   );
 }
