@@ -1,9 +1,10 @@
 // TODO: 리팩토링 (use client 남발, 더미 데이터 사용)
 "use client";
 
+import PageHeader from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import {
   ChevronLeft,
   ChevronRight,
@@ -48,8 +49,6 @@ const generateDummyReports = (): WeeklyReportItem[] => {
   return reports.reverse(); // 최신순으로 정렬
 };
 
-const dummyReports = generateDummyReports();
-
 const getStatusColor = (status: string): string => {
   switch (status) {
     case "completed":
@@ -86,13 +85,30 @@ export default function WeeklyReportsPage() {
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = React.useState(1);
   const itemsPerPage = 10;
-  const totalItems = dummyReports.length;
+
+  // dummyReports를 직접 사용하지 않고, state로 관리하여 hydration 오류 방지
+  const [reports, setReports] = React.useState<WeeklyReportItem[]>([]);
+  const [paginatedReports, setPaginatedReports] = React.useState<
+    WeeklyReportItem[]
+  >([]);
+
+  const totalItems = reports.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const paginatedReports = dummyReports.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  React.useEffect(() => {
+    // 클라이언트 사이드에서만 더미 데이터 생성 및 설정
+    const allReports = generateDummyReports();
+    setReports(allReports);
+  }, []);
+
+  React.useEffect(() => {
+    // reports 상태가 변경되면 paginatedReports 업데이트
+    const newPaginatedReports = reports.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+    setPaginatedReports(newPaginatedReports);
+  }, [reports, currentPage, itemsPerPage]);
 
   // 행 클릭 핸들러
   const handleRowClick = (reportId: string, status: string) => {
@@ -147,19 +163,15 @@ export default function WeeklyReportsPage() {
 
   return (
     <div>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>보고서 목록</CardTitle>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={handleCreateNew}
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />새 보고서 생성
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
+      <PageHeader
+        title="보고서 목록"
+        description="지난 주간 보고서들을 확인하고 새로운 보고서를 작성할 수 있습니다."
+        buttonElement={
+          <Button onClick={handleCreateNew} className="flex items-center gap-2">
+            <Plus className="w-4 h-4" />새 보고서 생성
+          </Button>
+        }
+      />
       <CardContent>
         {/* 테이블 */}
         <div className="overflow-x-auto">
