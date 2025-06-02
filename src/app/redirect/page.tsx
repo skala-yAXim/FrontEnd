@@ -1,10 +1,10 @@
 "use client";
 
-import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import { User } from "@/types/userType";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { httpClient } from "../../lib/api/httpClient";
 
 export default function RedirectPage() {
   const user = useAuthStore(state => state.user);
@@ -12,20 +12,19 @@ export default function RedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = await api.get<User>("/my/info");
-        if (userData) {
-          login(userData);
+    httpClient
+      .getMyInfo<User>()
+      .then(res => {
+        if (res) {
+          login(res);
           router.push("/dashboard");
         }
-      } catch (error) {
+      })
+      .catch(error => {
         console.error("Failed to fetch user info:", error);
         alert("로그인에 실패하였습니다. 로그인 페이지로 이동합니다.");
         router.push("/login");
-      }
-    };
-    fetchData();
+      });
   }, [login, router]);
 
   return (
