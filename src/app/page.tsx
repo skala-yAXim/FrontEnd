@@ -1,10 +1,10 @@
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ModeToggle } from "@/components/ModeToggleButton";
 
 export default function Home() {
   return (
     <main className='min-h-screen p-8'>
       <div className='absolute top-4 right-4'>
-        <ThemeToggle />
+        <ModeToggle />
       </div>
 
       <div className='max-w-4xl mx-auto mt-16'>
