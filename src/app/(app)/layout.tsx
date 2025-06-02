@@ -25,28 +25,22 @@ export default function AppGroupLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const userRole = useAuthStore((state: AuthState) => state.userRole);
+  const userRole = useAuthStore((state: AuthState) => state.user?.userRole);
   const isAuthenticated = useAuthStore(
     (state: AuthState) => state.isAuthenticated
   );
-  const isLoadingAuth = useAuthStore((state: AuthState) => state.isLoading);
+  const isLoading = useAuthStore((state: AuthState) => state.isLoading);
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoadingAuth && !isAuthenticated) {
-      router.replace("/login");
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.replace("/login");
+      }
     }
-  }, [isLoadingAuth, isAuthenticated, router]);
+  }, [isAuthenticated, isLoading, router]);
 
-  if (isLoadingAuth) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <p>Loading authentication...</p>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
+  if (isLoading) {
     return null;
   }
 

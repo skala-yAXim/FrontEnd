@@ -9,7 +9,7 @@ export default function LeaderGroupLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const userRole = useAuthStore((state: AuthState) => state.userRole);
+  const userRole = useAuthStore((state: AuthState) => state.user?.userRole);
   const isAuthenticated = useAuthStore(
     (state: AuthState) => state.isAuthenticated
   );

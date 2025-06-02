@@ -2,7 +2,7 @@
 
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
-import { User, UserRole } from "@/types/userType";
+import { User } from "@/types/userType";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -16,7 +16,7 @@ export default function RedirectPage() {
       try {
         const userData = await api.get<User>("/my/info");
         if (userData) {
-          login(userData, userData.userRole as UserRole);
+          login(userData);
           router.push("/dashboard");
         }
       } catch (error) {
@@ -32,11 +32,11 @@ export default function RedirectPage() {
     // 로그인 중인 상태 확인 페이지
 
     <div>
-      {/* <h1>userName:{user?.name}</h1>
+      <h1>userName:{user?.name}</h1>
       <p>userEmail:{user?.email}</p>
       <p>userRole:{user?.userRole}</p>
       <p>userId:{user?.userId}</p>
-      <p>gitEmail:{user?.gitEmail}</p> */}
+      <p>gitEmail:{user?.gitEmail}</p>
       <p>로그인 중인 상태 확인 페이지</p>
     </div>
   );

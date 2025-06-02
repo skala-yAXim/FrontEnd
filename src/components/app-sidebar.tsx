@@ -50,9 +50,10 @@ const iconMap: { [key: string]: LucideIcon } = {
 
 // Footer 사용자 표시 컴포넌트 (기존 NavUser 대체)
 const UserFooterDisplay = () => {
-  const userRole = useAuthStore((state: AuthState) => state.userRole);
+  const userRole = useAuthStore((state: AuthState) => state.user?.userRole);
   // AuthState에 email 또는 name이 있다면 가져와서 사용 가능
-  // const userEmail = useAuthStore((state: AuthState) => state.email);
+  const userEmail = useAuthStore((state: AuthState) => state.user?.email);
+  const userName = useAuthStore((state: AuthState) => state.user?.name);
 
   if (!userRole) {
     // 로그인하지 않았거나 역할을 아직 모를 경우 (예: 로딩 중)
@@ -85,11 +86,9 @@ const UserFooterDisplay = () => {
           <div className='grid flex-1 text-left text-sm leading-tight'>
             <span className='truncate font-medium'>
               {/* 실제 사용자 이름이 있다면 표시, 여기서는 displayName 사용 */}
-              {displayName}
+              {userName}
             </span>
-            <span className='truncate text-xs capitalize'>
-              {userRole.toLowerCase()}
-            </span>
+            <span className='truncate text-xs'>{userEmail}</span>
           </div>
         </SidebarMenuButton>
       </SidebarMenuItem>
@@ -115,7 +114,7 @@ const convertRoutesToNavItems = (routes: RouteConfig[], pathname: string) => {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const userRole = useAuthStore((state: AuthState) => state.userRole);
+  const userRole = useAuthStore((state: AuthState) => state.user?.userRole);
   const pathname = usePathname();
 
   let memberMenuItems: any[] = [];
