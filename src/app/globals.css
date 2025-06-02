@@ -137,3 +137,9 @@ html.dark body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Tailwind CSS를 사용하는 경우 */
+[data-active="true"] > a,
+a[aria-current="page"] {
+  @apply opacity-75 pointer-events-none cursor-default; /* 예시: 투명도, 클릭 이벤트 무시, 기본 커서 */
+}

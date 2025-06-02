@@ -7,13 +7,15 @@ import {
   // routes.ts 및 정적 UI에 필요한 아이콘들
   Home,
   LayoutDashboard,
+  LogOut,
   Minus,
   Settings,
+  User,
   UserCircle,
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 
 // Store 및 Config import
@@ -36,6 +38,16 @@ import {
 // ScrollArea는 SidebarContent 내부에서 자체적으로 처리될 수 있으므로 여기서는 직접 사용하지 않음
 // 만약 NavMain 등이 자체 스크롤을 지원하지 않으면 SidebarContent에 ScrollArea를 다시 적용해야 할 수 있음
 
+// ShadCN UI 컴포넌트 import
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 // 아이콘 매핑
 const iconMap: { [key: string]: LucideIcon } = {
   Home,
@@ -45,14 +57,23 @@ const iconMap: { [key: string]: LucideIcon } = {
   FolderKanban,
   Settings,
   Command,
+  LogOut,
+  User,
   // Minus는 직접 사용하므로 map에 없어도 됨
 };
 
 // Footer 사용자 표시 컴포넌트 (기존 NavUser 대체)
 const UserFooterDisplay = () => {
   const userRole = useAuthStore((state: AuthState) => state.userRole);
-  // AuthState에 email 또는 name이 있다면 가져와서 사용 가능
-  // const userEmail = useAuthStore((state: AuthState) => state.email);
+  const userEmail = useAuthStore((state: AuthState) => state.user?.email);
+  const userName = useAuthStore((state: AuthState) => state.user?.name);
+  const logoutAction = useAuthStore(state => state.logout);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logoutAction();
+    router.push("/login");
+  };
 
   if (!userRole) {
     // 로그인하지 않았거나 역할을 아직 모를 경우 (예: 로딩 중)
@@ -68,32 +89,38 @@ const UserFooterDisplay = () => {
     );
   }
 
-  const displayName =
-    userRole === "LEADER"
-      ? "팀장님"
-      : userRole === "MEMBER"
-        ? "팀원님"
-        : userRole;
-
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <SidebarMenuButton size='lg' className='w-full'>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <SidebarMenuButton size='lg' className='w-full cursor-pointer'>
           <div className='bg-muted text-muted-foreground flex aspect-square size-8 items-center justify-center rounded-lg'>
             <UserCircle className='size-4' />
           </div>
           <div className='grid flex-1 text-left text-sm leading-tight'>
-            <span className='truncate font-medium'>
-              {/* 실제 사용자 이름이 있다면 표시, 여기서는 displayName 사용 */}
-              {displayName}
-            </span>
-            <span className='truncate text-xs capitalize'>
-              {userRole.toLowerCase()}
-            </span>
+            <span className='truncate font-medium'>{userName}</span>
+            <span className='truncate text-xs'>{userEmail}</span>
           </div>
         </SidebarMenuButton>
-      </SidebarMenuItem>
-    </SidebarMenu>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align='end' sideOffset={8} className='w-56'>
+        <DropdownMenuLabel>내 계정</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href='/account'>
+            {" "}
+            {/* 프로필 페이지 경로 (예시) */}
+            <User className='mr-2 size-4' />
+            <span>프로필</span>
+          </Link>
+        </DropdownMenuItem>
+        {/* 다른 계정 관련 메뉴 항목 추가 가능 */}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={handleLogout} className='cursor-pointer'>
+          <LogOut className='mr-2 size-4' />
+          <span>로그아웃</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
@@ -115,7 +142,7 @@ const convertRoutesToNavItems = (routes: RouteConfig[], pathname: string) => {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const userRole = useAuthStore((state: AuthState) => state.userRole);
+  const userRole = useAuthStore((state: AuthState) => state.user?.userRole);
   const pathname = usePathname();
 
   let memberMenuItems: any[] = [];
@@ -159,9 +186,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
                   <span className='truncate font-medium'>yAXim</span>
-                  <span className='truncate text-xs'>
-                    사내 주간 보고서 자동 생성 서비스
-                  </span>
+                  <span className='truncate text-xs'>사내 업무 관리서비스</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -170,9 +195,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        <NavMain items={memberMenuItems} groupLabel='개인 메뉴' />
+        <NavMain
+          items={memberMenuItems}
+          groupLabel='개인 메뉴'
+          pathname={pathname}
+        />
         {userRole === "LEADER" && (
-          <NavMain items={leaderMenuItems} groupLabel='팀장 메뉴' />
+          <NavMain
+            items={leaderMenuItems}
+            groupLabel='팀장 메뉴'
+            pathname={pathname}
+          />
         )}
         {/* <NavProjects projects={navProjectsItems} /> */}
         {/* <NavSecondary items={navSecondaryItems} className="mt-auto" /> */}
