@@ -1,7 +1,7 @@
 "use client";
 
 import { AppSidebar } from "@/components/app-sidebar";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -83,7 +83,7 @@ export default function AppGroupLayout({
 
             {/* 오른쪽 요소 그룹 (다크모드 버튼) */}
             <div className='flex items-center'>
-              <ThemeToggle />
+              <ThemeToggleButton />
             </div>
           </div>
         </header>
