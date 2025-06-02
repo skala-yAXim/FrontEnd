@@ -1,29 +1,41 @@
 "use client";
 
 import {
+  ChevronsUpDown,
   Command,
   FileText,
   FolderKanban,
-  // routes.ts 및 정적 UI에 필요한 아이콘들
   Home,
   LayoutDashboard,
+  LogOut,
   Minus,
   Settings,
   UserCircle,
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 
 // Store 및 Config import
 import { RouteConfig, sidebarRoutes } from "@/config/routes";
 import { AuthState, useAuthStore } from "@/store/authStore";
 
-// Nav 컴포넌트 import (정의는 사용자 프로젝트 내에 있다고 가정)
+// Nav 컴포넌트 import
 import { NavMain } from "@/components/nav-main";
-// import { NavUser } from "@/components/nav-user"; // UserDisplay로 대체
 
+// Avatar 컴포넌트 import
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; // Avatar 관련 컴포넌트
+// DropdownMenu 컴포넌트 import
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"; // DropdownMenu 관련 컴포넌트
 import {
   Sidebar,
   SidebarContent,
@@ -33,8 +45,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-// ScrollArea는 SidebarContent 내부에서 자체적으로 처리될 수 있으므로 여기서는 직접 사용하지 않음
-// 만약 NavMain 등이 자체 스크롤을 지원하지 않으면 SidebarContent에 ScrollArea를 다시 적용해야 할 수 있음
 
 // 아이콘 매핑
 const iconMap: { [key: string]: LucideIcon } = {
@@ -45,52 +55,113 @@ const iconMap: { [key: string]: LucideIcon } = {
   FolderKanban,
   Settings,
   Command,
-  // Minus는 직접 사용하므로 map에 없어도 됨
+  LogOut,
 };
 
-// Footer 사용자 표시 컴포넌트 (기존 NavUser 대체)
+// Footer 사용자 표시 컴포넌트
 const UserFooterDisplay = () => {
-  const userRole = useAuthStore((state: AuthState) => state.user?.userRole);
-  // AuthState에 email 또는 name이 있다면 가져와서 사용 가능
-  const userEmail = useAuthStore((state: AuthState) => state.user?.email);
-  const userName = useAuthStore((state: AuthState) => state.user?.name);
+  const user = useAuthStore((state: AuthState) => state.user);
+  const router = useRouter();
 
-  if (!userRole) {
-    // 로그인하지 않았거나 역할을 아직 모를 경우 (예: 로딩 중)
+  if (!user || !user.userRole) {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton className='w-full justify-start'>
-            <UserCircle className='mr-2 size-4' />
-            로그인 필요
+          <SidebarMenuButton className='w-full justify-start' asChild>
+            <Link href='/login'>
+              <UserCircle className='mr-2 size-4' />
+              로그인 필요
+            </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
     );
   }
 
-  const displayName =
-    userRole === "LEADER"
-      ? "팀장님"
-      : userRole === "MEMBER"
-        ? "팀원님"
-        : userRole;
-
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size='lg' className='w-full'>
-          <div className='bg-muted text-muted-foreground flex aspect-square size-8 items-center justify-center rounded-lg'>
-            <UserCircle className='size-4' />
-          </div>
-          <div className='grid flex-1 text-left text-sm leading-tight'>
-            <span className='truncate font-medium'>
-              {/* 실제 사용자 이름이 있다면 표시, 여기서는 displayName 사용 */}
-              {userName}
-            </span>
-            <span className='truncate text-xs'>{userEmail}</span>
-          </div>
-        </SidebarMenuButton>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size='lg'
+              className='w-full data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+            >
+              <Avatar className='mr-2 size-8 rounded-lg'>
+                <AvatarImage
+                  src={(user as any).avatar || undefined}
+                  alt={user.name || "User"}
+                />
+                <AvatarFallback className='rounded-lg'>
+                  {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                </AvatarFallback>
+              </Avatar>
+              <div className='grid flex-1 text-left text-sm leading-tight'>
+                <span className='truncate font-medium'>
+                  {user.name || "사용자 이름"}
+                </span>
+                <span className='truncate text-xs'>
+                  {user.email || "사용자 이메일"}
+                </span>
+              </div>
+              <ChevronsUpDown className='ml-auto size-4' />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className='w-[calc(var(--radix-dropdown-menu-trigger-width)-8px)] min-w-56 rounded-lg'
+            side='right'
+            align='end'
+            sideOffset={8}
+          >
+            <DropdownMenuLabel className='p-0 font-normal'>
+              <div className='flex items-center gap-2 px-2 py-1.5 text-left text-sm'>
+                <Avatar className='size-8 rounded-lg'>
+                  <AvatarImage
+                    src={(user as any).avatar || undefined}
+                    alt={user.name || "User"}
+                  />
+                  <AvatarFallback className='rounded-lg'>
+                    {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className='grid flex-1 text-left text-sm leading-tight'>
+                  <span className='truncate font-medium'>
+                    {user.name || "사용자 이름"}
+                  </span>
+                  <span className='truncate text-xs'>
+                    {user.email || "사용자 이메일"}
+                  </span>
+                </div>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <Link href='/mypage'>
+                  <UserCircle className='mr-2 size-4' />
+                  마이페이지
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href='/settings'>
+                  <Settings className='mr-2 size-4' />
+                  설정
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                useAuthStore.getState().logout();
+
+                router.push("/login");
+              }}
+            >
+              <LogOut className='mr-2 size-4' />
+              로그아웃
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
   );
@@ -103,11 +174,13 @@ const convertRoutesToNavItems = (routes: RouteConfig[], pathname: string) => {
       ? iconMap[route.icon]
       : undefined;
     const resolvedIcon: LucideIcon = IconComponent || Minus; // Fallback icon
+    const isActive = pathname === route.path;
     return {
       title: route.name,
       url: route.path,
       icon: resolvedIcon,
-      isActive: pathname === route.path,
+      isActive: isActive,
+      disabled: isActive,
       items: [], // Assuming no sub-items for now
     };
   });
