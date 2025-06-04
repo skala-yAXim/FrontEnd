@@ -1,10 +1,10 @@
 "use client";
 
+import { httpInterface } from "@/lib/api/httpInterface";
 import { useAuthStore } from "@/store/authStore";
 import { User } from "@/types/userType";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { httpClient } from "../../lib/api/httpClient";
 
 export default function RedirectPage() {
   const user = useAuthStore(state => state.user);
@@ -12,7 +12,7 @@ export default function RedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    httpClient
+    httpInterface
       .getMyInfo<User>()
       .then(res => {
         if (res) {
