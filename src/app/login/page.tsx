@@ -1,4 +1,4 @@
-import { ThemeToggleButton } from "@/components/ThemeToggleButton";
+import { ThemeToggleButton } from "@/components/theme/ThemeToggleButton";
 import { BrandingSection } from "./components/BrandingSection";
 import { LoginForm } from "./components/LoginForm";
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { AppSidebar } from "@/components/app-sidebar";
-import { ThemeToggleButton } from "@/components/ThemeToggleButton";
+import { AppSidebar } from "@/components/sidebar/AppSidebar";
+import { ThemeToggleButton } from "@/components/theme/ThemeToggleButton";
 import {
   Breadcrumb,
   BreadcrumbItem,
