@@ -25,12 +25,16 @@ export async function customFetch<T>(
     ? path
     : `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
 
+  // FormData인 경우 Content-Type 헤더를 설정하지 않음
+  const isFormData = options.body instanceof FormData;
   const defaultOptions: RequestInit = {
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
+    headers: isFormData
+      ? options.headers
+      : {
+          "Content-Type": "application/json",
+          ...(options.headers || {}),
+        },
     ...options,
   };
 
