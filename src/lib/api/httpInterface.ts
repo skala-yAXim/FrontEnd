@@ -27,6 +27,10 @@ export class HttpInterface {
     return this.apiClient.postFormData<T>("/projects", projectData);
   }
 
+  async deleteProject<T>(projectId: number): Promise<T> {
+    return this.apiClient.delete<T>(`/projects/${projectId}`);
+  }
+
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.
   // 예시:
   // /**

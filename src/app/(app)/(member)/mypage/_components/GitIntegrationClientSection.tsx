@@ -11,7 +11,7 @@ import {
   Github,
   Settings,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Git OAuth 상태 타입
 interface GitIntegration {
@@ -27,59 +27,120 @@ interface GitIntegration {
  */
 export default function GitIntegrationClientSection() {
   const [gitIntegration, setGitIntegration] = useState<GitIntegration>({
-    isConnected: false, // 기본값: 연동 안됨
+    isConnected: false,
   });
-  const [isConnecting, setIsConnecting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Git OAuth 연동 핸들러
+  // 마운트 시 GitHub 연동 상태 확인
+  useEffect(() => {
+    const fetchGitStatus = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        // 백엔드의 연동 상태 확인 API 호출 (실제 엔드포인트로 수정 필요)
+        const response = await fetch("/api/user/git-integration-status"); // 예시 API 경로
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          throw new Error(
+            errorData?.message || "연동 상태를 가져오는데 실패했습니다."
+          );
+        }
+        const data: GitIntegration = await response.json();
+        setGitIntegration(data);
+        if (data.isConnected) {
+          // 성공 메시지는 여기서 직접 설정하기보다,
+          // OAuth 콜백 성공 후 리디렉션 시 쿼리 파라미터 등으로 전달받는 것이 일반적입니다.
+          // setSuccess("GitHub 계정이 성공적으로 연동되어 있습니다.");
+        }
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("알 수 없는 오류가 발생했습니다.");
+        }
+        // 연동 정보가 없는 경우 (e.g. 404)는 에러가 아닐 수 있으므로, API 응답에 따라 처리
+        setGitIntegration({ isConnected: false });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGitStatus();
+  }, []);
+
+  // Git OAuth 연동 시작 핸들러
   const handleGitConnect = async () => {
-    setIsConnecting(true);
+    setIsProcessing(true);
     setError(null);
     setSuccess(null);
-
-    try {
-      // 데모용 연동 처리 (2초 대기)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // 연동 성공으로 처리
-      setGitIntegration({
-        isConnected: true,
-        username: "demo-user",
-        avatar: "https://avatars.githubusercontent.com/u/12345?v=4", // Placeholder avatar
-        connectedAt: new Date().toISOString(),
-      });
-      setSuccess("GitHub 계정이 성공적으로 연동되었습니다.");
-    } catch (err) {
-      setError("Git 연동에 실패했습니다.");
-      console.error("Git connect error:", err);
-    } finally {
-      setIsConnecting(false);
-    }
+    // 백엔드의 GitHub 로그인 시작 API 엔드포인트로 리디렉션
+    // 실제로는 환경변수 등을 통해 백엔드 URL을 관리하는 것이 좋습니다.
+    window.location.href = "/api/auth/github/login"; // 예시 API 경로
+    // setIsProcessing(false)는 페이지가 리디렉션되므로 보통 필요 없습니다.
+    // 오류 발생 시를 대비한다면 try-catch로 감싸고 setIsProcessing(false)를 finally에 넣을 수 있습니다.
   };
 
   // Git 연동 해제 핸들러
   const handleGitDisconnect = async () => {
-    setIsConnecting(true);
+    setIsProcessing(true);
     setError(null);
     setSuccess(null);
 
     try {
-      // 데모용 해제 처리 (1초 대기)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // 백엔드의 연동 해제 API 호출 (실제 엔드포인트로 수정 필요)
+      const response = await fetch("/api/user/git-disconnect", {
+        // 예시 API 경로
+        method: "POST", // 또는 적절한 HTTP 메소드
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || "연동 해제에 실패했습니다.");
+      }
 
       setGitIntegration({
         isConnected: false,
+        username: undefined,
+        avatar: undefined,
+        connectedAt: undefined,
       });
-      setSuccess("GitHub 연동이 해제되었습니다.");
+      setSuccess("GitHub 연동이 성공적으로 해제되었습니다.");
     } catch (err) {
-      setError("연동 해제에 실패했습니다.");
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("연동 해제 중 알 수 없는 오류가 발생했습니다.");
+      }
       console.error("Git disconnect error:", err);
     } finally {
-      setIsConnecting(false);
+      setIsProcessing(false);
     }
   };
+
+  // 로딩 중 UI
+  if (isLoading) {
+    return (
+      <div>
+        <CardHeader>
+          <CardTitle className='flex items-center gap-2'>
+            <Github className='w-5 h-5' />
+            GitHub 연동
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className='flex items-center justify-center p-8'>
+            <Settings className='w-8 h-8 animate-spin text-muted-foreground' />
+            <p className='ml-2 text-muted-foreground'>
+              연동 정보를 불러오는 중입니다...
+            </p>
+          </div>
+        </CardContent>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -167,10 +228,10 @@ export default function GitIntegrationClientSection() {
               <Button
                 variant='outline'
                 onClick={handleGitDisconnect}
-                disabled={isConnecting}
+                disabled={isProcessing}
                 className='text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 dark:border-red-800 dark:hover:bg-red-900/20'
               >
-                {isConnecting ? "연동 해제 중..." : "연동 해제"}
+                {isProcessing ? "처리 중..." : "연동 해제"}
               </Button>
             </div>
           </div>
@@ -191,11 +252,11 @@ export default function GitIntegrationClientSection() {
 
             <Button
               onClick={handleGitConnect}
-              disabled={isConnecting}
+              disabled={isProcessing}
               className='w-full flex items-center gap-2 bg-[#24292e] hover:bg-[#1b1f23] text-white'
             >
               <Github className='w-4 h-4' />
-              {isConnecting ? "GitHub 연동 중..." : "GitHub 연동하기"}
+              {isProcessing ? "연동 페이지로 이동 중..." : "GitHub 연동하기"}
             </Button>
           </div>
         )}
