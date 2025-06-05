@@ -26,6 +26,10 @@ export class ServerHttpInterface {
     return this.apiClient.get<UserInfo>("/my/info");
   }
 
+  async getProjectDetail<T>(id: number): Promise<T> {
+    return this.apiClient.get<T>(`/projects/${id}`);
+  }
+
   // 여기에 다른 서버 컴포넌트용 API 메소드들을 추가할 수 있습니다.
 }
 

@@ -110,5 +110,20 @@ export async function customFetch<T>(
     throw new Error(errorData?.message || `HTTP error! status: ${res.status}`);
   }
 
-  return res.json();
+  if (res.status === 204) {
+    // 204 No Content
+    return null as T;
+  }
+
+  const contentType = res.headers.get("content-type");
+  if (!contentType || !contentType.includes("application/json")) {
+    // JSON이 아니거나, 본문이 없음
+    return null as T;
+  }
+
+  const text = await res.text();
+  if (!text) {
+    return null as T;
+  }
+  return JSON.parse(text);
 }

@@ -2,7 +2,7 @@
 
 import PageHeader from "@/components/PageHeader";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useCreateProjects } from "@/hooks/useCreateProjects";
+import { useCreateProjects } from "@/hooks/useProjectQueries";
 import { ProjectCreateForm } from "@/types/projectType";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,23 +21,8 @@ export default function ProjectCreatePage() {
       formData.append("name", form.name);
 
       // 날짜를 UTC로 변환
-      const startDateTime = new Date(form.startDate);
-      const endDateTime = new Date(form.endDate);
-
-      // Spring의 LocalDateTime 기본 형식으로 포맷팅 (yyyy-MM-dd'T'HH:mm:ss)
-      const formatToLocalDateTime = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
-        const seconds = String(date.getSeconds()).padStart(2, "0");
-
-        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-      };
-
-      formData.append("startDate", formatToLocalDateTime(startDateTime));
-      formData.append("endDate", formatToLocalDateTime(endDateTime));
+      formData.append("startDate", form.startDate);
+      formData.append("endDate", form.endDate);
       formData.append("description", form.description);
 
       // 파일 추가 (File 객체만 사용)

@@ -1,15 +1,14 @@
 "use client";
 
-import { api } from "@/lib/api/http"; // Assuming your api object is here
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react"; // useEffect might still be needed for other logic, or removed if not.
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
-import { useGetProjects } from "@/hooks/useGetProjects";
+import { useDeleteProject, useGetProjects } from "@/hooks/useProjectQueries";
 import { Project } from "@/types/projectType";
+import { getStatusColor } from "@/utils/statusColor";
 import {
   AlertCircle,
   ChevronLeft,
@@ -29,27 +28,9 @@ import { useRouter } from "next/navigation";
 // 만약 API가 { content: Project[], totalElements: number, ... } 형태라면:
 // interface ProjectsResponse { content: Project[]; totalElements: number; totalPages: number; number: number; size: number; }
 
-// 상태별 색상
-const getStatusColor = (status: string): string => {
-  switch (status.toUpperCase()) {
-    case "PLANNING":
-      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
-    case "IN_PROGRESS":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
-    case "COMPLETED":
-      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
-    case "PENDING":
-      return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300";
-    case "CANCELLED":
-      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
-    default:
-      return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200";
-  }
-};
-
 export default function ProjectListClient() {
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const { mutate: deleteProject, isPending } = useDeleteProject();
 
   const [currentPage, setCurrentPage] = useState(0); // API page (0-indexed)
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -86,23 +67,6 @@ export default function ProjectListClient() {
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const deleteMutation = useMutation<void, Error, number>({
-    // Returns void, Error type, projectId is number
-    mutationFn: (projectId: number) => api.delete(`/projects/${projectId}`),
-    onSuccess: (_, deletedProjectId) => {
-      alert(`프로젝트 (ID: ${deletedProjectId})가 삭제되었습니다.`);
-      setProjectToDelete(null); // Close confirmation
-      setDeleteError(null);
-      // Invalidate the projects query to refetch the list
-      queryClient.invalidateQueries({ queryKey: ["projects"] }); // More specific: queryClient.invalidateQueries({ queryKey: projectsQueryKey }) will refetch current page.
-      // Using just ['projects'] will refetch any query starting with 'projects'.
-    },
-    onError: err => {
-      setDeleteError(`삭제 실패: ${err.message}`);
-      // projectToDelete remains so user can see the error in the dialog
-    },
-  });
-
   const handleDeleteRequest = (project: Project) => {
     setProjectToDelete(project);
     setDeleteError(null); // Clear previous delete error
@@ -110,7 +74,10 @@ export default function ProjectListClient() {
 
   const handleDeleteConfirm = () => {
     if (projectToDelete) {
-      deleteMutation.mutate(projectToDelete.id);
+      deleteProject(projectToDelete.id);
+      setProjectToDelete(null);
+      setDeleteError(null);
+      // alert(`프로젝트 (ID: ${projectToDelete.id})가 삭제되었습니다.`);
     }
   };
 
@@ -239,26 +206,26 @@ export default function ProjectListClient() {
                           오류: {deleteError}
                         </span>
                       )}
-                      {/* {deleteMutation.isLoading && (
-                        <span className='block text-blue-700 dark:text-blue-400 mt-2'>
+                      {isPending && (
+                        <span className='block text-red-700 dark:text-red-400 mt-2'>
                           삭제 중...
                         </span>
-                      )} */}
+                      )}
                     </p>
                     <div className='flex gap-2'>
                       <Button
                         size='sm'
                         variant='destructive'
                         onClick={handleDeleteConfirm}
-                        // disabled={deleteMutation.isLoading}
+                        disabled={isPending}
                       >
-                        {/* {deleteMutation.isLoading ? "삭제 중..." : "삭제"} */}
+                        {isPending ? "삭제 중..." : "삭제"}
                       </Button>
                       <Button
                         size='sm'
                         variant='outline'
                         onClick={handleDeleteCancel}
-                        // disabled={deleteMutation.isLoading}
+                        disabled={isPending}
                       >
                         취소
                       </Button>

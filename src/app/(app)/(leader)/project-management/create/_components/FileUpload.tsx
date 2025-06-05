@@ -4,13 +4,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { MAX_FILE_COUNT } from "@/const/file";
-import { ProjectFile } from "@/types/projectType";
+import { ProjectFileReq } from "@/types/projectType";
 import { AlertCircle, FileText, Upload, X } from "lucide-react";
 import React from "react";
 import { formatFileSize } from "../_utils/utils";
 
 interface FileUploadProps {
-  files: ProjectFile[];
+  files: ProjectFileReq[];
   onFileSelect: (files: FileList | null) => void;
   onFileDelete: (fileId: string) => void;
   error?: string;

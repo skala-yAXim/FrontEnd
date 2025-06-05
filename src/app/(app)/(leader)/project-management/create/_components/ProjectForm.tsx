@@ -12,7 +12,7 @@ import {
   MAX_FILE_SIZE,
   MAX_NAME_LENGTH,
 } from "@/const/file";
-import { ProjectCreateForm, ProjectFile } from "@/types/projectType";
+import { ProjectCreateForm, ProjectFileReq } from "@/types/projectType";
 import { AlertCircle } from "lucide-react";
 import React from "react";
 import { validateForm } from "../_utils/utils";
@@ -85,7 +85,7 @@ export function ProjectForm({
   const handleFileSelect = (files: FileList | null) => {
     if (!files) return;
 
-    const newFiles: ProjectFile[] = [];
+    const newFiles: ProjectFileReq[] = [];
     const newErrors: string[] = [];
 
     // 파일 개수 확인
