@@ -17,13 +17,13 @@ export default function RedirectPage() {
       .then(res => {
         if (res) {
           login(res);
-          router.push("/dashboard");
+          router.replace("/dashboard");
         }
       })
       .catch(error => {
         console.error("Failed to fetch user info:", error);
         alert("로그인에 실패하였습니다. 로그인 페이지로 이동합니다.");
-        router.push("/login");
+        router.replace("/login");
       });
   }, [login, router]);
 
