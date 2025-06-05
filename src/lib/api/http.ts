@@ -5,10 +5,17 @@ import { customFetch } from "./fetcher";
 export const api = {
   get: <T>(url: string) => customFetch<T>(url),
 
-  post: <T>(url: string, body: any) =>
+  post: <T>(url: string, body: any, options?: RequestInit) =>
     customFetch<T>(url, {
       method: "POST",
       body: JSON.stringify(body),
+      ...options,
+    }),
+
+  postFormData: <T>(url: string, formData: FormData) =>
+    customFetch<T>(url, {
+      method: "POST",
+      body: formData,
     }),
 
   put: <T>(url: string, body: any) =>
@@ -23,3 +30,4 @@ export const api = {
 // 사용 예시
 // const user = await api.get<User>('/api/me');
 // await api.post<User>('/api/login', { email, password });
+// await api.postFormData<User>('/api/upload', formData);

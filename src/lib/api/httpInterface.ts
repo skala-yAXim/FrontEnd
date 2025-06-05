@@ -19,6 +19,14 @@ export class HttpInterface {
     return this.apiClient.post("/auth/logout", {});
   }
 
+  async getProjects<T>(page: number, size: number): Promise<T> {
+    return this.apiClient.get<T>(`/projects?page=${page}&size=${size}`);
+  }
+
+  async createProject<T>(projectData: FormData): Promise<T> {
+    return this.apiClient.postFormData<T>("/projects", projectData);
+  }
+
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.
   // 예시:
   // /**

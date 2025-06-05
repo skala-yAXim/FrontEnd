@@ -7,7 +7,7 @@ interface SectionHeaderProps {
   buttonElement?: React.ReactNode;
 }
 
-export default function SectionHeader({
+export default function PageHeader({
   title,
   description,
   buttonElement,
