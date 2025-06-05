@@ -30,7 +30,7 @@ import { useRouter } from "next/navigation";
 
 export default function ProjectListClient() {
   const router = useRouter();
-  const { mutate: deleteProject, isPending } = useDeleteProject();
+  const { deleteProject, isPending } = useDeleteProject();
 
   const [currentPage, setCurrentPage] = useState(0); // API page (0-indexed)
   const [itemsPerPage, setItemsPerPage] = useState(10);

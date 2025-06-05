@@ -35,7 +35,7 @@ export const useDeleteProject = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation({
+  const { mutate: deleteProject, isPending } = useMutation({
     mutationFn: (projectId: number) => httpInterface.deleteProject(projectId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
@@ -45,4 +45,6 @@ export const useDeleteProject = () => {
       console.error("프로젝트 삭제 실패:", error);
     },
   });
+
+  return { deleteProject, isPending };
 };
