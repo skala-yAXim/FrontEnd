@@ -30,9 +30,11 @@ export async function serverFetch<T>(
   const cookieStore: ReadonlyRequestCookies = await cookies();
   // let token = cookieStore.get("accessToken")?.value; // Authorization 헤더 방식이 아니므로 직접 사용 X
 
-  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL; // 실제 백엔드 서버 URL
+  const baseUrl = process.env.NEXT_PUBLIC_SERVER_SIDE_URL; // 실제 백엔드 서버 URL
   if (!baseUrl) {
-    throw new Error("NEXT_PUBLIC_SERVER_URL 환경 변수가 설정되지 않았습니다.");
+    throw new Error(
+      "NEXT_PUBLIC_SERVER_SIDE_URL 환경 변수가 설정되지 않았습니다."
+    );
   }
   // relativeUrl이 '/'로 시작하지 않으면 자동으로 추가
   const fullUrl = `${baseUrl}${relativeUrl.startsWith("/") ? relativeUrl : `/${relativeUrl}`}`;
@@ -64,6 +66,7 @@ export async function serverFetch<T>(
       ...options,
       headers: requestHeaders,
       cache: options.cache ?? "no-store",
+      credentials: "include",
     });
 
     // 401 에러 및 토큰 리프레시 로직은 필요시 여기에 다시 구현 (현재는 단순화)

@@ -18,7 +18,7 @@ export async function customFetch<T>(
   options: RequestInit = {},
   isRetryAttempt: boolean = false // Renamed for clarity
 ): Promise<T> {
-  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || "";
+  const baseUrl = process.env.NEXT_PUBLIC_SERVER_CLIENT_SIDE_URL || "";
   const isAbsolutePath =
     path.startsWith("http://") || path.startsWith("https://");
   const fullUrl = isAbsolutePath
