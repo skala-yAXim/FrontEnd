@@ -9,7 +9,7 @@ export function LoginForm() {
   const handleMicrosoftLogin = () => {
     // Microsoft OAuth 로직
     router.push(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/oauth2/authorization/azure`
+      `${process.env.NEXT_PUBLIC_SERVER_CLIENT_SIDE_URL}/oauth2/authorization/azure`
     );
   };
 

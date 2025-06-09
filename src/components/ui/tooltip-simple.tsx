@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { cn } from "@/lib/utils";
+import * as React from "react";
 
 interface TooltipProviderProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ interface TooltipProps {
   children: React.ReactNode;
 }
 
-interface TooltipTriggerProps {
+interface TooltipTriggerProps extends React.HTMLAttributes<HTMLDivElement> {
   asChild?: boolean;
   children: React.ReactNode;
 }
@@ -51,12 +51,13 @@ const TooltipTrigger = React.forwardRef<HTMLDivElement, TooltipTriggerProps>(
     const handleMouseLeave = () => setIsOpen(false);
 
     if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children, {
+      const childProps = {
         ...props,
-        ref,
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
-      });
+      };
+
+      return React.cloneElement(children, childProps);
     }
 
     return (
@@ -96,4 +97,4 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
 );
 TooltipContent.displayName = "TooltipContent";
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
