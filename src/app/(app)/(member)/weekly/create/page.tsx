@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { ThemeToggleButton } from "@/components/theme/ThemeToggleButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { ArrowLeft, Calendar, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 // 월별 주차 계산 함수
 const getWeeksInMonth = (year: number, month: number): number => {
@@ -108,7 +108,7 @@ export default function CreateWeeklyReportPage() {
                   위클리 보고서 생성
                 </CardTitle>
               </div>
-              <ThemeToggle />
+              <ThemeToggleButton />
             </div>
           </CardHeader>
           <CardContent>
