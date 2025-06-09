@@ -1,3 +1,4 @@
+import type { GitHubInfo } from "@/types/githubType";
 import { api as ApiClientType } from "./http"; // http.ts의 api 객체 타입을 가져옵니다.
 
 /**
@@ -29,6 +30,14 @@ export class HttpInterface {
 
   async deleteProject<T>(projectId: number): Promise<T> {
     return this.apiClient.delete<T>(`/projects/${projectId}`);
+  }
+
+  async getGitInfo(): Promise<GitHubInfo> {
+    return this.apiClient.get<GitHubInfo>("/git/my");
+  }
+
+  async deleteGitInfo(): Promise<void> {
+    return this.apiClient.delete<void>("/git");
   }
 
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.
