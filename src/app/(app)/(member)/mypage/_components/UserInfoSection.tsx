@@ -2,6 +2,7 @@ import { CardContent } from "@/components/ui/card";
 import { serverHttpInterface } from "@/lib/api/server/interface";
 import { Mail, User } from "lucide-react";
 import React from "react";
+export const dynamic = "force-dynamic";
 
 interface UserInfo {
   name: string;
