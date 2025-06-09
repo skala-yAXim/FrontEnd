@@ -178,9 +178,9 @@ export default function GitIntegrationClientSection() {
                     <p className='font-medium'>@{gitInfo.gitId}</p>
                     <Badge
                       variant='secondary'
-                      className='bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                      className='bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100 flex items-center whitespace-nowrap'
                     >
-                      <CheckCircle className='w-3 h-3 mr-1' />
+                      <CheckCircle className='w-3 h-3 mr-1 shrink-0' />
                       연동됨
                     </Badge>
                   </div>
@@ -197,9 +197,10 @@ export default function GitIntegrationClientSection() {
                 onClick={() =>
                   window.open(`https://github.com/${gitInfo.gitId}`, "_blank")
                 }
+                className='px-2 sm:px-3'
               >
-                <ExternalLink className='w-4 h-4 mr-2' />
-                GitHub 보기
+                <ExternalLink className='w-4 h-4 mr-0 sm:mr-2' />
+                <span className='hidden sm:inline'>GitHub 보기</span>
               </Button>
             </div>
 
