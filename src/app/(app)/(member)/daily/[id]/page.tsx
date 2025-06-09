@@ -1,22 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { useDailyReportStore } from "@/store/dailyReportStore";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { ThemeToggleButton } from "@/components/theme/ThemeToggleButton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip-simple";
-import { Download, ArrowLeft, FileText, ExternalLink } from "lucide-react";
+import { useDailyReportStore } from "@/store/dailyReportStore";
+import { ArrowLeft, Download, ExternalLink, FileText } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect } from "react";
 
 /**
  * MEM01M02 - 세부 보고서 페이지 (내용 부분만)
@@ -274,7 +274,7 @@ export default function DailyReportDetailPage() {
               <Download className='mr-2 h-4 w-4' />
               PDF 다운로드
             </Button>
-            <ThemeToggle />
+            <ThemeToggleButton />
           </div>
         </div>
 
