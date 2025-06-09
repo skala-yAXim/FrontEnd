@@ -4,6 +4,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useDeleteGitHubInfo, useGetGitHubInfo } from "@/hooks/useGitHubInfo";
 import {
   AlertCircle,
   CheckCircle,
@@ -11,7 +12,7 @@ import {
   Github,
   Settings,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // Git OAuth 상태 타입
 interface GitIntegration {
@@ -26,61 +27,30 @@ interface GitIntegration {
  * @returns {JSX.Element}
  */
 export default function GitIntegrationClientSection() {
-  const [gitIntegration, setGitIntegration] = useState<GitIntegration>({
-    isConnected: false,
-  });
-  const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // 마운트 시 GitHub 연동 상태 확인
-  useEffect(() => {
-    const fetchGitStatus = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        // 백엔드의 연동 상태 확인 API 호출 (실제 엔드포인트로 수정 필요)
-        const response = await fetch("/api/user/git-integration-status"); // 예시 API 경로
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => null);
-          throw new Error(
-            errorData?.message || "연동 상태를 가져오는데 실패했습니다."
-          );
-        }
-        const data: GitIntegration = await response.json();
-        setGitIntegration(data);
-        if (data.isConnected) {
-          // 성공 메시지는 여기서 직접 설정하기보다,
-          // OAuth 콜백 성공 후 리디렉션 시 쿼리 파라미터 등으로 전달받는 것이 일반적입니다.
-          // setSuccess("GitHub 계정이 성공적으로 연동되어 있습니다.");
-        }
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("알 수 없는 오류가 발생했습니다.");
-        }
-        // 연동 정보가 없는 경우 (e.g. 404)는 에러가 아닐 수 있으므로, API 응답에 따라 처리
-        setGitIntegration({ isConnected: false });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchGitStatus();
-  }, []);
+  const { data: gitInfo, isLoading, isError } = useGetGitHubInfo();
+  const { mutate: deleteGitHubInfo, isPending: isDeleting } =
+    useDeleteGitHubInfo();
 
   // Git OAuth 연동 시작 핸들러
   const handleGitConnect = async () => {
     setIsProcessing(true);
     setError(null);
     setSuccess(null);
-    // 백엔드의 GitHub 로그인 시작 API 엔드포인트로 리디렉션
-    // 실제로는 환경변수 등을 통해 백엔드 URL을 관리하는 것이 좋습니다.
-    window.location.href = "/api/auth/github/login"; // 예시 API 경로
-    // setIsProcessing(false)는 페이지가 리디렉션되므로 보통 필요 없습니다.
-    // 오류 발생 시를 대비한다면 try-catch로 감싸고 setIsProcessing(false)를 finally에 넣을 수 있습니다.
+
+    try {
+      window.location.href = `${process.env.NEXT_PUBLIC_SERVER_CLIENT_SIDE_URL}/oauth2/authorization/github`;
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("GitHub 연동 중 오류가 발생했습니다.");
+      }
+      setIsProcessing(false);
+    }
   };
 
   // Git 연동 해제 핸들러
@@ -90,32 +60,23 @@ export default function GitIntegrationClientSection() {
     setSuccess(null);
 
     try {
-      // 백엔드의 연동 해제 API 호출 (실제 엔드포인트로 수정 필요)
-      const response = await fetch("/api/user/git-disconnect", {
-        // 예시 API 경로
-        method: "POST", // 또는 적절한 HTTP 메소드
+      deleteGitHubInfo(undefined, {
+        onSuccess: () => {
+          setSuccess("GitHub 연동이 성공적으로 해제되었습니다.");
+        },
+        onError: error => {
+          setError(error.message || "연동 해제에 실패했습니다.");
+        },
+        onSettled: () => {
+          setIsProcessing(false);
+        },
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.message || "연동 해제에 실패했습니다.");
-      }
-
-      setGitIntegration({
-        isConnected: false,
-        username: undefined,
-        avatar: undefined,
-        connectedAt: undefined,
-      });
-      setSuccess("GitHub 연동이 성공적으로 해제되었습니다.");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("연동 해제 중 알 수 없는 오류가 발생했습니다.");
       }
-      console.error("Git disconnect error:", err);
-    } finally {
       setIsProcessing(false);
     }
   };
@@ -137,6 +98,28 @@ export default function GitIntegrationClientSection() {
               연동 정보를 불러오는 중입니다...
             </p>
           </div>
+        </CardContent>
+      </div>
+    );
+  }
+
+  // 에러 발생 시 UI
+  if (isError) {
+    return (
+      <div>
+        <CardHeader>
+          <CardTitle className='flex items-center gap-2'>
+            <Github className='w-5 h-5' />
+            GitHub 연동
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Alert variant='destructive'>
+            <AlertCircle className='h-4 w-4' />
+            <AlertDescription>
+              GitHub 연동 정보를 불러오는데 실패했습니다.
+            </AlertDescription>
+          </Alert>
         </CardContent>
       </div>
     );
@@ -167,33 +150,32 @@ export default function GitIntegrationClientSection() {
         </CardTitle>
       </CardHeader>
       <CardContent className='space-y-4'>
-        {gitIntegration.isConnected ? (
+        {gitInfo?.connected ? (
           /* 연동됨 상태 */
           <div className='space-y-4'>
             <div className='flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800'>
               <div className='flex items-center gap-3'>
-                {gitIntegration.avatar && (
+                {gitInfo.avatarUrl && (
                   <img
-                    src={gitIntegration.avatar}
+                    src={gitInfo.avatarUrl}
                     alt='GitHub Avatar'
                     className='w-10 h-10 rounded-full'
                     onError={e => {
-                      // 이미지 로드 실패 시 기본 아이콘 표시 (플레이스홀더 사용)
                       const target = e.currentTarget as HTMLImageElement;
-                      target.onerror = null; // 무한 루프 방지
+                      target.onerror = null;
                       target.src =
-                        "https://via.placeholder.com/40/cccccc/969696?text=GH"; // 간단한 플레이스홀더
+                        "https://via.placeholder.com/40/cccccc/969696?text=GH";
                     }}
                   />
                 )}
-                {!gitIntegration.avatar && (
+                {!gitInfo.avatarUrl && (
                   <div className='w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center'>
                     <Github className='w-5 h-5 text-muted-foreground' />
                   </div>
                 )}
                 <div>
                   <div className='flex items-center gap-2'>
-                    <p className='font-medium'>@{gitIntegration.username}</p>
+                    <p className='font-medium'>@{gitInfo.gitId}</p>
                     <Badge
                       variant='secondary'
                       className='bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
@@ -203,8 +185,8 @@ export default function GitIntegrationClientSection() {
                     </Badge>
                   </div>
                   <p className='text-sm text-muted-foreground'>
-                    {gitIntegration.connectedAt &&
-                      `${new Date(gitIntegration.connectedAt).toLocaleDateString("ko-KR")} 연동`}
+                    {gitInfo.createdAt &&
+                      `${new Date(gitInfo.createdAt).toLocaleDateString("ko-KR")} 연동`}
                   </p>
                 </div>
               </div>
@@ -213,10 +195,7 @@ export default function GitIntegrationClientSection() {
                 variant='outline'
                 size='sm'
                 onClick={() =>
-                  window.open(
-                    `https://github.com/${gitIntegration.username}`,
-                    "_blank"
-                  )
+                  window.open(`https://github.com/${gitInfo.gitId}`, "_blank")
                 }
               >
                 <ExternalLink className='w-4 h-4 mr-2' />
