@@ -34,6 +34,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import Image from "next/image";
 import { SidebarFooterDisplay } from "./SidebarFooterDisplay"; // 새로 추가
 
 // 아이콘 매핑
@@ -104,9 +105,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size='lg' asChild>
               <Link href='/dashboard'>
-                <div className='bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg'>
-                  <Command className='size-4' />
-                </div>
+                {/* <div className='text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg'> */}
+                <Image
+                  src='/favicon.png'
+                  alt='SK Logo'
+                  className='rounded-sm'
+                  width={30}
+                  height={30}
+                />
+                {/* </div> */}
                 <div className='grid flex-1 text-left text-sm leading-tight'>
                   <span className='truncate font-medium'>yAXim</span>
                   <span className='truncate text-xs'>
