@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 // TODO: 리팩토링 (use client 남발, 더미 데이터 사용)
 
 import PageHeader from "@/components/PageHeader";
