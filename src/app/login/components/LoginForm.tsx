@@ -7,9 +7,10 @@ export function LoginForm() {
   const router = useRouter();
 
   const handleMicrosoftLogin = () => {
-    console.log("Microsoft 로그인");
     // Microsoft OAuth 로직
-    router.push("/dashboard");
+    router.push(
+      `${process.env.NEXT_PUBLIC_SERVER_CLIENT_SIDE_URL}/oauth2/authorization/azure`
+    );
   };
 
   return (

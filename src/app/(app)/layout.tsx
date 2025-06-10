@@ -1,7 +1,7 @@
 "use client";
 
-import { AppSidebar } from "@/components/app-sidebar";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { AppSidebar } from "@/components/sidebar/AppSidebar";
+import { ThemeToggleButton } from "@/components/theme/ThemeToggleButton";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -25,28 +25,22 @@ export default function AppGroupLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const userRole = useAuthStore((state: AuthState) => state.userRole);
+  const userRole = useAuthStore((state: AuthState) => state.user?.userRole);
   const isAuthenticated = useAuthStore(
     (state: AuthState) => state.isAuthenticated
   );
-  const isLoadingAuth = useAuthStore((state: AuthState) => state.isLoading);
+  const isLoading = useAuthStore((state: AuthState) => state.isLoading);
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoadingAuth && !isAuthenticated) {
-      router.replace("/login");
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.replace("/login");
+      }
     }
-  }, [isLoadingAuth, isAuthenticated, router]);
+  }, [isAuthenticated, isLoading, router]);
 
-  if (isLoadingAuth) {
-    return (
-      <div className='flex h-screen items-center justify-center'>
-        <p>Loading authentication...</p>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
+  if (isLoading) {
     return null;
   }
 
@@ -89,7 +83,7 @@ export default function AppGroupLayout({
 
             {/* 오른쪽 요소 그룹 (다크모드 버튼) */}
             <div className='flex items-center'>
-              <ThemeToggle />
+              <ThemeToggleButton />
             </div>
           </div>
         </header>

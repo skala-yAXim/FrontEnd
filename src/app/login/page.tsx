@@ -1,4 +1,4 @@
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggleButton } from "@/components/theme/ThemeToggleButton";
 import { BrandingSection } from "./components/BrandingSection";
 import { LoginForm } from "./components/LoginForm";
 
@@ -7,7 +7,7 @@ export default function LoginPage() {
     <div className='min-h-screen flex'>
       {/* 테마 토글 */}
       <div className='absolute top-4 right-4'>
-        <ThemeToggle />
+        <ThemeToggleButton />
       </div>
 
       {/* 좌측 브랜딩 영역 */}

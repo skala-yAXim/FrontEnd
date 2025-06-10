@@ -1,64 +1,26 @@
-// Daily 보고서 관련 타입 정의
-
-export interface DailyReport {
-  id: string;
+export type Evidence = {
   title: string;
   content: string;
-  date: string; // YYYY-MM-DD 형식
-  author: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  status: "draft" | "published" | "archived";
-  createdAt: string;
-  updatedAt: string;
-  tags?: string[];
-  attachments?: Attachment[];
-}
+  LLM_reference: string;
+};
 
-export interface Attachment {
-  id: string;
-  name: string;
-  url: string;
-  type: string;
-  size: number;
-}
+export type ReportItem = {
+  text: string;
+  evidence: Evidence[];
+};
 
-export interface DailyReportListResponse {
-  reports: DailyReport[];
-  pagination: {
-    currentPage: number;
-    totalPages: number;
-    totalCount: number;
-    pageSize: number;
-  };
-}
-
-export interface CreateDailyReportRequest {
+export type Reflection = {
   title: string;
-  content: string;
-  date: string;
-  tags?: string[];
-}
+  content: string[];
+};
 
-export interface UpdateDailyReportRequest
-  extends Partial<CreateDailyReportRequest> {
-  id: string;
-  status?: DailyReport["status"];
-}
-
-// 필터 및 정렬 옵션
-export interface DailyReportFilters {
-  status?: DailyReport["status"][];
-  dateFrom?: string;
-  dateTo?: string;
-  author?: string;
-  tags?: string[];
-  search?: string;
-}
-
-export interface DailyReportSortOptions {
-  field: "date" | "title" | "createdAt" | "updatedAt";
-  direction: "asc" | "desc";
-}
+export type DailyReportData = {
+  report_title: string;
+  id: number;
+  daily_report: {
+    title: string;
+    summary: string;
+    contents: ReportItem[];
+  };
+  daily_reflection: Reflection;
+};
