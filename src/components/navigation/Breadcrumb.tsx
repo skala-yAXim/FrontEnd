@@ -185,17 +185,15 @@ export function Breadcrumb() {
               <BreadcrumbItem>
                 {breadcrumb.isCurrentPage ? (
                   <BreadcrumbPage className='flex items-center gap-1'>
-                    {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />}
+                    {/* {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />} */}
                     {breadcrumb.label}
                   </BreadcrumbPage>
-                ) : breadcrumb.isEllipsis ? (
-                  <span className='text-muted-foreground'>...</span>
                 ) : (
                   <BreadcrumbLink
                     href={breadcrumb.href}
                     className='flex items-center gap-1'
                   >
-                    {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />}
+                    {/* {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />} */}
                     {breadcrumb.label}
                   </BreadcrumbLink>
                 )}
@@ -216,7 +214,7 @@ export function Breadcrumb() {
               <BreadcrumbItem>
                 {breadcrumb.isCurrentPage ? (
                   <BreadcrumbPage className='flex items-center gap-1'>
-                    {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />}
+                    {/* {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />} */}
                     {breadcrumb.label}
                   </BreadcrumbPage>
                 ) : (
@@ -224,7 +222,7 @@ export function Breadcrumb() {
                     href={breadcrumb.href}
                     className='flex items-center gap-1'
                   >
-                    {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />}
+                    {/* {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />} */}
                     {breadcrumb.label}
                   </BreadcrumbLink>
                 )}

@@ -9,24 +9,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ReportItem } from "@/types/reportType";
+import { formatBoldText } from "@/utils/formatBoldText";
 import { getSourceIcon } from "@/utils/getSourceIcon";
 
 interface ReportContentProps {
   contents: ReportItem[];
 }
-
-// **텍스트** 패턴을 <b> 태그로 변환하는 함수
-const formatBoldText = (text: string) => {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-
-  return parts.map((part, index) => {
-    if (part.startsWith("**") && part.endsWith("**")) {
-      const boldText = part.slice(2, -2);
-      return <b key={index}>{boldText}</b>;
-    }
-    return part;
-  });
-};
 
 // [WBS 매칭], [WBS 미매칭] 텍스트를 제거하는 함수
 const removeWbsPrefix = (text: string) => {
@@ -61,7 +49,9 @@ export function ReportContent({ contents }: ReportContentProps) {
                   <div className='space-y-2 w-full'>
                     <div className='flex items-center justify-between'>
                       <div className='flex items-center gap-2'>
-                        <h4 className='text-sm font-medium'>{ev.title}</h4>
+                        <h4 className='text-sm font-medium'>
+                          {formatBoldText(ev.title)}
+                        </h4>
                         {/* Badge를 title 옆으로 이동 */}
                         <TooltipProvider>
                           <Tooltip>
