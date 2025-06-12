@@ -28,28 +28,18 @@ const formatBoldText = (text: string) => {
   });
 };
 
-// [WBS 매칭], [WBS 미매칭] 텍스트를 제거하는 함수
-const removeWbsPrefix = (text: string) => {
-  // task 값에 관계없이 WBS 접두사 제거 (둘 다 한번에 처리)
-  return text.replace("[WBS 매칭]", "").replace("[WBS 미매칭]", "");
-};
-
 /**
  * 보고서 콘텐츠 컴포넌트
  * 클라이언트 컴포넌트 - tooltip 인터랙션 필요
  */
 export function ReportContent({ contents }: ReportContentProps) {
-  // WBS 매칭/미매칭으로 그룹화
-  const wbsMatchedItems = contents.filter(item => item.task !== null);
-  const wbsUnmatchedItems = contents.filter(item => item.task === null);
-
   const renderReportItems = (items: ReportItem[]) => {
     return items.map((item, idx) => (
       <div key={idx} className='border-l-4 border-l-muted pl-4 mb-10'>
         <div className='space-y-4'>
           <div className='text-base font-semibold'>
             <TypographyP className='inline'>
-              {formatBoldText(removeWbsPrefix(item.text))}
+              {formatBoldText(item.text)}
             </TypographyP>
           </div>
 
@@ -128,35 +118,9 @@ export function ReportContent({ contents }: ReportContentProps) {
 
   return (
     <section className='space-y-6 p-6'>
-      {/* WBS 매칭 섹션 */}
-      {wbsMatchedItems.length > 0 && (
-        <div className='space-y-4'>
-          <div className='flex items-center gap-2 pb-2 border-b-2 border-green-200'>
-            <div className='w-4 h-4 bg-green-500 rounded-full'></div>
-            <h3 className='text-lg font-bold'>
-              WBS 매칭 ({wbsMatchedItems.length}건)
-            </h3>
-          </div>
-          <div className='bg-muted-foreground/120 rounded-lg p-4'>
-            {renderReportItems(wbsMatchedItems)}
-          </div>
-        </div>
-      )}
-
-      {/* WBS 미매칭 섹션 */}
-      {wbsUnmatchedItems.length > 0 && (
-        <div className='space-y-4'>
-          <div className='flex items-center gap-2 pb-2 border-b-2 border-amber-200'>
-            <div className='w-4 h-4 bg-amber-500 rounded-full'></div>
-            <h3 className='text-lg font-bold'>
-              WBS 미매칭 ({wbsUnmatchedItems.length}건)
-            </h3>
-          </div>
-          <div className='bg-muted-foreground/120  rounded-lg p-4'>
-            {renderReportItems(wbsUnmatchedItems)}
-          </div>
-        </div>
-      )}
+      <div className='bg-muted-foreground/120 rounded-lg p-4'>
+        {renderReportItems(contents)}
+      </div>
     </section>
   );
 }

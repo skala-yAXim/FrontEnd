@@ -3,9 +3,11 @@ import {
   TypographyList,
   TypographyP,
 } from "@/components/typography/Typograhpy";
+import { Reflection } from "@/types/reportType";
+import { getSourceIcon } from "@/utils/getSourceIcon";
 
 interface ReflectionSectionProps {
-  reflections: string[];
+  reflections: Reflection;
 }
 
 // **텍스트** 패턴을 <b> 태그로 변환하는 함수
@@ -28,12 +30,15 @@ const formatBoldText = (text: string) => {
 export function ReflectionSection({ reflections }: ReflectionSectionProps) {
   return (
     <section className='space-y-2 p-6'>
-      <TypographyH3>오늘의 회고 및 개선점</TypographyH3>
+      <TypographyH3>{reflections.title}</TypographyH3>
       <TypographyList>
-        {reflections.map((item, idx) => (
-          <li key={idx}>
-            <TypographyP>{formatBoldText(item)}</TypographyP>
-          </li>
+        {reflections.contents.map((item, idx) => (
+          <div key={idx} className='flex items-start gap-2 mb-2'>
+            <div className='text-muted-foreground flex-shrink-0 mt-2 mr-1'>
+              {getSourceIcon(item.source)}
+            </div>
+            <TypographyP>{item.reflection}</TypographyP>
+          </div>
         ))}
       </TypographyList>
     </section>
