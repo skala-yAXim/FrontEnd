@@ -1,4 +1,4 @@
-import { DailyReportData } from "@/types/dailyReport";
+import { DailyReportData } from "@/types/reportType";
 import { ReflectionSection } from "./ReflectionSection";
 import { ReportContent } from "./ReportContent";
 import { ReportHeader } from "./ReportHeader";
@@ -14,7 +14,7 @@ export default function DailyReport({
   daily_reflection,
 }: DailyReportData) {
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 max-w-6xl mx-auto'>
       {/* 서버 컴포넌트 - 정적 헤더 */}
       <ReportHeader title={report_title} summary={daily_report?.summary} />
 
@@ -24,8 +24,8 @@ export default function DailyReport({
       )}
 
       {/* 서버 컴포넌트 - 정적 회고 */}
-      {daily_reflection?.content && (
-        <ReflectionSection reflections={daily_reflection.content} />
+      {daily_reflection?.contents && (
+        <ReflectionSection reflections={daily_reflection} />
       )}
     </div>
   );
