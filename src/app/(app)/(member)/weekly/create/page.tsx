@@ -1,8 +1,7 @@
 "use client";
 
-import { ThemeToggleButton } from "@/components/theme/ThemeToggleButton";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Calendar, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -53,13 +52,13 @@ export default function CreateWeeklyReportPage() {
   });
 
   const handleGoBack = () => {
-    router.push("/weekly-reports");
+    router.push("/weekly");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // 임시로 목록 페이지로 이동
-    router.push("/weekly-reports");
+    router.push("/weekly");
   };
 
   // 현재 연도 기준으로 연도 옵션 생성
@@ -90,124 +89,121 @@ export default function CreateWeeklyReportPage() {
   return (
     <div className='flex justify-center'>
       <div className='w-full max-w-2xl'>
-        <Card>
-          <CardHeader>
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center gap-4'>
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={handleGoBack}
-                  className='flex items-center gap-1'
-                >
-                  <ArrowLeft className='w-4 h-4' />
-                  뒤로가기
-                </Button>
-                <CardTitle className='flex items-center gap-2'>
-                  <Calendar className='w-5 h-5' />
-                  위클리 보고서 생성
-                </CardTitle>
-              </div>
-              <ThemeToggleButton />
+        <CardHeader>
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center gap-4'>
+              <Button
+                variant='ghost'
+                size='sm'
+                onClick={handleGoBack}
+                className='flex items-center gap-1'
+              >
+                <ArrowLeft className='w-4 h-4' />
+                뒤로가기
+              </Button>
+              <CardTitle className='flex items-center gap-2'>
+                <Calendar className='w-5 h-5' />
+                위클리 보고서 생성
+              </CardTitle>
             </div>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className='space-y-6'>
-              {/* 연도 선택 */}
-              <div className='space-y-2'>
-                <Label htmlFor='year'>연도</Label>
-                <select
-                  id='year'
-                  value={formData.year}
-                  onChange={e =>
-                    setFormData(prev => ({
-                      ...prev,
-                      year: parseInt(e.target.value),
-                    }))
-                  }
-                  className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
-                >
-                  {yearOptions.map(year => (
-                    <option key={year} value={year}>
-                      {year}년
-                    </option>
-                  ))}
-                </select>
-              </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className='space-y-6'>
+            {/* 연도 선택 */}
+            <div className='space-y-2'>
+              <Label htmlFor='year'>연도</Label>
+              <select
+                id='year'
+                value={formData.year}
+                onChange={e =>
+                  setFormData(prev => ({
+                    ...prev,
+                    year: parseInt(e.target.value),
+                  }))
+                }
+                className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+              >
+                {yearOptions.map(year => (
+                  <option key={year} value={year}>
+                    {year}년
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              {/* 월 선택 */}
-              <div className='space-y-2'>
-                <Label htmlFor='month'>월</Label>
-                <select
-                  id='month'
-                  value={formData.month}
-                  onChange={e => handleMonthChange(parseInt(e.target.value))}
-                  className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
-                >
-                  {monthOptions.map(month => (
-                    <option key={month} value={month}>
-                      {getMonthName(month)}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            {/* 월 선택 */}
+            <div className='space-y-2'>
+              <Label htmlFor='month'>월</Label>
+              <select
+                id='month'
+                value={formData.month}
+                onChange={e => handleMonthChange(parseInt(e.target.value))}
+                className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+              >
+                {monthOptions.map(month => (
+                  <option key={month} value={month}>
+                    {getMonthName(month)}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              {/* 주차 선택 */}
-              <div className='space-y-2'>
-                <Label htmlFor='week'>주차</Label>
-                <select
-                  id='week'
-                  value={formData.week}
-                  onChange={e =>
-                    setFormData(prev => ({
-                      ...prev,
-                      week: parseInt(e.target.value),
-                    }))
-                  }
-                  className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
-                >
-                  {weekOptions.map(week => (
-                    <option key={week} value={week}>
-                      {week}주차
-                    </option>
-                  ))}
-                </select>
-              </div>
+            {/* 주차 선택 */}
+            <div className='space-y-2'>
+              <Label htmlFor='week'>주차</Label>
+              <select
+                id='week'
+                value={formData.week}
+                onChange={e =>
+                  setFormData(prev => ({
+                    ...prev,
+                    week: parseInt(e.target.value),
+                  }))
+                }
+                className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+              >
+                {weekOptions.map(week => (
+                  <option key={week} value={week}>
+                    {week}주차
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              {/* 주차 설명 */}
-              <div className='text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg'>
-                <p>
-                  💡 {formData.year}년 {getMonthName(formData.month)}에는 총{" "}
-                  {maxWeeks}주차까지 있습니다.
-                </p>
-              </div>
+            {/* 주차 설명 */}
+            <div className='text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg'>
+              <p>
+                💡 {formData.year}년 {getMonthName(formData.month)}에는 총{" "}
+                {maxWeeks}주차까지 있습니다.
+              </p>
+            </div>
 
-              {/* 미리보기 */}
-              <div className='p-4 bg-muted/50 rounded-lg'>
-                <div className='text-center'>
-                  <div className='text-lg font-semibold text-primary mb-1'>
-                    {formData.year}년 {getMonthName(formData.month)}{" "}
-                    {formData.week}주차 위클리 보고서
-                  </div>
-                  <div className='text-sm text-muted-foreground'>
-                    생성될 보고서 제목
-                  </div>
+            {/* 미리보기 */}
+            <div className='p-4 bg-muted/50 rounded-lg'>
+              <div className='text-center'>
+                <div className='text-lg font-semibold text-primary mb-1'>
+                  {formData.year}년 {getMonthName(formData.month)}{" "}
+                  {formData.week}주차 위클리 보고서
+                </div>
+                <div className='text-sm text-muted-foreground'>
+                  생성될 보고서 제목
                 </div>
               </div>
+            </div>
 
-              {/* 액션 버튼들 */}
-              <div className='flex gap-4 pt-4'>
-                <Button type='submit' className='flex-1'>
-                  <Plus className='w-4 h-4 mr-2' />
-                  보고서 생성
-                </Button>
-                <Button type='button' variant='outline' onClick={handleGoBack}>
-                  취소
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+            {/* 액션 버튼들 */}
+            <div className='flex gap-4 pt-4'>
+              <Button type='submit' className='flex-1'>
+                <Plus className='w-4 h-4 mr-2' />
+                보고서 생성
+              </Button>
+              <Button type='button' variant='outline' onClick={handleGoBack}>
+                취소
+              </Button>
+            </div>
+          </form>
+        </CardContent>
       </div>
     </div>
   );
