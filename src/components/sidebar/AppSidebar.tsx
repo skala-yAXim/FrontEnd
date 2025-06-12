@@ -117,7 +117,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <div className='grid flex-1 text-left text-sm leading-tight'>
                   <span className='truncate font-medium'>yAXim</span>
                   <span className='truncate text-xs'>
-                    사내 주간 보고서 자동 생성 서비스
+                    사내 업무 관리 플랫폼
                   </span>
                 </div>
               </Link>

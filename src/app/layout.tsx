@@ -8,8 +8,8 @@ import Providers from "./Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "yAXim | 사내 주간 보고서 자동 생성 서비스",
-  description: "사내 주간 보고서 자동 생성 서비스",
+  title: "yAXim | 사내 업무 관리 플랫폼",
+  description: "사내 업무 관리 플랫폼",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
