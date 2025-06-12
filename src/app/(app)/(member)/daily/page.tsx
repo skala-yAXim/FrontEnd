@@ -5,7 +5,7 @@
 import PageHeader from "@/components/PageHeader";
 import Pagination from "@/components/Pagination";
 import { usePagination } from "@/hooks/usePagination";
-import { DailyReportData } from "@/types/dailyReport";
+import { DailyReportData } from "@/types/reportType";
 import { DailyReportList } from "./_components/DailyReportList";
 import { EmptyState } from "./_components/EmptyState";
 import { ErrorState } from "./_components/ErrorState";
@@ -34,7 +34,7 @@ export default function DailyReportsPage() {
   // 페이지네이션 훅 사용
   const pagination = usePagination({
     totalItems: reports.length,
-    itemsPerPage: 5,
+    itemsPerPage: 7,
     initialPage: 1,
   });
 

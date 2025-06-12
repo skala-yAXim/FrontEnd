@@ -1,4 +1,4 @@
-import { DailyReportData } from "@/types/dailyReport";
+import { DailyReportData } from "@/types/reportType";
 
 export const mockDailyReports: DailyReportData[] = [
   {

@@ -1,4 +1,4 @@
-import { WeeklyReportData } from "@/types/weeklyReport";
+import { WeeklyReportData } from "@/types/reportType";
 
 export const mockWeeklyReports: WeeklyReportData[] = [
   {
