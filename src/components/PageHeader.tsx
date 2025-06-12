@@ -18,7 +18,7 @@ export default function PageHeader({
         <div>
           <CardTitle>{title}</CardTitle>
           {description && (
-            <p className='mt-1 mt-2 text-sm text-gray-600 dark:text-gray-400'>
+            <p className='mt-2 text-sm text-muted-foreground dark:text-gray-400'>
               {description}
             </p>
           )}
