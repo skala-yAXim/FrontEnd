@@ -26,11 +26,11 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.7 0.12 255);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.5 0.15 240);
-  --chart-5: oklch(0.65 0.08 265);
+  --chart-1: 205 86% 81%; /* 연한 파란색 */
+  --chart-2: 217 91% 60%; /* 밝은 파란색 */
+  --chart-3: 224 76% 48%; /* 중간 파란색 */
+  --chart-4: 213 94% 68%; /* 또 다른 파란색 */
+  --chart-5: 221 83% 53%; /* 진한 파란색 */
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -63,11 +63,11 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.75 0.12 255);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.55 0.15 240);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.7 0.08 265);
+  --chart-1: 205 86% 81%; /* 연한 파란색 */
+  --chart-2: 217 91% 60%; /* 밝은 파란색 */
+  --chart-3: 224 76% 48%; /* 중간 파란색 */
+  --chart-4: 213 94% 68%; /* 또 다른 파란색 */
+  --chart-5: 221 83% 53%; /* 진한 파란색 */
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
