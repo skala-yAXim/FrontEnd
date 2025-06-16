@@ -8,8 +8,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CardAction } from "@/components/ui/card-action";
-import { ChartBarStacked } from "./chart/BarChart";
 import { ChartBarMultiple } from "./chart/MultipleBarChart";
+import { ChartBarStacked } from "./chart/StackedBarChart";
 
 export function BarCards() {
   return (

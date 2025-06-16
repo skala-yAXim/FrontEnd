@@ -23,9 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { httpInterface } from "@/lib/api/httpInterface";
-import { ChartData, DataItem } from "@/types/statisticsType";
+import { DataItem, MultipleBarChartData } from "@/types/statisticsType";
 import { useEffect, useState } from "react";
-import { transformChartData } from "./_utils/TransformData";
+import { transformToAvgChartData } from "./_utils/TransformData";
 
 export const description = "A multiple bar chart";
 
@@ -52,7 +52,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const emptyChartData: ChartData = {
+const emptyChartData: MultipleBarChartData = {
   email: [],
   git: [],
   docs: [],
@@ -60,13 +60,14 @@ const emptyChartData: ChartData = {
 };
 
 export function ChartBarMultiple() {
-  const [chartData, setChartData] = useState<ChartData>(emptyChartData);
+  const [chartData, setChartData] =
+    useState<MultipleBarChartData>(emptyChartData);
 
   useEffect(() => {
     const fetchData = async () => {
       const rawData = await httpInterface.getStaticUser<DataItem[]>();
       const avgRawData = await httpInterface.getAvgStaticUser<DataItem[]>();
-      const transformed = transformChartData(rawData, avgRawData);
+      const transformed = transformToAvgChartData(rawData, avgRawData);
       setChartData(transformed);
     };
 

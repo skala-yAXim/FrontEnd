@@ -1,11 +1,15 @@
-import { ChartData, DataItem } from "@/types/statisticsType";
+import {
+  DataItem,
+  MultipleBarChartData,
+  StackedBarChartData,
+} from "@/types/statisticsType";
 
 const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-export function transformChartData(
+export function transformToAvgChartData(
   actualData: DataItem[],
   averageData: DataItem[]
-): ChartData {
+): MultipleBarChartData {
   return {
     email: actualData.map((item, idx) => {
       const day = weekDays[new Date(item.report_date).getDay()];
@@ -43,4 +47,30 @@ export function transformChartData(
       return { day, teams: value, avg };
     }),
   };
+}
+
+export function aggregateToWeekdayChart(
+  data: DataItem[]
+): StackedBarChartData[] {
+  // 초기화된 주간 데이터 (일 ~ 토)
+  const summary: Record<string, StackedBarChartData> = weekDays.reduce(
+    (acc, day) => {
+      acc[day] = { day, email: 0, git: 0, docs: 0, teams: 0 };
+      return acc;
+    },
+    {} as Record<string, StackedBarChartData>
+  );
+
+  data.forEach(item => {
+    const day = weekDays[new Date(item.report_date).getDay()];
+
+    summary[day].email += item.email.receive + item.email.send;
+    summary[day].git +=
+      item.git.pull_request + item.git.commit + item.git.issue;
+    summary[day].docs +=
+      item.docs.docx + item.docs.xlsx + item.docs.txt + item.docs.etc;
+    summary[day].teams += item.teams.post;
+  });
+
+  return weekDays.map(day => summary[day]);
 }
