@@ -1,4 +1,4 @@
-import { StaticsUserType } from "@/types/dashboardType";
+import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
 import type { GitHubInfo } from "@/types/githubType";
 import { api as ApiClientType } from "./http"; // http.ts의 api 객체 타입을 가져옵니다.
 
@@ -45,6 +45,17 @@ export class HttpInterface {
     return this.apiClient.get<StaticsUserType>("/statics/user");
   }
 
+  async getStaticsUserAvg(): Promise<StaticsUserType> {
+    return this.apiClient.get<StaticsUserType>("/statics/user/avg");
+  }
+
+  async getStaticsUserWeek(): Promise<StaticsUserType> {
+    return this.apiClient.get<StaticsUserType>("/statics/user/week");
+  }
+
+  async getStaticsTeamWeek(): Promise<StaticsTeamType> {
+    return this.apiClient.get<StaticsTeamType>("/statics/team/week");
+  }
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.
   // 예시:
   // /**

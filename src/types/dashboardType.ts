@@ -6,6 +6,13 @@ export interface StaticsUserType {
   git: GitType;
 }
 
+export interface StaticsTeamType {
+  teams: TeamsType;
+  docs: DocsType;
+  email: EmailType;
+  git: GitType;
+}
+
 export interface TeamsType {
   post: number;
 }

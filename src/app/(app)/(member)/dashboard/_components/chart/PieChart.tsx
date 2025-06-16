@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,6 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useGetStaticsUserWeek } from "@/hooks/useDashboardQueries";
 
 export const description = "A pie chart with a legend";
 
@@ -26,14 +28,6 @@ const COLORS = [
   "hsl(var(--chart-3))",
   "hsl(var(--chart-4))",
   "hsl(var(--chart-5))",
-];
-
-const chartData = [
-  { category: "email", count: 275 },
-  { category: "git", count: 200 },
-  { category: "docs", count: 187 },
-  { category: "teams", count: 173 },
-  { category: "etc", count: 90 },
 ];
 
 const chartConfig: Record<string, { label: string; color: string }> = {
@@ -60,11 +54,62 @@ const chartConfig: Record<string, { label: string; color: string }> = {
 };
 
 export function ChartPieLegend() {
+  const { data, isLoading, isError } = useGetStaticsUserWeek();
+
+  const chartData = data
+    ? [
+        { category: "teams", count: data.teams.post },
+        {
+          category: "git",
+          count: Object.values(data.git).reduce(
+            (acc: number, curr: number) => acc + curr,
+            0
+          ),
+        },
+        {
+          category: "docs",
+          count: Object.values(data.docs).reduce(
+            (acc: number, curr: number) => acc + curr,
+            0
+          ),
+        },
+        {
+          category: "email",
+          count: Object.values(data.email).reduce(
+            (acc: number, curr: number) => acc + curr,
+            0
+          ),
+        },
+      ].filter(item => item.count > 0)
+    : [];
+
+  const totalCount = chartData.reduce((acc, curr) => acc + curr.count, 0);
+
+  if (isLoading) {
+    return (
+      <Card className='flex flex-col'>
+        <CardHeader>
+          <CardTitle>로딩 중...</CardTitle>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Card className='flex flex-col'>
+        <CardHeader>
+          <CardTitle>데이터를 불러오는데 실패했습니다.</CardTitle>
+        </CardHeader>
+      </Card>
+    );
+  }
+
   return (
-    <Card className='flex flex-col'>
+    <Card className='flex flex-col' data-slot='card'>
       <CardHeader className='items-center pb-0'>
         <CardTitle>업무 동향</CardTitle>
-        <CardDescription>2025년 5월 25일 ~ 6월 12일</CardDescription>
+        <CardDescription>활동 유형별 분포</CardDescription>
       </CardHeader>
 
       <CardContent className='flex-1 pb-0'>
@@ -81,6 +126,7 @@ export function ChartPieLegend() {
               cy='50%'
               labelLine={false}
               label={({ x, y, name, value }) => {
+                const percentage = Math.round((value / totalCount) * 100);
                 return (
                   <text
                     x={x}
@@ -90,7 +136,7 @@ export function ChartPieLegend() {
                     dominantBaseline='central'
                     className='text-xs font-medium'
                   >
-                    {value}
+                    {percentage}%
                   </text>
                 );
               }}
@@ -102,20 +148,28 @@ export function ChartPieLegend() {
                 />
               ))}
             </Pie>
+
             <ChartLegend
               content={<ChartLegendContent nameKey='category' />}
-              className='-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center'
+              className='-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center mt-4'
             />
             <ChartTooltip
-              content={<ChartTooltipContent nameKey='count' hideLabel />}
+              content={
+                <ChartTooltipContent
+                  nameKey='count'
+                  formatter={(value, name) => {
+                    const label = chartConfig[name as string]?.label || name;
+                    return `${label}: ${value}건`;
+                  }}
+                />
+              }
             />
           </PieChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className='flex-col items-center gap-1 text-sm pt-4'>
-        <div className='font-medium'>총 방문자: {totalcount}명</div>
-        <div className='text-muted-foreground'>이번 달 5.2% 증가 추세</div>
-      </CardFooter> */}
+      <CardFooter className='flex-col items-center gap-1 text-sm'>
+        <div className='font-medium'>총 활동: {totalCount}건</div>
+      </CardFooter>
     </Card>
   );
 }
