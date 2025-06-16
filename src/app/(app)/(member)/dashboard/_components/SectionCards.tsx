@@ -39,6 +39,7 @@ export function SectionCards() {
       <CarouselCard cards={getDocsCards(data, teamTotal)} />
       <CarouselCard cards={getEmailCards(data, teamTotal)} />
       <CarouselCard cards={getTeamsCards(data, teamTotal)} />
+
     </div>
   );
 }
