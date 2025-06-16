@@ -40,6 +40,14 @@ export class HttpInterface {
     return this.apiClient.delete<void>("/git");
   }
 
+  async getStaticUser<T>(): Promise<T> {
+    return this.apiClient.get<T>("/statics/user");
+  }
+
+  async getAvgStaticUser<T>(): Promise<T> {
+    return this.apiClient.get<T>("/statics/user/avg");
+  }
+
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.
   // 예시:
   // /**
