@@ -17,18 +17,12 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { httpInterface } from "@/lib/api/httpInterface";
+import { DataItem, StackedBarChartData } from "@/types/statisticsType";
+import { useEffect, useState } from "react";
+import { aggregateToWeekdayChart } from "./_utils/TransformData";
 
 export const description = "A stacked bar chart with a legend";
-
-const chartData = [
-  { day: "FRI", email: 14, git: 10, docs: 3, teams: 5 },
-  { day: "SAT", email: 0, git: 0, docs: 0, teams: 0 },
-  { day: "SUN", email: 0, git: 0, docs: 0, teams: 0 },
-  { day: "MON", email: 15, git: 13, docs: 2, teams: 6 },
-  { day: "TUE", email: 13, git: 8, docs: 3, teams: 9 },
-  { day: "WED", email: 23, git: 6, docs: 4, teams: 6 },
-  { day: "THU", email: 18, git: 9, docs: 3, teams: 10 },
-];
 
 const chartConfig = {
   email: {
@@ -49,7 +43,22 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+const emptyChartData: StackedBarChartData[] = [];
+
 export function ChartBarStacked() {
+  const [chartData, setChartData] =
+    useState<StackedBarChartData[]>(emptyChartData);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const rawData = await httpInterface.getStaticUser<DataItem[]>();
+      const transformed = aggregateToWeekdayChart(rawData);
+      setChartData(transformed);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Card>
       <CardHeader>
