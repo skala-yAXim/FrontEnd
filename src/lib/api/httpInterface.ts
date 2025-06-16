@@ -41,30 +41,25 @@ export class HttpInterface {
     return this.apiClient.delete<void>("/git");
   }
 
-  async getStaticsUser(): Promise<StaticsUserType> {
-    return this.apiClient.get<StaticsUserType>("/statics/user");
+  async getDashboardUserAvg(): Promise<StaticsUserType> {
+    return this.apiClient.get<StaticsUserType>("/dashboard/statics/user/avg");
   }
 
-  async getStaticsUserAvg(): Promise<StaticsUserType> {
-    return this.apiClient.get<StaticsUserType>("/statics/user/avg");
+  async getDashboardUserWeek(): Promise<StaticsUserType> {
+    return this.apiClient.get<StaticsUserType>("/dashboard/statics/user/week");
   }
 
-  async getStaticsUserWeek(): Promise<StaticsUserType> {
-    return this.apiClient.get<StaticsUserType>("/statics/user/week");
+  async getDashboardTeamWeek(): Promise<StaticsTeamType> {
+    return this.apiClient.get<StaticsTeamType>("/dashboard/statics/team/week");
   }
 
-  async getStaticsTeamWeek(): Promise<StaticsTeamType> {
-    return this.apiClient.get<StaticsTeamType>("/statics/team/week");
+  async getDashboardUser<T>(): Promise<T> {
+    return this.apiClient.get<T>("/dashboard/statics/user");
   }
 
-  async getStaticUser<T>(): Promise<T> {
-    return this.apiClient.get<T>("/statics/user");
+  async getDashboardAvgUser<T>(): Promise<T> {
+    return this.apiClient.get<T>("/dashboard/statics/user/avg");
   }
-
-  async getAvgStaticUser<T>(): Promise<T> {
-    return this.apiClient.get<T>("/statics/user/avg");
-  }
-
 
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.
   // 예시:
