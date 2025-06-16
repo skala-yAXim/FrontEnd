@@ -17,9 +17,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { httpInterface } from "@/lib/api/httpInterface";
-import { DataItem, StackedBarChartData } from "@/types/statisticsType";
-import { useEffect, useState } from "react";
+import { useGetDashboardUser } from "@/hooks/useDashboardQueries";
+import { StackedBarChartData } from "@/types/statisticsType";
 import { aggregateToWeekdayChart } from "./_utils/TransformData";
 
 export const description = "A stacked bar chart with a legend";
@@ -43,21 +42,43 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const emptyChartData: StackedBarChartData[] = [];
-
 export function ChartBarStacked() {
-  const [chartData, setChartData] =
-    useState<StackedBarChartData[]>(emptyChartData);
+  const { data: dashboardUser, isLoading, isError } = useGetDashboardUser();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const rawData = await httpInterface.getStaticUser<DataItem[]>();
-      const transformed = aggregateToWeekdayChart(rawData);
-      setChartData(transformed);
-    };
+  // 데이터 전처리
+  const chartData: StackedBarChartData[] = dashboardUser
+    ? aggregateToWeekdayChart(dashboardUser)
+    : [];
 
-    fetchData();
-  }, []);
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>일일 업무 활동</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className='flex items-center justify-center h-40 text-muted-foreground'>
+            로딩 중...
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>일일 업무 활동</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className='flex items-center justify-center h-40 text-destructive'>
+            데이터를 불러오는데 실패했습니다.
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>

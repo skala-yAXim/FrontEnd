@@ -22,9 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { httpInterface } from "@/lib/api/httpInterface";
-import { DataItem, MultipleBarChartData } from "@/types/statisticsType";
-import { useEffect, useState } from "react";
+import {
+  useGetDashboardUser,
+  useGetDashboardUserAvg,
+} from "@/hooks/useDashboardQueries";
+import { MultipleBarChartData } from "@/types/statisticsType";
+import { useState } from "react";
 import { transformToAvgChartData } from "./_utils/TransformData";
 
 export const description = "A multiple bar chart";
@@ -60,25 +63,59 @@ const emptyChartData: MultipleBarChartData = {
 };
 
 export function ChartBarMultiple() {
-  const [chartData, setChartData] =
-    useState<MultipleBarChartData>(emptyChartData);
+  // react-query로 데이터 패칭
+  const {
+    data: rawData,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useGetDashboardUser();
+  const {
+    data: avgRawData,
+    isLoading: isLoadingAvg,
+    isError: isErrorAvg,
+  } = useGetDashboardUserAvg();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const rawData = await httpInterface.getStaticUser<DataItem[]>();
-      const avgRawData = await httpInterface.getAvgStaticUser<DataItem[]>();
-      const transformed = transformToAvgChartData(rawData, avgRawData);
-      setChartData(transformed);
-    };
-
-    fetchData();
-  }, []);
+  // 데이터 전처리
+  const chartData: MultipleBarChartData =
+    rawData && avgRawData
+      ? transformToAvgChartData(rawData, avgRawData)
+      : emptyChartData;
 
   const [filter, setFilter] = useState<"email" | "git" | "docs" | "teams">(
     "email"
   );
-
   const filteredData = chartData[filter];
+
+  // 로딩/에러 처리
+  if (isLoadingUser || isLoadingAvg) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>일일 업무 활동</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className='flex items-center justify-center h-40 text-muted-foreground'>
+            로딩 중...
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (isErrorUser || isErrorAvg) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>일일 업무 활동</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className='flex items-center justify-center h-40 text-destructive'>
+            데이터를 불러오는데 실패했습니다.
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>

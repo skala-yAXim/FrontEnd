@@ -2,28 +2,28 @@ import { httpInterface } from "@/lib/api/httpInterface";
 import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetStaticsUser = () => {
+export const useGetDashboardUser = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["staticsUser"],
-    queryFn: () => httpInterface.getStaticsUser(),
+    queryKey: ["dashboardUser"],
+    queryFn: () => httpInterface.getDashboardUser<StaticsUserType[]>(),
   });
 
-  return { data: data as StaticsUserType, isLoading, isError };
+  return { data: data as StaticsUserType[], isLoading, isError };
 };
 
-export const useGetStaticsUserAvg = () => {
+export const useGetDashboardUserAvg = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["staticsUserAvg"],
-    queryFn: () => httpInterface.getStaticsUserAvg(),
+    queryKey: ["dashboardUserAvg"],
+    queryFn: () => httpInterface.getDashboardAvgUser<StaticsUserType[]>(),
   });
 
-  return { data: data as StaticsUserType, isLoading, isError };
+  return { data: data as StaticsUserType[], isLoading, isError };
 };
 
 export const useGetStaticsUserWeek = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["staticsUserWeek"],
-    queryFn: () => httpInterface.getStaticsUserWeek(),
+    queryFn: () => httpInterface.getDashboardUserWeek(),
   });
 
   return { data: data as StaticsUserType, isLoading, isError };
@@ -32,7 +32,7 @@ export const useGetStaticsUserWeek = () => {
 export const useGetStaticsTeamWeek = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["staticsTeamWeek"],
-    queryFn: () => httpInterface.getStaticsTeamWeek(),
+    queryFn: () => httpInterface.getDashboardTeamWeek(),
   });
 
   return { data: data as StaticsTeamType, isLoading, isError };
