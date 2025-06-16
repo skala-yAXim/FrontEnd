@@ -63,7 +63,7 @@ export function ChartBarStacked() {
     <Card>
       <CardHeader>
         <CardTitle>일일 업무 활동</CardTitle>
-        <CardDescription>2025년 5월 25일 ~ 6월 12일</CardDescription>
+        <CardDescription>개인 업무 총합</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
