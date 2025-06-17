@@ -1,6 +1,8 @@
 import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
 import type { GitHubInfo } from "@/types/githubType";
-import { api as ApiClientType } from "./http"; // http.ts의 api 객체 타입을 가져옵니다.
+import { PageRequest, PageResponse } from "@/types/pagination";
+import { Project } from "../../types/projectType";
+import { api, api as ApiClientType } from "./http";
 
 /**
  * API 요청을 위한 인터페이스 클래스입니다.
@@ -21,8 +23,11 @@ export class HttpInterface {
     return this.apiClient.post("/auth/logout", {});
   }
 
-  async getProjects<T>(page: number, size: number): Promise<T> {
-    return this.apiClient.get<T>(`/projects?page=${page}&size=${size}`);
+  // Pagination
+  async getProjects(pageRequest: PageRequest): Promise<PageResponse<Project>> {
+    return this.apiClient.get<PageResponse<Project>>(
+      `/projects?page=${pageRequest.page}&size=${pageRequest.size}&sort=${pageRequest?.sort}`
+    );
   }
 
   async createProject<T>(projectData: FormData): Promise<T> {
@@ -81,7 +86,6 @@ export class HttpInterface {
   // }
 }
 
-import { api } from "./http";
 export const httpInterface = new HttpInterface(api); // api 객체를 임포트합니다.
 
 // 이 클래스를 사용하는 방법:

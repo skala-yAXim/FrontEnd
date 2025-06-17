@@ -1,15 +1,16 @@
 import { httpInterface } from "@/lib/api/httpInterface";
-import { Project } from "@/types/projectType";
+import { PageRequest } from "@/types/pagination";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-export const useGetProjects = (page: number, size: number) => {
+export const useGetProjects = (pageRequest: PageRequest) => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["projects", page, size],
-    queryFn: () => httpInterface.getProjects(page, size),
+    queryKey: ["projects", pageRequest],
+    queryFn: () => httpInterface.getProjects(pageRequest),
+    placeholderData: prev => prev,
   });
 
-  return { data: data as Project[], isLoading, isError };
+  return { data, isLoading, isError };
 };
 
 export const useCreateProjects = () => {
