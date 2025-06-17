@@ -1,7 +1,11 @@
 import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
 import type { GitHubInfo } from "@/types/githubType";
 import { PageRequest, PageResponse } from "@/types/pagination";
-import { DailyReportData, DailyReportList } from "@/types/reportType";
+import {
+  DailyReportData,
+  DailyReportList,
+  WeeklyReportList,
+} from "@/types/reportType";
 import { Project } from "../../types/projectType";
 import { api, api as ApiClientType } from "./http";
 
@@ -41,6 +45,15 @@ export class HttpInterface {
 
   async getDailyReport(id: number): Promise<DailyReportData> {
     return this.apiClient.get<DailyReportData>(`/reports/user/daily/${id}`);
+  }
+
+  // Pagination
+  async getWeeklyReports(
+    pageRequest: PageRequest
+  ): Promise<PageResponse<WeeklyReportList>> {
+    return this.apiClient.get<PageResponse<WeeklyReportList>>(
+      `/reports/user/weekly?page=${pageRequest.page}&size=${pageRequest.size}&sort=${pageRequest?.sort}`
+    );
   }
 
   async createProject<T>(projectData: FormData): Promise<T> {
