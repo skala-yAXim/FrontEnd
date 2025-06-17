@@ -2,21 +2,17 @@
 
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetTeamInfo, usePostTemplate } from "@/hooks/useTeamQueries";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function TeamWeeklySettingPage() {
   const [template, setTemplate] = useState("");
+  const [activeTab, setActiveTab] = useState<string>("edit");
 
   const { data: teamInfo, isLoading: isTeamInfoLoading } = useGetTeamInfo();
   const { postTemplate, isPending: isSubmitting } = usePostTemplate();
@@ -179,125 +175,177 @@ export default function TeamWeeklySettingPage() {
   };
 
   return (
-    <div className='space-y-6 pb-10'>
-      <PageHeader
-        title='팀 위클리 템플릿 설정'
-        description='팀에서 사용할 위클리 보고서 템플릿을 설정하세요. 기존 템플릿은 새로운 템플릿으로 대체됩니다.'
-      />
+    <div className='space-y-8 pb-10'>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <PageHeader
+          title='팀 위클리 템플릿 설정'
+          description='팀에서 사용할 위클리 보고서 템플릿을 설정하세요. 기존 템플릿은 새로운 템플릿으로 대체됩니다.'
+        />
+      </motion.div>
 
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-        <div className='lg:col-span-2'>
-          <Card className='border-0 shadow-lg'>
-            <CardContent className='pt-1'>
-              <div className='space-y-4'>
-                <div>
-                  <Label htmlFor='template-content'>템플릿 내용</Label>
-                </div>
-
-                <div>
-                  <div className='space-y-2'>
-                    <div className='relative'>
-                      <Textarea
-                        id='template-content'
-                        placeholder={
-                          isTeamInfoLoading
-                            ? ""
-                            : "위클리 보고서 템플릿 내용을 작성하세요."
-                        }
-                        className='min-h-[400px] font-mono resize-none'
-                        value={template}
-                        onChange={e => setTemplate(e.target.value)}
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+        <motion.div
+          className='lg:col-span-2'
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className='border-0 overflow-hidden p-6'>
+            <div>
+              <div className='space-y-6'>
+                <div className='flex items-center justify-between'>
+                  <Label
+                    htmlFor='template-content'
+                    className='text-lg font-medium'
+                  >
+                    템플릿 내용
+                  </Label>
+                  {!isTeamInfoLoading && (
+                    <div className='flex gap-2'>
+                      <Button
+                        variant='ghost'
+                        size='sm'
+                        onClick={() => loadTemplateExample("basic")}
                         disabled={isTeamInfoLoading || isSubmitting}
-                      />
-                      {isTeamInfoLoading && (
-                        <div className='absolute inset-0 flex items-center justify-center bg-background/50'>
-                          <p className='text-sm text-muted-foreground'>
-                            템플릿 불러오는 중...
-                          </p>
-                        </div>
-                      )}
+                        className='text-xs hover:bg-primary/10 hover:text-primary transition-colors'
+                      >
+                        기본 템플릿
+                      </Button>
+                      <Button
+                        variant='ghost'
+                        size='sm'
+                        onClick={() => loadTemplateExample("detailed")}
+                        disabled={isTeamInfoLoading || isSubmitting}
+                        className='text-xs hover:bg-primary/10 hover:text-primary transition-colors'
+                      >
+                        상세 템플릿
+                      </Button>
+                      <Button
+                        variant='ghost'
+                        size='sm'
+                        onClick={() => loadTemplateExample("agile")}
+                        disabled={isTeamInfoLoading || isSubmitting}
+                        className='text-xs hover:bg-primary/10 hover:text-primary transition-colors'
+                      >
+                        애자일 템플릿
+                      </Button>
                     </div>
-                  </div>
+                  )}
                 </div>
 
-                <div className='flex flex-wrap justify-between gap-2 mt-4'>
-                  <p className='text-sm text-muted-foreground w-full mb-1'>
-                    템플릿 예시:
-                  </p>
-                  <div className='flex flex-wrap gap-2'>
-                    <Button
-                      variant='outline'
-                      size='sm'
-                      onClick={() => loadTemplateExample("basic")}
-                      disabled={isTeamInfoLoading || isSubmitting}
+                <div className='relative rounded-lg overflow-hidden border border-border/50 shadow-inner'>
+                  <Textarea
+                    id='template-content'
+                    placeholder={
+                      isTeamInfoLoading
+                        ? ""
+                        : "위클리 보고서 템플릿 내용을 작성하세요."
+                    }
+                    className='min-h-[450px] font-mono resize-none border-0 p-4 focus-visible:ring-1 focus-visible:ring-primary/30 bg-card/50 backdrop-blur-sm'
+                    value={template}
+                    onChange={e => setTemplate(e.target.value)}
+                    disabled={isTeamInfoLoading || isSubmitting}
+                  />
+                  {isTeamInfoLoading && (
+                    <motion.div
+                      className='absolute inset-0 flex items-center justify-center bg-background/70 backdrop-blur-sm'
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      기본 템플릿
-                    </Button>
-                    <Button
-                      variant='outline'
-                      size='sm'
-                      onClick={() => loadTemplateExample("detailed")}
-                      disabled={isTeamInfoLoading || isSubmitting}
-                    >
-                      상세 템플릿
-                    </Button>
-                    <Button
-                      variant='outline'
-                      size='sm'
-                      onClick={() => loadTemplateExample("agile")}
-                      disabled={isTeamInfoLoading || isSubmitting}
-                    >
-                      애자일/스프린트 템플릿
-                    </Button>
-                  </div>
+                      <div className='flex flex-col items-center gap-2'>
+                        <div className='h-5 w-5 rounded-full border-2 border-primary/30 border-t-primary animate-spin'></div>
+                        <p className='text-sm font-medium text-muted-foreground'>
+                          템플릿 불러오는 중...
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+
+                <div className='flex justify-end'>
                   <Button
                     onClick={handleSaveTemplate}
                     disabled={isSubmitting || isTeamInfoLoading}
-                    className='px-6'
+                    className='px-8 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-md hover:shadow-lg transition-all duration-300'
                   >
-                    {isSubmitting ? "저장 중..." : "템플릿 저장"}
+                    {isSubmitting ? (
+                      <div className='flex items-center gap-2'>
+                        <div className='h-4 w-4 rounded-full border-2 border-background/30 border-t-background animate-spin'></div>
+                        <span>저장 중...</span>
+                      </div>
+                    ) : (
+                      <span>템플릿 저장</span>
+                    )}
                   </Button>
                 </div>
               </div>
-            </CardContent>
-            <CardFooter className='flex justify-end bg-muted/20 py-4'></CardFooter>
-          </Card>
-        </div>
+            </div>
+          </div>
+        </motion.div>
 
-        <div className='lg:col-span-1'>
-          <Card className='border-0 shadow-lg sticky top-23'>
-            <CardHeader className='rounded-t-lg'>
-              <CardTitle className='text-lg'>템플릿 설정 가이드</CardTitle>
-            </CardHeader>
+        <motion.div
+          className='lg:col-span-1'
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <Card className='border-0 sticky top-24 bg-gradient-to-br from-background to-muted/20 shadow-xl'>
             <CardContent className='pt-6'>
-              <div className='space-y-4 text-sm'>
-                <div>
-                  <h3 className='font-medium mb-1'>
+              <div className='space-y-6 text-sm'>
+                <div className='bg-gradient-to-br from-primary/5 to-background p-4 rounded-lg border border-border/30 shadow-sm'>
+                  <h3 className='font-semibold mb-2 text-base'>
                     효과적인 위클리 템플릿 작성 팁
                   </h3>
-                  <ul className='list-disc pl-5 space-y-1 text-muted-foreground'>
-                    <li>명확한 섹션 구분으로 정보를 체계화하세요</li>
-                    <li>프로젝트 진행 상황을 시각적으로 표현하세요</li>
-                    <li>다음 주 계획을 구체적으로 작성하세요</li>
-                    <li>이슈와 리스크를 명확히 기록하세요</li>
-                    <li>팀원별 기여도를 포함하세요</li>
+                  <ul className='list-disc pl-5 space-y-2 text-muted-foreground'>
+                    <li className='hover:text-foreground transition-colors'>
+                      명확한 섹션 구분으로 정보를 체계화하세요
+                    </li>
+                    <li className='hover:text-foreground transition-colors'>
+                      프로젝트 진행 상황을 시각적으로 표현하세요
+                    </li>
+                    <li className='hover:text-foreground transition-colors'>
+                      다음 주 계획을 구체적으로 작성하세요
+                    </li>
+                    <li className='hover:text-foreground transition-colors'>
+                      이슈와 리스크를 명확히 기록하세요
+                    </li>
+                    <li className='hover:text-foreground transition-colors'>
+                      팀원별 기여도를 포함하세요
+                    </li>
                   </ul>
                 </div>
 
-                <div>
-                  <h3 className='font-medium mb-1'>권장 포함 항목</h3>
-                  <ul className='list-disc pl-5 space-y-1 text-muted-foreground'>
-                    <li>주요 성과 및 달성 사항</li>
-                    <li>프로젝트별 진행 상황</li>
-                    <li>다음 주 계획 및 목표</li>
-                    <li>이슈 및 리스크 요소</li>
-                    <li>팀원별 업무 현황</li>
+                <div className='bg-gradient-to-br from-primary/5 to-background p-4 rounded-lg border border-border/30 shadow-sm'>
+                  <h3 className='font-semibold mb-2 text-base'>
+                    권장 포함 항목
+                  </h3>
+                  <ul className='list-disc pl-5 space-y-2 text-muted-foreground'>
+                    <li className='hover:text-foreground transition-colors'>
+                      주요 성과 및 달성 사항
+                    </li>
+                    <li className='hover:text-foreground transition-colors'>
+                      프로젝트별 진행 상황
+                    </li>
+                    <li className='hover:text-foreground transition-colors'>
+                      다음 주 계획 및 목표
+                    </li>
+                    <li className='hover:text-foreground transition-colors'>
+                      이슈 및 리스크 요소
+                    </li>
+                    <li className='hover:text-foreground transition-colors'>
+                      팀원별 업무 현황
+                    </li>
                   </ul>
                 </div>
 
-                <div className='bg-muted/30 p-3 rounded-md'>
-                  <h3 className='font-medium mb-1'>도움말</h3>
-                  <p className='text-muted-foreground text-xs'>
+                <div className='bg-gradient-to-br from-muted/30 to-background p-4 rounded-lg border border-border/30 shadow-sm'>
+                  <h3 className='font-semibold mb-2 text-base'>도움말</h3>
+                  <p className='text-muted-foreground text-xs leading-relaxed'>
                     템플릿을 저장하면 팀의 모든 위클리 보고서 작성 시 기본
                     양식으로 사용됩니다. 이전 위클리를 불러와 템플릿으로
                     활용하거나, 예시 템플릿을 사용할 수 있습니다.
@@ -306,7 +354,7 @@ export default function TeamWeeklySettingPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
