@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,18 +10,40 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CardAction } from "@/components/ui/card-action";
+import { motion } from "framer-motion";
 import { ChartBarMultiple } from "./chart/MultipleBarChart";
 import { ChartBarStacked } from "./chart/StackedBarChart";
 
 export function BarCards() {
   return (
-    <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4'>
-      <div className='col-span-2'>
-        <ChartBarStacked />
-      </div>
-      <div className='col-span-2'>
-        <ChartBarMultiple />
-      </div>
+    <div className='grid grid-cols-1 gap-6 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4'>
+      <motion.div
+        className='col-span-2'
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        whileHover={{ scale: 1.01 }}
+      >
+        <Card className='border-0 overflow-hidden bg-gradient-to-br from-background to-muted/30 shadow-lg'>
+          <div className='p-4'>
+            <ChartBarStacked />
+          </div>
+        </Card>
+      </motion.div>
+
+      <motion.div
+        className='col-span-2'
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        whileHover={{ scale: 1.01 }}
+      >
+        <Card className='border-0 overflow-hidden bg-gradient-to-br from-background to-muted/30 shadow-lg'>
+          <div className='p-4'>
+            <ChartBarMultiple />
+          </div>
+        </Card>
+      </motion.div>
     </div>
   );
 }

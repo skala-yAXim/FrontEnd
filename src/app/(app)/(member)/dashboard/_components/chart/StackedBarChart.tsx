@@ -81,10 +81,12 @@ export function ChartBarStacked() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>일일 업무 활동</CardTitle>
-        <CardDescription>개인 업무 총합</CardDescription>
+    <Card className='mt-0 border-0 shadow-none bg-transparent'>
+      <CardHeader className='border-b border-border/10 bg-muted/5'>
+        <CardTitle className='text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70'>
+          주간 활동 요약
+        </CardTitle>
+        <CardDescription>일주일 간의 활동 유형별 통계</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

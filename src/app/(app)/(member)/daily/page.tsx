@@ -1,10 +1,10 @@
-// TODO: 리팩토링 완료 - 서버/클라이언트 컴포넌트 분리
-
 "use client";
 
 import PageHeader from "@/components/PageHeader";
 import Pagination from "@/components/Pagination";
 import { useGetDailyReports } from "@/hooks/useUserDailyQueries";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useServerPagination } from "../../../../hooks/useServerPagination";
 import { DailyReportList } from "./_components/DailyReportList";
 import { EmptyState } from "./_components/EmptyState";
@@ -16,6 +16,34 @@ import { ReportStats } from "./_components/ReportStats";
  * 설계서 기준: 개인 데일리 보고서 목록 표시 화면
  */
 export default function DailyReportsPage() {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  // 애니메이션 변수
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.15,
+        duration: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4 },
+    },
+  };
+
   // 페이지네이션 훅 사용
   const pagination = useServerPagination({
     initialPage: 0,
@@ -38,36 +66,54 @@ export default function DailyReportsPage() {
   }
 
   return (
-    <div className='space-y-6'>
-      {/* 서버 컴포넌트 - 정적 헤더 */}
-      <PageHeader
-        title='데일리 보고서'
-        description='지난 데일리 보고서들을 확인하고 새로운 보고서를 자동으로 생성할 수 있습니다.
+    <div className='flex flex-1 flex-col'>
+      <motion.div
+        className='@container/main flex flex-1 flex-col'
+        initial='hidden'
+        animate={isLoaded ? "visible" : "hidden"}
+        variants={containerVariants}
+      >
+        <motion.div variants={itemVariants} className='z-10'>
+          <PageHeader
+            title='데일리 보고서'
+            description='지난 데일리 보고서들을 확인하고 새로운 보고서를 자동으로 생성할 수 있습니다.'
+          />
+        </motion.div>
 
-'
-      />
+        <motion.div variants={itemVariants} className='relative p-6 pt-0'>
+          {/* 배경 효과 */}
+          <motion.div
+            className='absolute inset-0 pointer-events-none z-0'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            transition={{ delay: 0.5, duration: 1 }}
+          />
 
-      <div className='p-6 pt-0'>
-        {totalItems === 0 ? (
-          <EmptyState />
-        ) : (
-          <>
-            {/* 서버 컴포넌트 - 통계 정보 */}
-            <ReportStats totalCount={totalItems} sortOrder='latest' />
+          {totalItems === 0 ? (
+            <motion.div variants={itemVariants}>
+              <EmptyState />
+            </motion.div>
+          ) : (
+            <>
+              <motion.div variants={itemVariants} className='z-10'>
+                <ReportStats totalCount={totalItems} sortOrder='latest' />
+              </motion.div>
 
-            {/* 서버 컴포넌트 - 보고서 목록 (현재 페이지 데이터만 전달) */}
-            <DailyReportList reports={dailyReports} />
+              <motion.div variants={itemVariants} className='z-10'>
+                <DailyReportList reports={dailyReports} />
+              </motion.div>
 
-            {/* 공통 페이지네이션 컴포넌트 */}
-            <Pagination
-              {...pagination.getPaginationProps(totalItems)}
-              showPageInfo={true}
-              showResultInfo={true}
-              className='mt-6'
-            />
-          </>
-        )}
-      </div>
+              <motion.div variants={itemVariants} className='z-10 mt-6'>
+                <Pagination
+                  {...pagination.getPaginationProps(totalItems)}
+                  showPageInfo={true}
+                  showResultInfo={true}
+                />
+              </motion.div>
+            </>
+          )}
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
