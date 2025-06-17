@@ -31,10 +31,25 @@ export interface Report {
 }
 
 export interface DailyReportData {
-  report_title: string;
   id: number;
-  daily_report: Report;
-  daily_reflection: Reflection;
+  createdAt: string;
+  updatedAt: string | null;
+  date: string;
+  title: string;
+  report: {
+    report_title: string;
+    daily_report: Report;
+    daily_reflection: Reflection;
+  };
+}
+
+export interface DailyReportList {
+  id: number;
+  createdAt: string;
+  updatedAt: string | null;
+  date: string;
+  title: string;
+  preview: string;
 }
 
 export interface WeeklyReportData {

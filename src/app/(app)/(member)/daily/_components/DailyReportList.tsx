@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DailyReportData } from "@/types/reportType";
+import { DailyReportList as DailyReportListType } from "@/types/reportType";
 import Link from "next/link";
 
 interface DailyReportListProps {
-  reports: DailyReportData[];
+  reports: DailyReportListType[];
 }
 
 export function DailyReportList({ reports }: DailyReportListProps) {
@@ -24,7 +24,7 @@ export function DailyReportList({ reports }: DailyReportListProps) {
                 <div className='flex-1 space-y-2 pl-3'>
                   {/* 제목 */}
                   <CardTitle className='text-lg leading-tight line-clamp-2 transition-colors duration-200 group-hover:text-primary'>
-                    {report.report_title}
+                    {report.title}
                   </CardTitle>
                 </div>
 
@@ -51,7 +51,7 @@ export function DailyReportList({ reports }: DailyReportListProps) {
             {/* 간단한 내용 미리보기 */}
             <CardContent className='pt-0 pb-3 pl-8'>
               <p className='text-muted-foreground text-sm line-clamp-2 transition-colors duration-200 group-hover:text-foreground/80'>
-                {report.daily_report?.summary}
+                {report.preview || "보고서 내용이 없습니다."}
               </p>
             </CardContent>
 
