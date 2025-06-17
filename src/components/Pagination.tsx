@@ -60,8 +60,8 @@ export default function Pagination({
 
   const visiblePages = getVisiblePages();
 
-  // 페이지가 1개 이하면 렌더링하지 않음
-  if (totalPages <= 1) {
+  // 페이지가 1개 미만이면 렌더링하지 않음
+  if (totalPages < 1) {
     return null;
   }
 
