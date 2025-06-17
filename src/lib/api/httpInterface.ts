@@ -7,6 +7,7 @@ import {
   WeeklyReportList,
 } from "@/types/reportType";
 import { Project } from "../../types/projectType";
+import { TeamInfoType } from "../../types/teamType";
 import { api, api as ApiClientType } from "./http";
 
 /**
@@ -90,6 +91,14 @@ export class HttpInterface {
 
   async getDashboardAvgUser<T>(): Promise<T> {
     return this.apiClient.get<T>("/dashboard/statics/user/avg");
+  }
+
+  async postTeamTemplate(template: string): Promise<void> {
+    return this.apiClient.post<void>("/team/template", { template });
+  }
+
+  async getTeamInfo(): Promise<TeamInfoType> {
+    return this.apiClient.get<TeamInfoType>("/team");
   }
 
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.

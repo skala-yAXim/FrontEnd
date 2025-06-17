@@ -42,7 +42,9 @@ export default function DailyReportsPage() {
       {/* 서버 컴포넌트 - 정적 헤더 */}
       <PageHeader
         title='데일리 보고서'
-        description='자동으로 생성된 개인 데일리 보고서 목록입니다'
+        description='지난 데일리 보고서들을 확인하고 새로운 보고서를 자동으로 생성할 수 있습니다.
+
+'
       />
 
       <div className='p-6 pt-0'>
