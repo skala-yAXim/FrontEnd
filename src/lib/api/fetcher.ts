@@ -19,14 +19,17 @@ export async function customFetch<T>(
   isRetryAttempt: boolean = false // Renamed for clarity
 ): Promise<T> {
   const baseUrl = process.env.NEXT_PUBLIC_SERVER_CLIENT_SIDE_URL || "";
+
   const isAbsolutePath =
     path.startsWith("http://") || path.startsWith("https://");
+
   const fullUrl = isAbsolutePath
     ? path
     : `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
 
   // FormData인 경우 Content-Type 헤더를 설정하지 않음
   const isFormData = options.body instanceof FormData;
+
   const defaultOptions: RequestInit = {
     credentials: "include",
     headers: isFormData
@@ -48,12 +51,11 @@ export async function customFetch<T>(
         try {
           const refreshResponse = await fetch(`${baseUrl}/auth/reissue`, {
             method: "POST",
-            credentials: "include", // HttpOnly 쿠키에 리프레시 토큰이 있는 경우 중요
+            credentials: "include",
           });
 
           if (!refreshResponse.ok) {
             // 리프레시 토큰 실패 (예: 리프레시 토큰 만료 또는 무효)
-            // console.error("Token refresh failed:", refreshResponse.status);
             throw new Error(
               `Token refresh failed with status: ${refreshResponse.status}`
             );
@@ -65,7 +67,7 @@ export async function customFetch<T>(
             localStorage.removeItem("auth-storage"); // Zustand persist 키
             window.location.href = "/login";
           }
-          // 에러를 다시 throw하여 리프레시 실패를 알림
+
           throw error instanceof Error
             ? error
             : new Error("Token refresh failed");

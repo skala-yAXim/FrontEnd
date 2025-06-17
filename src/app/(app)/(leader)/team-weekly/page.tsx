@@ -4,7 +4,7 @@
 import PageHeader from "@/components/PageHeader";
 import { WeeklyReportItem, WeeklyReportListPage } from "@/components/reports";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -59,7 +59,7 @@ export default function TeamWeeklyPage() {
 
   // 새 보고서 생성 핸들러 - 1번 페이지로 이동
   const handleCreateNew = () => {
-    router.push("/team-weekly/create");
+    router.push("/team-weekly/setting");
   };
 
   // 페이지 변경 핸들러
@@ -69,8 +69,12 @@ export default function TeamWeeklyPage() {
 
   const MyButton = () => {
     return (
-      <Button onClick={handleCreateNew} className='flex items-center gap-2'>
-        <Plus className='w-4 h-4' />새 보고서 생성
+      <Button
+        onClick={handleCreateNew}
+        className='flex items-center gap-2 bg-primary hover:bg-primary/80 text-primary-foreground w-full'
+      >
+        <Settings className='w-4 h-4' />
+        설정
       </Button>
     );
   };
