@@ -52,6 +52,16 @@ export interface DailyReportList {
   preview: string;
 }
 
+export interface WeeklyReportList {
+  id: number;
+  createdAt: string;
+  updatedAt: string | null;
+  startDate: string;
+  endDate: string;
+  title: string;
+  preview: string;
+}
+
 export interface WeeklyReportData {
   report_title: string;
   id: number;

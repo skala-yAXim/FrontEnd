@@ -5,53 +5,28 @@ import PageHeader from "@/components/PageHeader";
 import Pagination from "@/components/Pagination";
 import { TypographyMuted } from "@/components/typography/Typograhpy";
 import { CardContent } from "@/components/ui/card";
-import { usePagination } from "@/hooks/usePagination";
+import { useServerPagination } from "@/hooks/useServerPagination";
+import { useGetWeeklyReports } from "@/hooks/useUserWeeklyQueries";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { mockWeeklyReports } from "./mock";
-
-// 위클리 보고서 아이템 타입 (mock 데이터 구조에 맞춤)
-interface WeeklyReportItem {
-  id: number;
-  report_title: string;
-  weekly_report: {
-    title: string;
-    summary: string;
-    contents: Array<{
-      text: string;
-      evidence: Array<{
-        title: string;
-        content: string;
-        LLM_reference: string;
-      }>;
-    }>;
-  };
-  weekly_reflection: {
-    title: string;
-    content: string[];
-  };
-}
 
 export default function WeeklyReportsPage() {
   const router = useRouter();
 
-  // 보고서 데이터 상태 (mock 데이터 사용)
-  const [reports, setReports] = useState<WeeklyReportItem[]>([]);
-
-  // 페이지네이션 훅 사용
-  const pagination = usePagination({
-    totalItems: reports.length,
-    itemsPerPage: 10,
-    initialPage: 1,
+  const pagination = useServerPagination({
+    initialPage: 0,
+    initialSize: 10,
+    initialSort: "createdAt,desc",
   });
 
-  // 현재 페이지의 보고서들
-  const paginatedReports = pagination.sliceData(reports);
+  const {
+    data: weeklyReportsData,
+    isLoading,
+    isError,
+  } = useGetWeeklyReports(pagination.pageRequest);
 
-  useEffect(() => {
-    // 클라이언트 사이드에서 mock 데이터 설정
-    setReports(mockWeeklyReports as unknown as WeeklyReportItem[]);
-  }, []);
+  const weeklyReports = weeklyReportsData?.content || [];
+  const totalItems = weeklyReportsData?.totalElements || 0;
+  const totalPages = weeklyReportsData?.totalPages || 0;
 
   // 행 클릭 핸들러
   const handleRowClick = (reportId: number) => {
@@ -74,13 +49,6 @@ export default function WeeklyReportsPage() {
       <PageHeader
         title='위클리 보고서'
         description='지난 주간 보고서들을 확인하고 새로운 보고서를 자동으로 생성할 수 있습니다.'
-        // buttonElement={
-        //   // <Link href='/weekly/create'>
-        //   //   <Button className='flex items-center gap-2 bg-primary hover:bg-primary/80 text-primary-foreground'>
-        //   //     <Plus className='w-4 h-4' />새 보고서 생성
-        //   //   </Button>
-        //   // </Link>
-        // }
       />
       <CardContent>
         {/* 테이블 */}
@@ -97,7 +65,7 @@ export default function WeeklyReportsPage() {
               </tr>
             </thead>
             <tbody>
-              {paginatedReports.length === 0 ? (
+              {weeklyReports.length === 0 ? (
                 <tr>
                   <td
                     colSpan={2}
@@ -107,7 +75,7 @@ export default function WeeklyReportsPage() {
                   </td>
                 </tr>
               ) : (
-                paginatedReports.map(report => (
+                weeklyReports.map(report => (
                   <tr
                     key={report.id}
                     className={`border-b transition-colors hover:bg-muted/50 cursor-pointer`}
@@ -115,13 +83,13 @@ export default function WeeklyReportsPage() {
                     title={"클릭하여 상세보기"}
                   >
                     <td className='py-3 px-4'>
-                      <div className='font-medium'>{report.report_title}</div>
+                      <div className='font-medium'>{report.title}</div>
                       <TypographyMuted className='text-xs mt-1'>
-                        {report.weekly_report.summary.slice(0, 60) + "..."}
+                        {report.preview.slice(0, 60) + "..."}
                       </TypographyMuted>
                     </td>
                     <td className='py-3 px-4 text-sm text-muted-foreground'>
-                      {extractDateFromTitle(report.report_title)}
+                      {extractDateFromTitle(report.title)}
                     </td>
                   </tr>
                 ))
@@ -132,10 +100,9 @@ export default function WeeklyReportsPage() {
 
         {/* 페이지네이션 */}
         <Pagination
-          currentPage={pagination.currentPage}
-          totalItems={pagination.totalItems}
-          itemsPerPage={pagination.itemsPerPage}
-          onPageChange={pagination.handlePageChange}
+          {...pagination.getPaginationProps(totalItems)}
+          showPageInfo={true}
+          showResultInfo={true}
           className='mt-6'
         />
       </CardContent>
