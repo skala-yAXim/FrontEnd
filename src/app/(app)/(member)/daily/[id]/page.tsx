@@ -3,10 +3,8 @@
 import { ReportActions } from "@/components/reports/ReportActions";
 import { ReportError, ReportNotFound } from "@/components/reports/ReportError";
 import { ReportSkeleton } from "@/components/reports/ReportSkeleton";
-import { DailyReportData } from "@/types/reportType";
+import { useGetDailyReport } from "@/hooks/useUserDailyQueries";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { mockDailyReports } from "../mock";
 import DailyReport from "./_components/DailyReport";
 
 /**
@@ -17,41 +15,11 @@ export default function DailyReportDetailPage() {
   const params = useParams();
   const reportId = params.id as string;
 
-  const [currentReport, setCurrentReport] = useState<DailyReportData | null>(
-    null
-  );
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // TODO: react-query 훅 구현 예정
-  // const {
-  //   data: reportData,
-  //   isLoading,
-  //   error,
-  //   refetch
-  // } = useDailyReportQuery(reportId);
-
-  // TODO: API 연동 시 실제 데이터 fetch 로직 구현
-  useEffect(() => {
-    if (reportId) {
-      setIsLoading(true);
-
-      // 임시 데이터 (실제 구현에서는 API 호출)
-      setTimeout(() => {
-        const mockReport = mockDailyReports.find(
-          report => report.id === Number(reportId)
-        );
-        if (!mockReport) {
-          setError("보고서를 찾을 수 없습니다.");
-          setIsLoading(false);
-          return;
-        }
-
-        setCurrentReport(mockReport);
-        setIsLoading(false);
-      }, 1000);
-    }
-  }, [reportId]);
+  const {
+    data: reportData,
+    isLoading,
+    isError,
+  } = useGetDailyReport(Number(reportId));
 
   // PDF 다운로드 핸들러
   const handlePdfDownload = async () => {
@@ -67,11 +35,11 @@ export default function DailyReportDetailPage() {
     return <ReportSkeleton />;
   }
 
-  if (error) {
-    return <ReportError error={error} href='/daily' />;
+  if (isError) {
+    return <ReportError error={isError.toString()} href='/daily' />;
   }
 
-  if (!currentReport) {
+  if (!reportData) {
     return <ReportNotFound href='/daily' />;
   }
 
@@ -85,7 +53,7 @@ export default function DailyReportDetailPage() {
       />
 
       {/* 서버 컴포넌트 - 보고서 내용 */}
-      <DailyReport {...currentReport} />
+      <DailyReport {...reportData} />
     </div>
   );
 }
