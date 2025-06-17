@@ -107,11 +107,13 @@ export function ChartPieLegend() {
   }
 
   return (
-    <Card className='flex flex-col' data-slot='card'>
+    <Card
+      className='flex flex-col border-0 shadow-none bg-transparent'
+      data-slot='card'
+    >
       <CardHeader className='items-center pb-0'>
         <CardTitle>업무 동향</CardTitle>
         <CardDescription>활동 유형별 분포</CardDescription>
-
       </CardHeader>
 
       <CardContent className='flex-1 pb-0'>

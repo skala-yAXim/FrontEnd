@@ -10,9 +10,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { CardAction } from "@/components/ui/card-action";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useGetStaticsUserWeek } from "@/hooks/useDashboardQueries";
 import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
 import { getSourceIcon } from "@/utils/getSourceIcon";
+import { motion } from "framer-motion";
 import { CarouselCard } from "./chart/CarouselCard";
 
 const mockDataTeamWeek: StaticsTeamType = {
@@ -31,15 +33,65 @@ export function SectionCards() {
   // } = useGetStaticsTeamWeek();
   const teamTotal = mockDataTeamWeek;
 
-  if (isLoading || !data) return <div>로딩 중...</div>;
+  if (isLoading) {
+    return (
+      <motion.div
+        className='grid grid-cols-1 gap-6 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4'
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: i * 0.1 }}
+            className='h-[200px] rounded-xl overflow-hidden'
+          >
+            <Card className='h-full border-0 shadow-md bg-gradient-to-br from-background to-muted/30'>
+              <CardHeader className='pb-0'>
+                <Skeleton className='h-4 w-24 mb-2' />
+                <Skeleton className='h-8 w-16 mb-2' />
+                <Skeleton className='h-6 w-10' />
+              </CardHeader>
+              <CardFooter className='mt-auto'>
+                <Skeleton className='h-4 w-32' />
+              </CardFooter>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
+    );
+  }
+
+  if (isError || !data) {
+    return (
+      <div className='px-4 lg:px-6'>
+        <Card className='border-0 bg-destructive/10 text-destructive'>
+          <CardHeader>
+            <CardTitle>데이터를 불러올 수 없습니다</CardTitle>
+            <CardDescription className='text-destructive/80'>
+              잠시 후 다시 시도해주세요
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
 
   return (
-    <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4'>
+    <motion.div
+      className='grid grid-cols-1 gap-6 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4'
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <CarouselCard cards={getGitCards(data, teamTotal)} />
       <CarouselCard cards={getDocsCards(data, teamTotal)} />
       <CarouselCard cards={getEmailCards(data, teamTotal)} />
       <CarouselCard cards={getTeamsCards(data, teamTotal)} />
-    </div>
+    </motion.div>
   );
 }
 

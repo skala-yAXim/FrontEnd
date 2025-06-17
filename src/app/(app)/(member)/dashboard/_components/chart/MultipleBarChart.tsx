@@ -118,13 +118,15 @@ export function ChartBarMultiple() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className='flex justify-between items-center'>
-          <div>
-            <CardTitle>일일 업무 활동</CardTitle>
-            <CardDescription>{`${filter.toUpperCase()} 활동`}</CardDescription>
-          </div>
+    <Card className='mt-0 border-0 shadow-none bg-transparent'>
+      <CardHeader className='border-b border-border/10 bg-muted/5 flex justify-between items-center'>
+        <CardTitle className='text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70'>
+          일별 활동 비교
+          <CardDescription className='mt-1'>
+            일별 활동량 비교 분석
+          </CardDescription>
+        </CardTitle>
+        <div className='flex justify-end items-center'>
           <div className='w-[160px]'>
             <Select
               value={filter}
@@ -163,14 +165,6 @@ export function ChartBarMultiple() {
           </BarChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className='flex-col items-start gap-2 text-sm'>
-        <div className='flex gap-2 leading-none font-medium'>
-          Trending up by 5.2% this month <TrendingUp className='h-4 w-4' />
-        </div>
-        <div className='text-muted-foreground leading-none'>
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter> */}
     </Card>
   );
 }
