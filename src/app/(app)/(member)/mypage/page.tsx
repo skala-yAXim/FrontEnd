@@ -1,41 +1,41 @@
 export const dynamic = "force-dynamic";
 
-// TODO: 리팩토링 (use client 남발, 더미 데이터 사용)
-
 import PageHeader from "@/components/PageHeader";
+import { Card } from "@/components/ui/card";
+import { AnimatedItem, AnimatedLayout } from "./_components/AnimatedLayout";
 import GitIntegrationClientSection from "./_components/GitIntegrationClientSection";
 import UserInfoSection from "./_components/UserInfoSection";
 
-// 더미 사용자 데이터 (실제 사용 시에는 API 호출 등을 통해 가져옵니다)
-const dummyUser = {
-  id: "1",
-  name: "홍길동",
-  email: "hong@example.com",
-  roles: ["developer"], // UserInfoSectionProps에 맞게 필요시 사용
-};
-
-/**
- * 마이페이지 메인 컴포넌트 (서버 컴포넌트)
- * 사용자 정보와 Git 연동 섹션을 표시합니다.
- * @returns {JSX.Element}
- */
 export default function ProfilePage() {
-  // 실제 애플리케이션에서는 API를 통해 사용자 정보를 가져옵니다.
-  // 예: const user = await fetchUser();
-  const user = dummyUser;
-
-  // Git 연동 관련 상태 및 핸들러는 GitIntegrationClientSection으로 이동
-
   return (
-    <div className='w-full'>
-      <PageHeader title='개인 정보' />
+    <div className='w-full space-y-6'>
+      <AnimatedLayout>
+        <AnimatedItem>
+          <PageHeader
+            title='개인 정보'
+            description='계정 정보 및 연동 서비스를 관리합니다'
+          />
+        </AnimatedItem>
 
-      {/* 개인 정보 섹션 */}
-      {/* user 객체에 roles가 있다면 UserInfoSectionProps에 맞게 전달하거나, UserInfoSection 내부에서 처리 */}
-      <UserInfoSection />
+        <div className='flex flex-col gap-6 px-6'>
+          {/* 사용자 정보 섹션 */}
+          <AnimatedItem>
+            <Card className='lg:col-span-1 border-0 shadow-md bg-gradient-to-br from-card to-card/80 backdrop-blur-sm'>
+              <div className='px-6 py-4 border-b'>
+                <h2 className='text-xl font-semibold'>프로필 정보</h2>
+              </div>
+              <UserInfoSection />
+            </Card>
+          </AnimatedItem>
 
-      {/* Git 연동 섹션 (클라이언트 컴포넌트) */}
-      <GitIntegrationClientSection />
+          {/* Git 연동 섹션 */}
+          <AnimatedItem>
+            <Card className='lg:col-span-2 border-0 shadow-md bg-gradient-to-br from-card to-card/80 backdrop-blur-sm'>
+              <GitIntegrationClientSection />
+            </Card>
+          </AnimatedItem>
+        </div>
+      </AnimatedLayout>
     </div>
   );
 }
