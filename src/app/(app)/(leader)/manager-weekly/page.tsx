@@ -154,7 +154,7 @@ export default function ManagerWeeklyPage() {
         <div className='w-full max-w-none'>
           <CardContent className='space-y-6'>
             {/* 필터 영역 */}
-            <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
+            <div className='flex justify-between'>
               {/* 팀원 다중 선택 */}
               <div className='space-y-2'>
                 <Label>팀원 선택</Label>
@@ -191,53 +191,32 @@ export default function ManagerWeeklyPage() {
                 </DropdownMenu>
               </div>
 
-              {/* 보고서 타입 토글 */}
-              <div className='space-y-2'>
-                <Label>보고서 타입</Label>
-                <div className='flex border rounded-md'>
-                  <Button
-                    variant={
-                      filters.reportType === "weekly" ? "default" : "ghost"
+              <div className='flex gap-4'>
+                {/* 시작 날짜 */}
+                <div className='space-y-2 w-full'>
+                  <Label htmlFor='startDate'>시작 날짜</Label>
+                  <Input
+                    id='startDate'
+                    type='date'
+                    value={filters.startDate}
+                    onChange={e =>
+                      handleDateChange("startDate", e.target.value)
                     }
-                    className='flex-1 rounded-r-none border-r'
-                    onClick={() => handleReportTypeChange("weekly")}
-                  >
-                    위클리
-                  </Button>
-                  <Button
-                    variant={
-                      filters.reportType === "daily" ? "default" : "ghost"
-                    }
-                    className='flex-1 rounded-l-none'
-                    onClick={() => handleReportTypeChange("daily")}
-                  >
-                    데일리
-                  </Button>
+                    max={filters.endDate} // 종료 날짜보다 늦을 수 없음
+                  />
                 </div>
-              </div>
 
-              {/* 시작 날짜 */}
-              <div className='space-y-2'>
-                <Label htmlFor='startDate'>시작 날짜</Label>
-                <Input
-                  id='startDate'
-                  type='date'
-                  value={filters.startDate}
-                  onChange={e => handleDateChange("startDate", e.target.value)}
-                  max={filters.endDate} // 종료 날짜보다 늦을 수 없음
-                />
-              </div>
-
-              {/* 종료 날짜 */}
-              <div className='space-y-2'>
-                <Label htmlFor='endDate'>종료 날짜</Label>
-                <Input
-                  id='endDate'
-                  type='date'
-                  value={filters.endDate}
-                  onChange={e => handleDateChange("endDate", e.target.value)}
-                  min={filters.startDate} // 시작 날짜보다 빠를 수 없음
-                />
+                {/* 종료 날짜 */}
+                <div className='space-y-2 w-full'>
+                  <Label htmlFor='endDate'>종료 날짜</Label>
+                  <Input
+                    id='endDate'
+                    type='date'
+                    value={filters.endDate}
+                    onChange={e => handleDateChange("endDate", e.target.value)}
+                    min={filters.startDate} // 시작 날짜보다 빠를 수 없음
+                  />
+                </div>
               </div>
             </div>
 

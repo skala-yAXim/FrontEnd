@@ -1,8 +1,8 @@
 export const dynamic = "force-dynamic";
 
+import { AnimatedItem, AnimatedLayout } from "@/components/AnimatedLayout";
 import PageHeader from "@/components/PageHeader";
 import { Card } from "@/components/ui/card";
-import { AnimatedItem, AnimatedLayout } from "./_components/AnimatedLayout";
 import GitIntegrationClientSection from "./_components/GitIntegrationClientSection";
 import UserInfoSection from "./_components/UserInfoSection";
 

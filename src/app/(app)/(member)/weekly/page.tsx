@@ -1,6 +1,7 @@
 // TODO: 리팩토링 (use client 남발, 더미 데이터 사용)
 "use client";
 
+import { AnimatedItem, AnimatedLayout } from "@/components/AnimatedLayout";
 import PageHeader from "@/components/PageHeader";
 import Pagination from "@/components/Pagination";
 import { TypographyMuted } from "@/components/typography/Typograhpy";
@@ -45,67 +46,69 @@ export default function WeeklyReportsPage() {
   };
 
   return (
-    <div>
-      <PageHeader
-        title='위클리 보고서'
-        description='지난 위클리 보고서들을 확인하고 새로운 보고서를 자동으로 생성할 수 있습니다.'
-      />
-      <CardContent>
-        {/* 테이블 */}
-        <div className='overflow-x-auto'>
-          <table className='w-full'>
-            <thead>
-              <tr className='border-b'>
-                <th className='text-left py-3 px-4 font-semibold text-sm'>
-                  제목
-                </th>
-                <th className='text-left py-3 px-4 font-semibold text-sm'>
-                  생성일자
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {weeklyReports.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={2}
-                    className='text-center py-8 text-muted-foreground'
-                  >
-                    아직 생성된 위클리 보고서가 없습니다.
-                  </td>
+    <AnimatedLayout>
+      <AnimatedItem>
+        <PageHeader
+          title='위클리 보고서'
+          description='지난 위클리 보고서들을 확인하고 새로운 보고서를 자동으로 생성할 수 있습니다.'
+        />
+        <CardContent>
+          {/* 테이블 */}
+          <div className='overflow-x-auto'>
+            <table className='w-full'>
+              <thead>
+                <tr className='border-b'>
+                  <th className='text-left py-3 px-4 font-semibold text-sm'>
+                    제목
+                  </th>
+                  <th className='text-left py-3 px-4 font-semibold text-sm'>
+                    생성일자
+                  </th>
                 </tr>
-              ) : (
-                weeklyReports.map(report => (
-                  <tr
-                    key={report.id}
-                    className={`border-b transition-colors hover:bg-muted/50 cursor-pointer`}
-                    onClick={() => handleRowClick(report.id)}
-                    title={"클릭하여 상세보기"}
-                  >
-                    <td className='py-3 px-4'>
-                      <div className='font-medium'>{report.title}</div>
-                      <TypographyMuted className='text-xs mt-1'>
-                        {report.preview.slice(0, 60) + "..."}
-                      </TypographyMuted>
-                    </td>
-                    <td className='py-3 px-4 text-sm text-muted-foreground'>
-                      {extractDateFromTitle(report.title)}
+              </thead>
+              <tbody>
+                {weeklyReports.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={2}
+                      className='text-center py-8 text-muted-foreground'
+                    >
+                      아직 생성된 위클리 보고서가 없습니다.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                ) : (
+                  weeklyReports.map(report => (
+                    <tr
+                      key={report.id}
+                      className={`border-b transition-colors hover:bg-muted/50 cursor-pointer`}
+                      onClick={() => handleRowClick(report.id)}
+                      title={"클릭하여 상세보기"}
+                    >
+                      <td className='py-3 px-4'>
+                        <div className='font-medium'>{report.title}</div>
+                        <TypographyMuted className='text-xs mt-1'>
+                          {report.preview.slice(0, 60) + "..."}
+                        </TypographyMuted>
+                      </td>
+                      <td className='py-3 px-4 text-sm text-muted-foreground'>
+                        {extractDateFromTitle(report.title)}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
 
-        {/* 페이지네이션 */}
-        <Pagination
-          {...pagination.getPaginationProps(totalItems)}
-          showPageInfo={true}
-          showResultInfo={true}
-          className='mt-6'
-        />
-      </CardContent>
-    </div>
+          {/* 페이지네이션 */}
+          <Pagination
+            {...pagination.getPaginationProps(totalItems)}
+            showPageInfo={true}
+            showResultInfo={true}
+            className='mt-6'
+          />
+        </CardContent>
+      </AnimatedItem>
+    </AnimatedLayout>
   );
 }
