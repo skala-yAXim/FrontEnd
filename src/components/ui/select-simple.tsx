@@ -1,8 +1,8 @@
 "use client";
 
-import * as React from "react";
-import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChevronDown } from "lucide-react";
+import * as React from "react";
 
 interface SelectProps {
   value?: string;
@@ -132,4 +132,4 @@ const SelectItem = React.forwardRef<HTMLButtonElement, SelectItemProps>(
 );
 SelectItem.displayName = "SelectItem";
 
-export { Select, SelectTrigger, SelectValue, SelectContent, SelectItem };
+export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue };
