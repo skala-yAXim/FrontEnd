@@ -82,6 +82,9 @@
 body {
   background-color: var(--bg);
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* 다크모드 강제 적용 */
@@ -135,5 +138,47 @@ html.dark body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* 항상 스크롤바 표시하여 레이아웃 시프트 방지 */
+/* html {
+  overflow-y: scroll;
+} */
+
+/* 레이아웃 안정성 개선을 위한 추가 스타일 */
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* 컨텐츠 영역 안정성 */
+main {
+  width: 100%;
+  position: relative;
+  contain: layout;
+}
+
+/* 404 페이지 애니메이션 요소 */
+.bubble {
+  position: absolute;
+  bottom: -100px;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: float 4s ease-in-out forwards;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-100vh) scale(1);
+    opacity: 0;
   }
 }

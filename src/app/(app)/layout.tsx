@@ -33,6 +33,14 @@ export default function AppGroupLayout({
     }
   }, [isAuthenticated, isLoading, router]);
 
+  useEffect(() => {
+    document.documentElement.style.overflowY = "scroll";
+
+    return () => {
+      document.documentElement.style.overflowY = "";
+    };
+  }, []);
+
   if (isLoading) {
     return null;
   }
