@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function RedirectPage() {
   const user = useAuthStore(state => state.user);
@@ -24,7 +25,7 @@ export default function RedirectPage() {
 
     if (hour >= 5 && hour < 12) {
       return {
-        text: "좋은 아침이에요",
+        text: "좋은 아침입니다",
       };
     } else if (hour >= 12 && hour < 17) {
       return {
@@ -32,7 +33,7 @@ export default function RedirectPage() {
       };
     } else if (hour >= 17 && hour < 21) {
       return {
-        text: "좋은 저녁이에요",
+        text: "좋은 저녁입니다",
       };
     } else {
       return {
@@ -51,6 +52,7 @@ export default function RedirectPage() {
           if (res) {
             login(res);
             setStatus("success");
+            toast.success("로그인에 성공하였습니다");
             setTimeout(() => {
               router.replace("/dashboard");
             }, 2000);
@@ -60,6 +62,7 @@ export default function RedirectPage() {
           console.error("Failed to fetch user info:", error);
           setStatus("error");
           setErrorMessage("로그인에 실패하였습니다");
+          toast.error("로그인에 실패하였습니다");
           setTimeout(() => {
             router.replace("/login");
           }, 2000);
