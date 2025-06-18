@@ -135,7 +135,7 @@ export function ChartBarMultiple() {
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent sideOffset={4} avoidCollisions={true}>
                 <SelectItem value='email'>Email</SelectItem>
                 <SelectItem value='git'>Git</SelectItem>
                 <SelectItem value='docs'>Docs</SelectItem>

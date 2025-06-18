@@ -2,6 +2,7 @@
 
 import PageHeader from "@/components/PageHeader";
 import Pagination from "@/components/Pagination";
+import { containerVariants, itemVariants } from "@/const/animate";
 import { useGetDailyReports } from "@/hooks/useUserDailyQueries";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -21,28 +22,6 @@ export default function DailyReportsPage() {
   useEffect(() => {
     setIsLoaded(true);
   }, []);
-
-  // 애니메이션 변수
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.15,
-        duration: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4 },
-    },
-  };
 
   // 페이지네이션 훅 사용
   const pagination = useServerPagination({
