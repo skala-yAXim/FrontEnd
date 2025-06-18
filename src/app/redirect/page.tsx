@@ -250,10 +250,8 @@ export default function RedirectPage() {
                         <span className='text-muted-foreground'>이메일:</span>
                         <span className='font-medium'>{user.email}</span>
                       </div>
-                      <div>
-                        <span className='text-muted-foreground mr-10'>
-                          권한:
-                        </span>
+                      <div className='flex justify-between'>
+                        <span className='text-muted-foreground'>권한:</span>
                         <span className='font-medium'>
                           {user.userRole
                             ? user.userRole === "LEADER"
