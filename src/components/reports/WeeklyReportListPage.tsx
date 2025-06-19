@@ -1,5 +1,4 @@
 import { CardContent } from "@/components/ui/card";
-import { ReportStatus } from "./ReportStatusBadge";
 import WeeklyReportPagination from "./WeeklyReportPagination";
 import WeeklyReportTable, { WeeklyReportItem } from "./WeeklyReportTable";
 
@@ -8,7 +7,7 @@ interface WeeklyReportListPageProps {
   createButtonText?: string;
   onCreateNew: () => void;
   reports: WeeklyReportItem[];
-  onRowClick?: (reportId: string, status: ReportStatus) => void;
+  onRowClick?: (reportId: string) => void;
   totalItems: number;
   currentPage: number;
   itemsPerPage: number;
