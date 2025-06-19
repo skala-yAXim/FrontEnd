@@ -54,13 +54,9 @@ export function CarouselCard({ cards }: { cards: DashboardCard[] }) {
       whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
     >
       <Card
-        className='@container/card h-full from-primary/5 via-background to-card dark:bg-card bg-gradient-to-br shadow-lg border-0 backdrop-blur-sm overflow-hidden rounded-xl'
+        className='@container/card h-full dark:bg-card border-1 overflow-hidden rounded-xl shadow-none'
         data-slot='card'
       >
-        <div className='absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/30 to-transparent' />
-        <div className='absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full blur-3xl' />
-        <div className='absolute bottom-0 left-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl' />
-
         <AnimatePresence mode='wait'>
           <motion.div
             key={index}

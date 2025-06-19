@@ -16,7 +16,7 @@ import { ChartBarStacked } from "./chart/StackedBarChart";
 
 export function BarCards() {
   return (
-    <div className='grid grid-cols-1 gap-6 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4'>
+    <div className='grid grid-cols-1 w-full gap-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4 lg:px-0 px-2'>
       <motion.div
         className='col-span-2'
         initial={{ opacity: 0, y: 20 }}
@@ -24,8 +24,8 @@ export function BarCards() {
         transition={{ duration: 0.5, delay: 0.2 }}
         whileHover={{ scale: 1.01 }}
       >
-        <Card className='border-0 overflow-hidden bg-gradient-to-br from-background to-muted/30 shadow-lg'>
-          <div className='p-4'>
+        <Card className='border-1 overflow-hidden shadow-none'>
+          <div className='px-4'>
             <ChartBarStacked />
           </div>
         </Card>
@@ -38,8 +38,8 @@ export function BarCards() {
         transition={{ duration: 0.5, delay: 0.4 }}
         whileHover={{ scale: 1.01 }}
       >
-        <Card className='border-0 overflow-hidden bg-gradient-to-br from-background to-muted/30 shadow-lg'>
-          <div className='p-4'>
+        <Card className='border-1 overflow-hidden shadow-none'>
+          <div className='px-4'>
             <ChartBarMultiple />
           </div>
         </Card>
