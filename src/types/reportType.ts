@@ -95,3 +95,44 @@ export interface MemberWeeklyReportData {
     weekly_reflection: WeeklyReflection;
   };
 }
+
+export interface TeamWeeklyHighlightItem {
+  title: string;
+  contributors: string[];
+  summary: string;
+  progress_percentage: number;
+  llm_reference: string;
+}
+
+export interface ProjectReportItem {
+  project_id: number;
+  project_name: string;
+  summary: string;
+  highlights: TeamWeeklyHighlightItem[];
+  team_progress_overview: {
+    overall_progress: number;
+    llm_reference: string;
+  };
+}
+
+export interface TeamWeeklyReflection {
+  content: string[];
+  next_week_schedule: string[];
+}
+
+export interface TeamWeeklyReportData {
+  id: number;
+  createdAt: string;
+  updatedAt: string | null;
+  startDate: string;
+  endDate: string;
+  title: string;
+  reportMd: string;
+  reportJson: {
+    report_title: string;
+    team_weekly_report: ProjectReportItem[];
+    team_weekly_reflection: TeamWeeklyReflection;
+    weekly_short_review: string;
+    weekly_report_md: string;
+  };
+}
