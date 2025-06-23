@@ -5,77 +5,77 @@
 
 /* 기본 CSS 변수 */
 :root {
-  --bg: white;
+  --bg: #11113f;
   --text: black;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.6 0.18 255);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.7 0.15 250);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: 205 86% 81%; /* 연한 파란색 */
-  --chart-2: 217 91% 60%; /* 밝은 파란색 */
-  --chart-3: 224 76% 48%; /* 중간 파란색 */
-  --chart-4: 213 94% 68%; /* 또 다른 파란색 */
-  --chart-5: 221 83% 53%; /* 진한 파란색 */
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #ffffff;
+  --foreground: #252525;
+  --card: #ffffff;
+  --card-foreground: #252525;
+  --popover: #ffffff;
+  --popover-foreground: #252525;
+  --primary: #6263f8;
+  --primary-foreground: #fbfbfb;
+  --secondary: #f8f8f8;
+  --secondary-foreground: #343434;
+  --muted: #f8f8f8;
+  --muted-foreground: #8e8e8e;
+  --accent: #7e5cff;
+  --accent-foreground: #343434;
+  --destructive: #e11d48;
+  --border: #ebebeb;
+  --input: #ebebeb;
+  --ring: #b4b4b4;
+  --chart-1: 237 66% 33%; /* #4E4F67 - 어두운 보라색 */
+  --chart-2: 238 35% 71%; /* #9D9FCA - 파스텔 보라색 */
+  --chart-3: 238 79% 72%; /* #8185ED - 연한 보라색 */
+  --chart-4: 239 94% 68%; /* #6263F8 - 밝은 보라색 */
+  --chart-5: 264 90% 68%; /* #9463F7 - 요청한 색상 */
+  --sidebar: #11113f;
+  --sidebar-foreground: #fbfbfb;
+  --sidebar-primary: #343434;
+  --sidebar-primary-foreground: #fbfbfb;
+  --sidebar-accent: #f8f8f8;
+  --sidebar-accent-foreground: #343434;
+  --sidebar-border: #ebebeb;
+  --sidebar-ring: #b4b4b4;
 }
 
 /* 다크모드 변수 */
 .dark {
   --bg: #0a0a0a;
   --text: #ededed;
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.65 0.18 255);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.75 0.15 250);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: 205 86% 81%; /* 연한 파란색 */
-  --chart-2: 217 91% 60%; /* 밝은 파란색 */
-  --chart-3: 224 76% 48%; /* 중간 파란색 */
-  --chart-4: 213 94% 68%; /* 또 다른 파란색 */
-  --chart-5: 221 83% 53%; /* 진한 파란색 */
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #252525;
+  --foreground: #fbfbfb;
+  --card: #343434;
+  --card-foreground: #fbfbfb;
+  --popover: #343434;
+  --popover-foreground: #fbfbfb;
+  --primary: #6263f8;
+  --primary-foreground: #fbfbfb;
+  --secondary: #444444;
+  --secondary-foreground: #fbfbfb;
+  --muted: #444444;
+  --muted-foreground: #b4b4b4;
+  --accent: #8f6eff;
+  --accent-foreground: #343434;
+  --destructive: #f43f5e;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #8e8e8e;
+  --chart-1: 237 66% 33%; /* #4E4F67 - 어두운 보라색 */
+  --chart-2: 238 35% 71%; /* #9D9FCA - 파스텔 보라색 */
+  --chart-3: 238 79% 72%; /* #8185ED - 연한 보라색 */
+  --chart-4: 239 94% 68%; /* #6263F8 - 밝은 보라색 */
+  --chart-5: 264 90% 68%; /* #9463F7 - 요청한 색상 */
+  --sidebar: #11113f;
+  --sidebar-foreground: #252525;
+  --sidebar-primary: #343434;
+  --sidebar-primary-foreground: #fbfbfb;
+  --sidebar-accent: #f8f8f8;
+  --sidebar-accent-foreground: #343434;
+  --sidebar-border: #ebebeb;
+  --sidebar-ring: #b4b4b4;
 }
 
 /* Body 기본 스타일 */

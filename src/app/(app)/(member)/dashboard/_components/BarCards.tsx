@@ -1,15 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  //   CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { CardAction } from "@/components/ui/card-action";
+import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ChartBarMultiple } from "./chart/MultipleBarChart";
 import { ChartBarStacked } from "./chart/StackedBarChart";
@@ -45,26 +36,5 @@ export function BarCards() {
         </Card>
       </motion.div>
     </div>
-  );
-}
-
-// 사용 예시 (기존 코드에 맞게 조정하세요)
-export function ExampleCard() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>카드 제목</CardTitle>
-        <CardDescription>카드 설명 텍스트입니다.</CardDescription>
-      </CardHeader>
-      <CardAction>
-        <Button variant='outline' size='sm'>
-          취소
-        </Button>
-        <Button size='sm'>확인</Button>
-      </CardAction>
-      <CardFooter>
-        <p>카드 푸터 영역입니다.</p>
-      </CardFooter>
-    </Card>
   );
 }

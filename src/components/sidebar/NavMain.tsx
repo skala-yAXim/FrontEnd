@@ -35,7 +35,9 @@ export function NavMain({
   }
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>{groupLabel}</SidebarGroupLabel>
+      <SidebarGroupLabel className='text-muted text-xs'>
+        {groupLabel}
+      </SidebarGroupLabel>
       <SidebarMenu>
         {items.map(item => (
           <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
@@ -44,7 +46,7 @@ export function NavMain({
                 asChild
                 tooltip={item.title}
                 disabled={item.disabled}
-                className='data-[state=open]:bg-accent/30'
+                className='data-[state=open]:bg-accent/30 text-muted'
               >
                 <a
                   href={item.disabled ? undefined : item.url}
