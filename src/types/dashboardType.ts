@@ -7,6 +7,7 @@ export interface StaticsUserType {
 }
 
 export interface StaticsTeamType {
+  report_date: string;
   teams: TeamsType;
   docs: DocsType;
   email: EmailType;
@@ -15,12 +16,13 @@ export interface StaticsTeamType {
 
 export interface TeamsType {
   post: number;
+  reply: number;
 }
 
 export interface DocsType {
   docx: number;
   xlsx: number;
-  txt: number;
+  pptx: number;
   etc: number;
 }
 
