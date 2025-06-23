@@ -73,7 +73,7 @@ export default function RedirectPage() {
   }, [login, router]);
 
   return (
-    <div className='h-screen w-full flex items-center justify-center bg-gradient-to-br from-background to-muted/30'>
+    <div className='h-screen w-full flex items-center justify-center bg-background'>
       <AnimatedLayout>
         <div className='relative w-full max-w-md mx-auto'>
           {/* 배경 장식 요소 */}

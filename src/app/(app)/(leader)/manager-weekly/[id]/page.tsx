@@ -4,6 +4,7 @@ import { ReportActions } from "@/components/reports/ReportActions";
 import { ReportError } from "@/components/reports/ReportError";
 import { ReportSkeleton } from "@/components/reports/ReportSkeleton";
 import { useGetMemberWeeklyReport } from "@/hooks/useMemberWeeklyQueries";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import MemberWeeklyReport from "./_components/MemberWeeklyReport";
 
@@ -31,12 +32,12 @@ export default function MemberWeeklyReportDetailPage() {
         <div className='text-sm text-gray-500'>
           요청하신 보고서가 존재하지 않거나 접근 권한이 없습니다.
         </div>
-        <a
+        <Link
           href='/manager-weekly'
           className='inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors'
         >
           목록으로 돌아가기
-        </a>
+        </Link>
       </div>
     );
   }

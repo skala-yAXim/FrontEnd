@@ -11,12 +11,6 @@ import React from "react";
 // 팀 Weekly 더미 데이터 생성
 const generateTeamWeeklyReports = (): WeeklyReportItem[] => {
   const reports: WeeklyReportItem[] = [];
-  const statuses: ("completed" | "generating" | "draft" | "error")[] = [
-    "completed",
-    "generating",
-    "draft",
-    "error",
-  ];
 
   for (let i = 1; i <= 25; i++) {
     const month = Math.ceil(i / 4);
@@ -27,7 +21,6 @@ const generateTeamWeeklyReports = (): WeeklyReportItem[] => {
       id: `team-${i}`,
       title: `2025년 ${month}월 ${week}주차 팀 위클리 보고서`,
       createdAt: date.toISOString().split("T")[0],
-      status: statuses[i % statuses.length], // 고정된 패턴 사용
     });
   }
 
@@ -50,11 +43,8 @@ export default function TeamWeeklyPage() {
   );
 
   // 행 클릭 핸들러
-  const handleRowClick = (reportId: string, status: string) => {
-    // 완료된 보고서만 클릭 가능
-    if (status === "completed") {
-      router.push(`/team-weekly/${reportId}`);
-    }
+  const handleRowClick = (reportId: string) => {
+    router.push(`/team-weekly/${reportId}`);
   };
 
   // 새 보고서 생성 핸들러 - 1번 페이지로 이동

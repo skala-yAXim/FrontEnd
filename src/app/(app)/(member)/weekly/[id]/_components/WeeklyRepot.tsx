@@ -1,5 +1,4 @@
 import { WeeklyReportData } from "@/types/reportType";
-import { ReflectionSection } from "../_components/ReflectionSection";
 import { ReportContent } from "../_components/ReportContent";
 import { ReportHeader } from "../_components/ReportHeader";
 
@@ -9,7 +8,7 @@ import { ReportHeader } from "../_components/ReportHeader";
  */
 export default function WeeklyReport({
   report_title,
-  id,
+  // id,
   weekly_report,
   weekly_reflection,
 }: WeeklyReportData) {
@@ -24,9 +23,9 @@ export default function WeeklyReport({
       )}
 
       {/* 서버 컴포넌트 - 정적 회고 */}
-      {weekly_reflection?.content && (
-        <ReflectionSection reflections={weekly_reflection} />
-      )}
+      {/* {weekly_reflection?.contents && (
+        <ReflectionSection reflections={weekly_reflection.contents} />
+      )} */}
     </div>
   );
 }
