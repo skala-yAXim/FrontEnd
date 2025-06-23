@@ -6,3 +6,8 @@ export interface TeamInfoType {
   description: string;
   weeklyTemplate: string;
 }
+export interface TeamMember {
+  id: number;
+  name: string;
+  email: string;
+}

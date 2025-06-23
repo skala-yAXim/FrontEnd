@@ -54,8 +54,8 @@ export default function WeeklyReportPagination({
 
   const visiblePages = getVisiblePages();
 
-  // 페이지가 1개 이하인 경우 페이지네이션 숨김
-  if (totalPages <= 1) {
+  // 아이템이 0개인 경우 페이지네이션 숨김
+  if (totalItems === 0) {
     return null;
   }
 
