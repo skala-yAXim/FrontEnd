@@ -16,9 +16,9 @@ export default function PageHeader({
     <CardHeader>
       <div className='flex items-center justify-between my-6'>
         <div>
-          <CardTitle className='text-2xl font-bold'>{title}</CardTitle>
+          <CardTitle className='text-3xl font-bold'>{title}</CardTitle>
           {description && (
-            <p className='mt-2 text-sm text-muted-foreground dark:text-gray-400'>
+            <p className='mt-2 text-md text-muted-foreground dark:text-gray-400'>
               {description}
             </p>
           )}

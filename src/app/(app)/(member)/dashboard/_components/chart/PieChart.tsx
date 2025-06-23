@@ -28,7 +28,6 @@ const COLORS = [
   "hsl(var(--chart-2))",
   "hsl(var(--chart-3))",
   "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
 ];
 
 const chartConfig: Record<string, { label: string; color: string }> = {
@@ -107,20 +106,14 @@ export function ChartPieLegend() {
   }
 
   return (
-    <Card
-      className='flex flex-col border-0 shadow-none bg-transparent'
-      data-slot='card'
-    >
+    <Card className='flex flex-col border-0 shadow-none bg-transparent'>
       <CardHeader className='items-center pb-0'>
-        <CardTitle>업무 동향</CardTitle>
+        <CardTitle className='text-lg font-semibold'>업무 동향</CardTitle>
         <CardDescription>활동 유형별 분포</CardDescription>
       </CardHeader>
 
-      <CardContent className='flex-1 pb-0'>
-        <ChartContainer
-          config={chartConfig}
-          className='mx-auto aspect-square max-h-[300px]'
-        >
+      <CardContent>
+        <ChartContainer config={chartConfig} className='mx-auto'>
           <PieChart>
             <Pie
               data={chartData}
@@ -171,7 +164,7 @@ export function ChartPieLegend() {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className='flex-col items-center gap-1 text-sm'>
+      <CardFooter className='flex-col items-center gap-1'>
         <div className='font-medium'>총 활동: {totalCount}건</div>
       </CardFooter>
     </Card>

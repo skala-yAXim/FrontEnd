@@ -6,7 +6,7 @@ import { ReportSkeleton } from "@/components/reports/ReportSkeleton";
 import { WeeklyReportData } from "@/types/reportType";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { mockWeeklyReports } from "../mock";
+// import { mockWeeklyReports } from "../mock";
 import WeeklyReport from "./_components/WeeklyRepot";
 
 /**
@@ -38,16 +38,16 @@ export default function WeeklyReportDetailPage() {
 
       // 임시 데이터 (실제 구현에서는 API 호출)
       setTimeout(() => {
-        const mockReport = mockWeeklyReports.find(
-          report => report.id === Number(reportId)
-        );
-        if (!mockReport) {
-          setError("보고서를 찾을 수 없습니다.");
-          setIsLoading(false);
-          return;
-        }
+        // const mockReport = mockWeeklyReports.find(
+        //   report => report.id === Number(reportId)
+        // );
+        // if (!mockReport) {
+        //   setError("보고서를 찾을 수 없습니다.");
+        //   setIsLoading(false);
+        //   return;
+        // }
 
-        setCurrentReport(mockReport as WeeklyReportData);
+        // setCurrentReport(mockReport as WeeklyReportData);
         setIsLoading(false);
       }, 1000);
     }

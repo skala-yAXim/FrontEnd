@@ -83,9 +83,7 @@ export function ChartBarStacked() {
   return (
     <Card className='mt-0 border-0 shadow-none bg-transparent'>
       <CardHeader>
-        <CardTitle className='text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70'>
-          주간 활동 요약
-        </CardTitle>
+        <CardTitle className='text-lg font-semibold'>주간 활동 요약</CardTitle>
         <CardDescription>일주일 간의 활동 유형별 통계</CardDescription>
       </CardHeader>
       <CardContent>
