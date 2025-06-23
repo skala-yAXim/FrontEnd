@@ -2,71 +2,96 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { TeamWeeklyReportData } from "@/types/reportType";
 import { ArrowLeft, Download, FileText } from "lucide-react";
-import { useRouter, useParams } from "next/navigation";
-import React from "react";
+import { useParams, useRouter } from "next/navigation";
+import TeamWeeklyReportDetail from "./_components/TeamWeeklyReportDetail";
 
-// 더미 데이터 인터페이스
-interface WeeklyReportDetail {
-  id: string;
-  title: string;
-  createdAt: string;
-  status: string;
-  content: string;
-  sources: { [key: string]: string };
-}
-
-// 더미 데이터 생성
-const generateReportDetail = (id: string): WeeklyReportDetail => {
-  return {
-    id,
-    title: "2025년 5월 22주차 팀 위클리 보고서",
-    createdAt: "2025-05-30",
-    status: "completed",
-    content: `
-# 팀 위클리 보고서
-
-## 주요 성과
-이번 주 우리 팀은 다음과 같은 성과를 달성했습니다:
-
-- **프로젝트 A 완료**: [개발팀의 일일 보고서]에 따르면 예정보다 2일 앞서 완료했습니다.
-- **버그 수정 완료**: [QA팀 테스트 결과]를 바탕으로 총 15개의 버그를 수정했습니다.
-- **성능 개선**: [모니터링 시스템 데이터]에서 응답시간이 30% 향상된 것을 확인했습니다.
-
-## 이슈 및 해결방안
-다음과 같은 이슈들을 확인하고 해결방안을 마련했습니다:
-
-- **서버 용량 부족**: [인프라팀 보고서]에 따르면 현재 서버 사용률이 85%에 도달했습니다.
-- **일정 지연 우려**: [프로젝트 매니저 리포트]에서 다음 주 일정에 대한 우려를 표명했습니다.
-
-## 다음 주 계획
-- 서버 증설 작업 진행
-- 새로운 기능 개발 착수
-- 팀 내 커뮤니케이션 강화 방안 논의
-
-## 팀 리더 코멘트
-전반적으로 팀의 성과가 우수하며, 목표 달성을 위한 협력이 잘 이루어지고 있습니다.
-    `,
-    sources: {
-      "개발팀의 일일 보고서":
-        "김개발님의 5월 29일 일일 보고서 - 프로젝트 A 진행률 100% 달성",
-      "QA팀 테스트 결과":
-        "이테스터님의 5월 28일 QA 리포트 - 버그 15건 발견 및 수정 완료",
-      "모니터링 시스템 데이터":
-        "서버 모니터링 시스템 - 평균 응답시간 150ms → 105ms로 개선",
-      "인프라팀 보고서":
-        "박인프라님의 5월 30일 서버 현황 보고서 - CPU 85%, 메모리 78% 사용률",
-      "프로젝트 매니저 리포트":
-        "최매니저님의 5월 30일 프로젝트 현황 보고서 - 일정 조정 필요성 언급",
+// 더미 데이터
+const dummyTeamWeeklyReportData: TeamWeeklyReportData = {
+  id: 1,
+  createdAt: "2025-06-23T12:00:00Z",
+  updatedAt: null,
+  startDate: "2025-06-17",
+  endDate: "2025-06-23",
+  title: "6월 3주차 팀 주간 리포트",
+  reportMd: "## 6월 3주차 팀 주간 리포트\n상세 내용은 아래를 참고하세요.",
+  reportJson: {
+    report_title: "6월 3주차 팀 주간 리포트",
+    team_weekly_report: [
+      {
+        project_id: 101,
+        project_name: "Git 데이터 기반 개인 업무 내용 파악 에이전트 개발",
+        summary:
+          "이번 주 팀은 개인 업무 관리 프로젝트의 핵심 기능 개발에 집중했습니다. Git, 이메일, Teams 데이터의 전처리 및 통합 분석 흐름을 구축하고, OAuth 로그인 및 프로젝트 관리 기능을 구현했습니다. 일부 작업은 데이터 부족 및 커뮤니케이션 부재로 지연되었으나 전반적인 진척은 긍정적이었습니다.",
+        highlights: [
+          {
+            title: "LangGraph 적용 완료",
+            contributors: ["노건표", "조민서"],
+            summary:
+              "LangGraph를 활용하여 멀티 에이전트 기반 업무 분석 기능을 개발하였습니다.",
+            progress_percentage: 70,
+            llm_reference: "LLM-Ref-001",
+          },
+          {
+            title: "Vector DB 통합",
+            contributors: ["김용준", "여다건"],
+            summary:
+              "Git, Teams 데이터를 벡터 DB에 통합하여 검색 기반을 구축하였습니다.",
+            progress_percentage: 80,
+            llm_reference: "LLM-Ref-002",
+          },
+        ],
+        team_progress_overview: {
+          overall_progress: 75,
+          llm_reference: "LLM-Ref-OV-001",
+        },
+      },
+      {
+        project_id: 102,
+        project_name: "사내 문서 자동 분류 시스템 개발",
+        summary: "문서 데이터셋을 확장하고, 분류 모델을 적용하였습니다.",
+        highlights: [
+          {
+            title: "문서 데이터 수집",
+            contributors: ["김세은", "고석환"],
+            summary: "사내 약 1,000건의 문서를 수집 및 전처리하였습니다.",
+            progress_percentage: 60,
+            llm_reference: "LLM-Ref-003",
+          },
+          {
+            title: "분류 모델 적용 및 검증",
+            contributors: ["김세은", "여다건"],
+            summary:
+              "BERT 기반 문서 분류 모델을 적용하고 초기 검증을 완료하였습니다.",
+            progress_percentage: 25,
+            llm_reference: "LLM-Ref-004",
+          },
+        ],
+        team_progress_overview: {
+          overall_progress: 62,
+          llm_reference: "LLM-Ref-OV-002",
+        },
+      },
+    ],
+    team_weekly_reflection: {
+      content: [
+        "이번 주 API 연동 작업이 예상보다 원활하게 진행되었습니다.",
+        "문서 데이터셋 구축 시 데이터 품질에 대한 지속적인 관리가 필요합니다.",
+        "멀티 에이전트 시스템에서 예상치 못한 데이터 충돌 이슈가 발생하여 이를 개선해야 합니다.",
+      ],
+      next_week_schedule: [
+        "개인 업무 분석 결과 시각화 기능 개발",
+        "문서 분류 모델의 고도화 및 정확도 개선",
+        "데이터 충돌 방지 로직 보완 및 테스트",
+      ],
     },
-  };
+    weekly_short_review:
+      "이번 주는 Git 분석 에이전트와 문서 분류 시스템 모두에서 주요 진전이 있었습니다. API 연동과 데이터 구축이 성공적으로 진행되었습니다.",
+    weekly_report_md:
+      "## 6월 3주차 요약\n- Git 에이전트 개발 진척\n- 문서 분류 시스템 구축\n- 팀 협업 및 데이터 통합 성공",
+  },
 };
 
 export default function TeamWeeklyDetailPage() {
@@ -75,7 +100,8 @@ export default function TeamWeeklyDetailPage() {
   const reportId = params.id as string;
 
   // 더미 데이터 로드
-  const reportDetail = generateReportDetail(reportId);
+  // const reportDetail = generateReportDetail(reportId);
+  const reportDetail = dummyTeamWeeklyReportData;
 
   // 뒤로가기 핸들러
   const handleGoBack = () => {
@@ -90,71 +116,71 @@ export default function TeamWeeklyDetailPage() {
   };
 
   // 보고서 내용에서 출처 태그를 렌더링하는 함수
-  const renderContentWithSources = (content: string) => {
-    const lines = content.split("\n");
+  // const renderContentWithSources = (content: string) => {
+  //   const lines = content.split("\n");
 
-    return lines.map((line, index) => {
-      // [출처] 패턴을 찾아서 툴팁으로 변환
-      const parts = line.split(/(\[.*?\])/g);
+  //   return lines.map((line, index) => {
+  //     // [출처] 패턴을 찾아서 툴팁으로 변환
+  //     const parts = line.split(/(\[.*?\])/g);
 
-      return (
-        <div key={index} className='mb-2'>
-          {parts.map((part, partIndex) => {
-            // [출처] 패턴인지 확인
-            const sourceMatch = part.match(/^\[(.*?)\]$/);
-            if (sourceMatch) {
-              const sourceName = sourceMatch[1];
-              const sourceInfo = reportDetail.sources[sourceName];
+  //     return (
+  //       <div key={index} className='mb-2'>
+  //         {parts.map((part, partIndex) => {
+  //           // [출처] 패턴인지 확인
+  //           const sourceMatch = part.match(/^\[(.*?)\]$/);
+  //           if (sourceMatch) {
+  //             const sourceName = sourceMatch[1];
+  //             const sourceInfo = reportDetail.sources[sourceName];
 
-              if (sourceInfo) {
-                return (
-                  <TooltipProvider key={partIndex}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className='text-blue-600 hover:text-blue-800 cursor-help border-b border-blue-300 border-dashed'>
-                          [{sourceName}]
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent className='max-w-sm'>
-                        <p className='text-sm'>{sourceInfo}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                );
-              }
-            }
+  //             if (sourceInfo) {
+  //               return (
+  //                 <TooltipProvider key={partIndex}>
+  //                   <Tooltip>
+  //                     <TooltipTrigger asChild>
+  //                       <span className='text-blue-600 hover:text-blue-800 cursor-help border-b border-blue-300 border-dashed'>
+  //                         [{sourceName}]
+  //                       </span>
+  //                     </TooltipTrigger>
+  //                     <TooltipContent className='max-w-sm'>
+  //                       <p className='text-sm'>{sourceInfo}</p>
+  //                     </TooltipContent>
+  //                   </Tooltip>
+  //                 </TooltipProvider>
+  //               );
+  //             }
+  //           }
 
-            // 일반 텍스트
-            if (line.startsWith("# ")) {
-              return (
-                <h1 key={partIndex} className='text-2xl font-bold mb-4'>
-                  {part.replace("# ", "")}
-                </h1>
-              );
-            } else if (line.startsWith("## ")) {
-              return (
-                <h2 key={partIndex} className='text-xl font-semibold mb-3 mt-6'>
-                  {part.replace("## ", "")}
-                </h2>
-              );
-            } else if (line.startsWith("- **")) {
-              const boldMatch = part.match(/- \*\*(.*?)\*\*:(.*)/);
-              if (boldMatch) {
-                return (
-                  <li key={partIndex} className='mb-2'>
-                    <strong>{boldMatch[1]}:</strong>
-                    {boldMatch[2]}
-                  </li>
-                );
-              }
-            }
+  //           // 일반 텍스트
+  //           if (line.startsWith("# ")) {
+  //             return (
+  //               <h1 key={partIndex} className='text-2xl font-bold mb-4'>
+  //                 {part.replace("# ", "")}
+  //               </h1>
+  //             );
+  //           } else if (line.startsWith("## ")) {
+  //             return (
+  //               <h2 key={partIndex} className='text-xl font-semibold mb-3 mt-6'>
+  //                 {part.replace("## ", "")}
+  //               </h2>
+  //             );
+  //           } else if (line.startsWith("- **")) {
+  //             const boldMatch = part.match(/- \*\*(.*?)\*\*:(.*)/);
+  //             if (boldMatch) {
+  //               return (
+  //                 <li key={partIndex} className='mb-2'>
+  //                   <strong>{boldMatch[1]}:</strong>
+  //                   {boldMatch[2]}
+  //                 </li>
+  //               );
+  //             }
+  //           }
 
-            return <span key={partIndex}>{part}</span>;
-          })}
-        </div>
-      );
-    });
-  };
+  //           return <span key={partIndex}>{part}</span>;
+  //         })}
+  //       </div>
+  //     );
+  //   });
+  // };
 
   return (
     <div className='w-full'>
@@ -191,13 +217,17 @@ export default function TeamWeeklyDetailPage() {
           </div>
         </CardHeader>
 
-        <CardContent className='p-8'>
+        {/* <CardContent className='p-8'>
           <div className='prose prose-lg max-w-none'>
             <div className='space-y-4 leading-relaxed'>
               {renderContentWithSources(reportDetail.content)}
             </div>
           </div>
-        </CardContent>
+        </CardContent> */}
+      </Card>
+
+      <Card>
+        <TeamWeeklyReportDetail {...reportDetail} />
       </Card>
 
       {/* 하단 안내 */}
