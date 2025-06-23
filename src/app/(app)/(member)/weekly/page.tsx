@@ -4,7 +4,6 @@
 import { AnimatedItem, AnimatedLayout } from "@/components/AnimatedLayout";
 import PageHeader from "@/components/PageHeader";
 import Pagination from "@/components/Pagination";
-import { TypographyMuted } from "@/components/typography/Typograhpy";
 import { CardContent } from "@/components/ui/card";
 import { useServerPagination } from "@/hooks/useServerPagination";
 import { useGetWeeklyReports } from "@/hooks/useUserWeeklyQueries";
@@ -86,9 +85,9 @@ export default function WeeklyReportsPage() {
                     >
                       <td className='py-3 px-4'>
                         <div className='font-medium'>{report.title}</div>
-                        <TypographyMuted className='text-xs mt-1'>
+                        {/* <TypographyMuted className='text-xs mt-1'>
                           {report.preview.slice(0, 60) + "..."}
-                        </TypographyMuted>
+                        </TypographyMuted> */}
                       </td>
                       <td className='py-3 px-4 text-sm text-muted-foreground'>
                         {extractDateFromTitle(report.title)}

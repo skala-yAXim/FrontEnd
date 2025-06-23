@@ -11,6 +11,7 @@ import {
 } from "@/types/reportType";
 import { TeamInfoType, TeamMember } from "@/types/teamType";
 import { UserComment } from "@/types/userType";
+import { WeeklyReportType } from "@/types/weeklyReportType";
 import { api, api as ApiClientType } from "./http";
 
 /**
@@ -133,6 +134,11 @@ export class HttpInterface {
 
   async getCommentUser(): Promise<UserComment> {
     return this.apiClient.get<UserComment>("/comment/user");
+  }
+
+  // 개인 Weekly
+  async getUserWeeklyReport(id: number): Promise<WeeklyReportType> {
+    return this.apiClient.get(`/reports/user/weekly/${id}`);
   }
 
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.

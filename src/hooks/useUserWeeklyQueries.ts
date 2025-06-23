@@ -11,3 +11,12 @@ export const useGetWeeklyReports = (pageRequest: PageRequest) => {
 
   return { data, isLoading, isError };
 };
+
+export const useGetUserWeeklyReport = (id: number) => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["weekly-report", id],
+    queryFn: () => httpInterface.getUserWeeklyReport(id),
+  });
+
+  return { data, isLoading, isError };
+};

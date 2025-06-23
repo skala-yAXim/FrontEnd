@@ -72,7 +72,7 @@ export function ReportContent({ contents }: ReportContentProps) {
                       </span>
                     </Badge>
                   </TooltipTrigger>
-                  <TooltipContent className='bg-popover border shadow-lg text-sm px-4 py-3 max-w-md'>
+                  <TooltipContent className='bg-popover border border-border shadow-lg text-sm px-4 py-3 max-w-md'>
                     <div className='space-y-3'>
                       <div className='flex items-start gap-2'>
                         <div className='mt-0.5'>📋</div>
