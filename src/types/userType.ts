@@ -13,3 +13,7 @@ export interface User {
   userId: string;
   gitEmail: string;
 }
+
+export interface UserComment {
+  comment: string;
+}
