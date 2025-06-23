@@ -19,7 +19,7 @@ export default function WeeklyReport({
   const nextWeekSchedule = report.next_week_schedule;
 
   return (
-    <div className='min-h-screen bg-muted w-full max-w-4xl rounded-lg mx-auto py-8 px-4 sm:px-6 lg:px-8'>
+    <div className='min-h-screen bg-muted w-full max-w-3xl rounded-lg mx-auto py-8 px-4 sm:px-6 lg:px-8'>
       {/* 서버 컴포넌트 - 정적 헤더 */}
       <ReportHeader title={title} startDate={startDate} endDate={endDate} />
 
