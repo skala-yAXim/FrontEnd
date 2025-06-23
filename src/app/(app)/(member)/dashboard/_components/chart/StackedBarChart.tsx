@@ -82,10 +82,8 @@ export function ChartBarStacked() {
 
   return (
     <Card className='mt-0 border-0 shadow-none bg-transparent'>
-      <CardHeader className='border-b border-border/10 bg-muted/5'>
-        <CardTitle className='text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70'>
-          주간 활동 요약
-        </CardTitle>
+      <CardHeader>
+        <CardTitle className='text-lg font-semibold'>주간 활동 요약</CardTitle>
         <CardDescription>일주일 간의 활동 유형별 통계</CardDescription>
       </CardHeader>
       <CardContent>
@@ -118,14 +116,6 @@ export function ChartBarStacked() {
           </BarChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className='flex-col items-start gap-2 text-sm'>
-        <div className='flex gap-2 leading-none font-medium'>
-          Trending up by 5.2% this month <TrendingUp className='h-4 w-4' />
-        </div>
-        <div className='text-muted-foreground leading-none'>
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter> */}
     </Card>
   );
 }

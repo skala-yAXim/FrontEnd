@@ -9,6 +9,9 @@ export interface Evidence {
 
 export interface ReportItem {
   text: string;
+  project_id: string;
+  project_name: string;
+  task_id: string;
   task?: string | null;
   evidence: Evidence[];
 }
@@ -31,7 +34,6 @@ export interface WeeklyReflection {
 }
 
 export interface Report {
-  title: string;
   summary: string;
   contents: ReportItem[];
 }

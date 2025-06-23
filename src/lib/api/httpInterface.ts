@@ -1,6 +1,7 @@
 import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
 import type { GitHubInfo } from "@/types/githubType";
 import { PageRequest, PageResponse } from "@/types/pagination";
+import { Project } from "@/types/projectType";
 import {
   DailyReportData,
   DailyReportList,
@@ -8,8 +9,13 @@ import {
   MemberWeeklyReportList,
   WeeklyReportList,
 } from "@/types/reportType";
+
 import { Project } from "../../types/projectType";
 import { TeamInfoType, TeamMember } from "../../types/teamType";
+
+import { TeamInfoType } from "@/types/teamType";
+import { UserComment } from "@/types/userType";
+
 import { api, api as ApiClientType } from "./http";
 
 /**
@@ -128,6 +134,10 @@ export class HttpInterface {
     return this.apiClient.get<MemberWeeklyReportData>(
       `/reports/team/weekly/member/${id}`
     );
+
+  async getCommentUser(): Promise<UserComment> {
+    return this.apiClient.get<UserComment>("/comment/user");
+
   }
 
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.

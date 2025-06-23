@@ -119,15 +119,15 @@ export function ChartBarMultiple() {
 
   return (
     <Card className='mt-0 border-0 shadow-none bg-transparent'>
-      <CardHeader className='border-b border-border/10 bg-muted/5 flex justify-between items-center'>
-        <CardTitle className='text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70'>
+      <CardHeader className='flex justify-between items-center'>
+        <CardTitle className='text-lg font-semibold '>
           일별 활동 비교
           <CardDescription className='mt-1'>
             일별 활동량 비교 분석
           </CardDescription>
         </CardTitle>
         <div className='flex justify-end items-center'>
-          <div className='w-[160px]'>
+          <div className='min-w-[160px]'>
             <Select
               value={filter}
               onValueChange={value => setFilter(value as any)}
