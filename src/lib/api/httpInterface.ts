@@ -7,6 +7,7 @@ import {
   DailyReportList,
   MemberWeeklyReportData,
   MemberWeeklyReportList,
+  TeamWeeklyReportData,
   WeeklyReportList,
 } from "@/types/reportType";
 import { TeamComment, TeamInfoType, TeamMember } from "@/types/teamType";
@@ -58,6 +59,12 @@ export class HttpInterface {
   ): Promise<PageResponse<WeeklyReportList>> {
     return this.apiClient.get<PageResponse<WeeklyReportList>>(
       `/reports/user/weekly?page=${pageRequest.page}&size=${pageRequest.size}&sort=${pageRequest?.sort}`
+    );
+  }
+
+  async getTeamWeeklyReport(id: number): Promise<TeamWeeklyReportData> {
+    return this.apiClient.get<TeamWeeklyReportData>(
+      `/reports/team/weekly/${id}`
     );
   }
 
