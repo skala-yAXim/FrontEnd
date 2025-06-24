@@ -10,3 +10,9 @@ export interface TeamInfoType {
 export interface TeamComment {
   comment: string;
 }
+
+export interface TeamMember {
+  id: number;
+  name: string;
+  email: string;
+}

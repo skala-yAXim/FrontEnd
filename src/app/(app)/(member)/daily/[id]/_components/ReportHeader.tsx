@@ -23,7 +23,8 @@ export function ReportHeader({ title, summary }: ReportHeaderProps) {
         {/* 보고서 제목 */}
         <div className='text-center mb-8'>
           <h1 className='text-2xl font-bold text-foreground tracking-tight mb-2'>
-            {title}
+            {/* {title} */}
+            일일 업무 보고서
           </h1>
         </div>
 

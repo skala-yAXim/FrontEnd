@@ -7,7 +7,7 @@ import { LoginForm } from "./components/LoginForm";
 
 export default function LoginPage() {
   return (
-    <div className='min-h-screen flex relative overflow-hidden'>
+    <div className='min-h-screen flex relative overflow-hidden bg-background'>
       {/* 배경 그라데이션 애니메이션 */}
       <motion.div
         className='absolute inset-0 -z-10 bg-gradient-to-br from-background/80 to-muted/50 opacity-60'

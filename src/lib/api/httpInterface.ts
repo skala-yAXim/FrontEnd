@@ -5,10 +5,13 @@ import { Project } from "@/types/projectType";
 import {
   DailyReportData,
   DailyReportList,
+  MemberWeeklyReportData,
+  MemberWeeklyReportList,
   WeeklyReportList,
 } from "@/types/reportType";
-import { TeamComment, TeamInfoType } from "@/types/teamType";
+import { TeamComment, TeamInfoType, TeamMember } from "@/types/teamType";
 import { UserComment } from "@/types/userType";
+import { WeeklyReportType } from "@/types/weeklyReportType";
 import { api, api as ApiClientType } from "./http";
 
 /**
@@ -116,6 +119,41 @@ export class HttpInterface {
 
   async getCommentTeam(): Promise<TeamComment> {
     return this.apiClient.get<TeamComment>("/comment/team");
+
+  async getTeamMembers(): Promise<TeamMember[]> {
+    return this.apiClient.get<TeamMember[]>("/team/members");
+  }
+
+  // Pagination
+  async getMemberWeeklyReports(
+    pageRequest: PageRequest,
+    requestBody: { userId?: string[]; startDate?: string; endDate?: string }
+  ): Promise<PageResponse<MemberWeeklyReportList>> {
+    const params = new URLSearchParams({
+      page: pageRequest.page.toString(),
+      size: pageRequest.size.toString(),
+      ...(pageRequest.sort && { sort: pageRequest.sort }),
+    });
+
+    return this.apiClient.post<PageResponse<MemberWeeklyReportList>>(
+      `/reports/team/weekly/member?${params.toString()}`,
+      requestBody
+    );
+  }
+
+  async getMemberWeeklyReport(id: number): Promise<MemberWeeklyReportData> {
+    return this.apiClient.get<MemberWeeklyReportData>(
+      `/reports/team/weekly/member/${id}`
+    );
+  }
+
+  async getCommentUser(): Promise<UserComment> {
+    return this.apiClient.get<UserComment>("/comment/user");
+  }
+
+  // 개인 Weekly
+  async getUserWeeklyReport(id: number): Promise<WeeklyReportType> {
+    return this.apiClient.get(`/reports/user/weekly/${id}`);
   }
 
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.

@@ -107,8 +107,8 @@ export default function ProjectListClient() {
                 <AlertDescription>
                   <div className='space-y-3'>
                     <p>
-                      <strong>"{projectToDelete.name}"</strong> 프로젝트를
-                      삭제하시겠습니까?
+                      <strong>&quot;{projectToDelete.name}&quot;</strong>{" "}
+                      프로젝트를 삭제하시겠습니까?
                       <br />
                       삭제된 프로젝트는 복구할 수 없습니다.
                       {deleteError && (

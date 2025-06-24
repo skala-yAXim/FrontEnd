@@ -1,0 +1,132 @@
+{
+  "report_title": "고석환님의 2025-06-11 업무보고서",
+  "daily_report": {
+    "summary": "총 3개의 WBS에 기여. 총 9개 업무 활동 중 WBS 매칭 3건, 미매칭 6건 수행 (GIT 1건, TEAMS 8건, EMAIL 0건, DOCS 0건). 프로젝트 '개인 업무 관리 AI'의 목표 달성에 기여한 주요 활동: 프로젝트 관리 기능과 데이터베이스 적재 작업 완료를 통해 데이터 관리 및 보고서 관리 기능 개발에 기여.",
+    "contents": [
+      {
+        "text": "프로젝트 관리 기능 구현 작업을 진행하였습니다.",
+        "project_id": "1",
+        "project_name": "개인 업무 관리 AI",
+        "task_id": "58",
+        "task": "프로젝트 관리(생성, 수정, 삭제)",
+        "evidence": [
+          {
+            "source": "GIT",
+            "title": "✨ Feat: 페이지네이션 컴포넌트 및 훅 추가",
+            "content": "레포: skala-yAXim/FrontEnd, ID: 9f3cac3 (작성자: 2, 날짜: 2025-06-11T10:09:27+09:00)",
+            "llm_reference": "저장소의 주요 기능과 기술 스택을 고려할 때, 페이지네이션 컴포넌트 추가는 프로젝트 관리 기능의 일부로 볼 수 있습니다. 이는 WBS의 '프로젝트 관리(생성, 수정, 삭제)' 작업과 관련이 있습니다."
+          }
+        ]
+      },
+      {
+        "text": "팀장의 개인 weekly 열람 작업을 진행하였습니다.",
+        "project_id": "1",
+        "project_name": "개인 업무 관리 AI",
+        "task_id": "62",
+        "task": "팀장의 개인 weekly 열람",
+        "evidence": [
+          {
+            "source": "TEAMS",
+            "title": "YAX-67 [FE] Weekly 보고서",
+            "content": "고석환 changed the **Assignee** on this issue: YAX-67 [FE] Weekly 보고서 From **Unassigned** to **고석환**",
+            "llm_reference": "고석환이 YAX-67 티켓의 담당자로 지정되었음을 확인. 이는 '해야할일' 상태에서 '진행중'으로의 전환을 의미할 수 있음."
+          }
+        ]
+      },
+      {
+        "text": "데이터베이스(RDB)에 보고서 적재 작업을 완료하였습니다.",
+        "project_id": "1",
+        "project_name": "개인 업무 관리 AI",
+        "task_id": "42",
+        "task": "데이터베이스(RDB)에 보고서 적재",
+        "evidence": [
+          {
+            "source": "TEAMS",
+            "title": "YAX-35 [BE] GitHub OAuth 사용자 정보 가져오기",
+            "content": "고석환 updated the **Status** on this issue: YAX-35 [BE] GitHub OAuth 사용자 정보 가져오기 From **진행 중** to **완료**",
+            "llm_reference": "고석환이 YAX-35 티켓을 완료했음을 확인. 이는 해당 작업이 완료되었음을 명시적으로 나타냄."
+          }
+        ]
+      },
+      {
+        "text": "우선순위 조정 작업을 수행하였습니다.",
+        "project_id": null,
+        "project_name": null,
+        "task_id": null,
+        "task": null,
+        "evidence": [
+          {
+            "source": "TEAMS",
+            "title": "YAX-67 [FE] Weekly 보고서",
+            "content": "고석환 updated the **Rank** on this issue: YAX-67 [FE] Weekly 보고서 From **NONE** to **Ranked higher**",
+            "llm_reference": "고석환이 티켓의 우선순위를 상향 조정했음을 확인. 이는 작업의 중요성을 높였음을 의미."
+          },
+          {
+            "source": "TEAMS",
+            "title": "YAX-35 [BE] GitHub OAuth 사용자 정보 가져오기",
+            "content": "고석환 updated the **Rank** on this issue: YAX-35 [BE] GitHub OAuth 사용자 정보 가져오기 From **NONE** to **Ranked lower**",
+            "llm_reference": "고석환이 티켓의 우선순위를 하향 조정했음을 확인. 이는 작업의 중요성을 낮췄음을 의미."
+          }
+        ]
+      },
+      {
+        "text": "작업 보류 및 스프린트 할당 작업을 수행하였습니다.",
+        "project_id": null,
+        "project_name": null,
+        "task_id": null,
+        "task": null,
+        "evidence": [
+          {
+            "source": "TEAMS",
+            "title": "YAX-45 [Fe] GitHub 연동",
+            "content": "고석환 updated the **Status** on this issue: YAX-45 [Fe] GitHub 연동 From **진행 중** to **해야 할 일**",
+            "llm_reference": "고석환이 YAX-45 티켓의 상태를 '진행 중'에서 '해야 할 일'로 변경했음을 확인. 이는 작업이 보류되었음을 나타냄."
+          },
+          {
+            "source": "TEAMS",
+            "title": "YAX-67 [FE] Weekly 보고서",
+            "content": "고석환 updated the **Sprint** on this issue: YAX-67 [FE] Weekly 보고서 From **NONE** to **고도화 개발**",
+            "llm_reference": "고석환이 티켓의 스프린트를 '고도화 개발'로 설정했음을 확인. 이는 작업의 스프린트 할당을 의미."
+          }
+        ]
+      },
+      {
+        "text": "새로운 작업 생성 작업을 수행하였습니다.",
+        "project_id": null,
+        "project_name": null,
+        "task_id": null,
+        "task": null,
+        "evidence": [
+          {
+            "source": "TEAMS",
+            "title": "YAX-67 [FE] Weekly 보고서",
+            "content": "고석환 **created** this issue: YAX-67: [FE] Weekly 보고서 Unassigned **Medium** | **해야 할 일**",
+            "llm_reference": "고석환이 새로운 티켓을 생성했음을 확인. 이는 새로운 작업의 시작을 의미."
+          }
+        ]
+      }
+    ]
+  },
+  "daily_reflection": {
+    "summary": "GIT 1건, TEAMS 8건 등 총 9건의 활동을 수행했으며, 이 중 WBS 매칭 3건(33.3%)로 코드 집중형 업무 패턴을 보였습니다. 특히 프로젝트 관리 기능 구현과 데이터베이스 적재 작업 완료를 통해 프로젝트 '개인 업무 관리 AI'의 데이터 관리 및 보고서 관리 기능 개발에 기여했습니다. 다중 저장소 간의 작업 분산도를 높여 협업 효율성을 향상시킬 계획입니다.",
+    "contents": [
+      {
+        "source": "GIT",
+        "reflection": "프로젝트 관리 기능 구현을 위한 페이지네이션 컴포넌트 추가 작업을 완료했습니다. 이는 프로젝트의 데이터 관리 효율성을 높이는 데 기여했습니다. 커밋 메시지가 명확하여 협업 품질이 높았으나, 다중 저장소 간의 작업 분산도를 높여야 할 필요성을 느꼈습니다. 내일은 다른 저장소와의 연계 작업을 계획하고 있습니다."
+      },
+      {
+        "source": "TEAMS",
+        "reflection": "여러 티켓의 상태 변경 및 우선순위 조정을 통해 팀의 작업 흐름을 조정했습니다. 특히 데이터베이스 적재 작업 완료로 프로젝트의 데이터 관리 측면에서 중요한 진전을 이루었습니다. 작업의 중요도와 진행 계획을 재조정하는 패턴을 보였으며, 보류된 작업의 재개 여부를 검토할 계획입니다."
+      },
+      {
+        "source": "EMAIL",
+        "reflection": "분석할 관련 이메일이 없어 업무 분석을 수행할 수 없었습니다. 이메일 활용도를 높여 문서화 및 커뮤니케이션 효율성을 강화할 필요가 있습니다."
+      },
+      {
+        "source": "DOCS",
+        "reflection": "분석할 관련 문서가 없어 업무 분석을 수행할 수 없었습니다. 문서 작성 및 업로드 프로세스를 점검하고, 프로젝트 진행 상황을 문서로 기록하는 습관을 권장합니다."
+      }
+    ]
+  },
+  "daily_short_review": "프로젝트 관리 기능 구현과 데이터베이스 적재 완료! 내일은 다중 저장소 작업도 도전해봐요! 🚀"
+}

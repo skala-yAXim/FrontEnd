@@ -3,55 +3,16 @@
 import { ReportActions } from "@/components/reports/ReportActions";
 import { ReportError, ReportNotFound } from "@/components/reports/ReportError";
 import { ReportSkeleton } from "@/components/reports/ReportSkeleton";
-import { WeeklyReportData } from "@/types/reportType";
+import { useGetUserWeeklyReport } from "@/hooks/useUserWeeklyQueries";
+import { WeeklyReport as WeeklyReportType } from "@/types/weeklyReportType";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-// import { mockWeeklyReports } from "../mock";
-import WeeklyReport from "./_components/WeeklyRepot";
+import WeeklyReport from "./_components/WeeklyReport";
 
-/**
- * MEM01M02 - 위클리 보고서 상세 페이지
- * 설계서 기준: 위클리 보고서 선택 시 이동하는 상세 화면
- */
 export default function WeeklyReportDetailPage() {
   const params = useParams();
   const reportId = params.id as string;
 
-  const [currentReport, setCurrentReport] = useState<WeeklyReportData | null>(
-    null
-  );
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // TODO: react-query 훅 구현 예정
-  // const {
-  //   data: reportData,
-  //   isLoading,
-  //   error,
-  //   refetch
-  // } = useWeeklyReportQuery(reportId);
-
-  // TODO: API 연동 시 실제 데이터 fetch 로직 구현
-  useEffect(() => {
-    if (reportId) {
-      setIsLoading(true);
-
-      // 임시 데이터 (실제 구현에서는 API 호출)
-      setTimeout(() => {
-        // const mockReport = mockWeeklyReports.find(
-        //   report => report.id === Number(reportId)
-        // );
-        // if (!mockReport) {
-        //   setError("보고서를 찾을 수 없습니다.");
-        //   setIsLoading(false);
-        //   return;
-        // }
-
-        // setCurrentReport(mockReport as WeeklyReportData);
-        setIsLoading(false);
-      }, 1000);
-    }
-  }, [reportId]);
+  const { data, isLoading, isError } = useGetUserWeeklyReport(Number(reportId));
 
   // PDF 다운로드 핸들러
   const handlePdfDownload = async () => {
@@ -67,11 +28,11 @@ export default function WeeklyReportDetailPage() {
     return <ReportSkeleton />;
   }
 
-  if (error) {
-    return <ReportError error={error} href='/weekly' />;
+  if (isError) {
+    return <ReportError error={isError.toString()} href='/weekly' />;
   }
 
-  if (!currentReport) {
+  if (!data) {
     return <ReportNotFound href='/weekly' />;
   }
 
@@ -85,7 +46,7 @@ export default function WeeklyReportDetailPage() {
       />
 
       {/* 위클리 보고서 내용 */}
-      <WeeklyReport {...currentReport} />
+      <WeeklyReport {...(data as WeeklyReportType)} />
     </div>
   );
 }

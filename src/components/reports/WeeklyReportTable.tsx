@@ -1,15 +1,12 @@
-import ReportStatusBadge, { ReportStatus } from "./ReportStatusBadge";
-
 export interface WeeklyReportItem {
   id: string;
   title: string;
   createdAt: string;
-  status: ReportStatus;
 }
 
 interface WeeklyReportTableProps {
   reports: WeeklyReportItem[];
-  onRowClick?: (reportId: string, status: ReportStatus) => void;
+  onRowClick?: (reportId: string) => void;
   isLoading?: boolean;
   emptyMessage?: string;
 }
@@ -22,7 +19,7 @@ export default function WeeklyReportTable({
 }: WeeklyReportTableProps) {
   const handleRowClick = (report: WeeklyReportItem) => {
     if (onRowClick) {
-      onRowClick(report.id, report.status);
+      onRowClick(report.id);
     }
   };
 
@@ -67,14 +64,13 @@ export default function WeeklyReportTable({
             <th className='text-left py-3 px-4 font-semibold text-sm'>
               생성일자
             </th>
-            <th className='text-left py-3 px-4 font-semibold text-sm'>상태</th>
           </tr>
         </thead>
         <tbody>
           {reports.length === 0 ? (
             <tr>
               <td
-                colSpan={3}
+                colSpan={2}
                 className='text-center py-8 text-muted-foreground'
               >
                 {emptyMessage}
@@ -84,26 +80,14 @@ export default function WeeklyReportTable({
             reports.map(report => (
               <tr
                 key={report.id}
-                className={`border-b transition-colors ${
-                  report.status === "completed"
-                    ? "hover:bg-muted/50 cursor-pointer"
-                    : "cursor-not-allowed opacity-75"
-                }`}
+                className='border-b transition-colors hover:bg-muted/50 cursor-pointer'
                 onClick={() => handleRowClick(report)}
-                title={
-                  report.status === "completed"
-                    ? "클릭하여 상세보기"
-                    : "완료된 보고서만 볼 수 있습니다"
-                }
               >
                 <td className='py-3 px-4'>
                   <div className='font-medium'>{report.title}</div>
                 </td>
                 <td className='py-3 px-4 text-sm text-muted-foreground'>
                   {new Date(report.createdAt).toLocaleDateString("ko-KR")}
-                </td>
-                <td className='py-3 px-4'>
-                  <ReportStatusBadge status={report.status} />
                 </td>
               </tr>
             ))

@@ -27,6 +27,12 @@ export interface Reflection {
   contents: ReflectionItem[];
 }
 
+export interface WeeklyReflection {
+  title: string;
+  summary: string | null;
+  content: string[];
+}
+
 export interface Report {
   summary: string;
   contents: ReportItem[];
@@ -68,8 +74,24 @@ export interface WeeklyReportData {
   report_title: string;
   id: number;
   weekly_report: Report;
-  weekly_reflection: {
-    title: string;
-    content: string[];
+  weekly_reflection: Reflection;
+}
+
+export interface MemberWeeklyReportList {
+  id: number;
+  createdAt?: string;
+  updatedAt: string | null;
+  startDate?: string;
+  endDate?: string;
+  title: string;
+  preview: string;
+}
+
+export interface MemberWeeklyReportData {
+  id: number;
+  report: {
+    report_title: string;
+    weekly_report: Report;
+    weekly_reflection: WeeklyReflection;
   };
 }
