@@ -96,6 +96,15 @@ export interface MemberWeeklyReportData {
   };
 }
 
+export interface TeamWeeklyReportList {
+  id: number;
+  createdAt: string;
+  updatedAt: string | null;
+  startDate?: string;
+  endDate?: string;
+  title: string;
+}
+
 export interface TeamWeeklyHighlightItem {
   title: string;
   contributors: string[];
