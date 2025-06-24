@@ -2,45 +2,39 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
-import { WeeklyReportItem, WeeklyReportListPage } from "@/components/reports";
+import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
+import { useServerPagination } from "@/hooks/useServerPagination";
+import { useGetTeamWeeklyReports } from "@/hooks/useTeamWeeklyQueries";
 import { Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React from "react";
-
-// 팀 Weekly 더미 데이터 생성
-const generateTeamWeeklyReports = (): WeeklyReportItem[] => {
-  const reports: WeeklyReportItem[] = [];
-
-  for (let i = 1; i <= 25; i++) {
-    const month = Math.ceil(i / 4);
-    const week = ((i - 1) % 4) + 1;
-    const date = new Date(2025, month - 1, week * 7);
-
-    reports.push({
-      id: `team-${i}`,
-      title: `2025년 ${month}월 ${week}주차 팀 위클리 보고서`,
-      createdAt: date.toISOString().split("T")[0],
-    });
-  }
-
-  return reports.reverse(); // 최신순으로 정렬
-};
-
-const dummyTeamReports = generateTeamWeeklyReports();
+import { useEffect, useState } from "react";
+import WeeklyReportTable from "./_components/WeeklyReportTable";
 
 export default function TeamWeeklyPage() {
   const router = useRouter();
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // 페이지네이션 상태
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 10;
-  const totalItems = dummyTeamReports.length;
+  useEffect(() => {
+    setIsLoaded(true);
+  });
 
-  const paginatedReports = dummyTeamReports.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // 페이지네이션 훅 사용
+  const pagination = useServerPagination({
+    initialPage: 0,
+    initialSize: 7,
+    initialSort: "createdAt,desc",
+  });
+
+  const {
+    data: teamWeeklyReportsData,
+    isLoading,
+    isError,
+  } = useGetTeamWeeklyReports(pagination.pageRequest);
+
+  const teamWeeklyReports = teamWeeklyReportsData?.content || [];
+  const totalItems = teamWeeklyReportsData?.totalElements || 0;
+  const totalPages = teamWeeklyReportsData?.totalPages || 0;
 
   // 행 클릭 핸들러
   const handleRowClick = (reportId: string) => {
@@ -50,11 +44,6 @@ export default function TeamWeeklyPage() {
   // 새 보고서 생성 핸들러 - 1번 페이지로 이동
   const handleCreateNew = () => {
     router.push("/team-weekly/setting");
-  };
-
-  // 페이지 변경 핸들러
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
   };
 
   const MyButton = () => {
@@ -78,18 +67,17 @@ export default function TeamWeeklyPage() {
         buttonElement={<MyButton />}
       />
 
-      {/* 보고서 목록 */}
-      <WeeklyReportListPage
-        title='팀 위클리 보고서 목록'
-        createButtonText='새 보고서 생성'
-        onCreateNew={handleCreateNew}
-        reports={paginatedReports}
+      <WeeklyReportTable
+        reports={teamWeeklyReports}
         onRowClick={handleRowClick}
-        totalItems={totalItems}
-        currentPage={currentPage}
-        itemsPerPage={itemsPerPage}
-        onPageChange={handlePageChange}
+        isLoading={isLoading}
         emptyMessage='아직 생성된 팀 위클리 보고서가 없습니다.'
+      />
+
+      <Pagination
+        {...pagination.getPaginationProps(totalItems)}
+        showPageInfo={true}
+        showResultInfo={true}
       />
     </div>
   );
