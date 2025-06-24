@@ -9,7 +9,7 @@ import {
   MemberWeeklyReportList,
   WeeklyReportList,
 } from "@/types/reportType";
-import { TeamInfoType, TeamMember } from "@/types/teamType";
+import { TeamComment, TeamInfoType, TeamMember } from "@/types/teamType";
 import { UserComment } from "@/types/userType";
 import { WeeklyReportType } from "@/types/weeklyReportType";
 import { api, api as ApiClientType } from "./http";
@@ -85,16 +85,16 @@ export class HttpInterface {
     return this.apiClient.get<StaticsUserType>("/dashboard/statics/user/week");
   }
 
-  async getDashboardTeamWeek(): Promise<StaticsTeamType> {
-    return this.apiClient.get<StaticsTeamType>("/dashboard/statics/team/week");
-  }
-
   async getDashboardUser<T>(): Promise<T> {
     return this.apiClient.get<T>("/dashboard/statics/user");
   }
 
   async getDashboardAvgUser<T>(): Promise<T> {
     return this.apiClient.get<T>("/dashboard/statics/user/avg");
+  }
+
+  async getCommentUser(): Promise<UserComment> {
+    return this.apiClient.get<UserComment>("/comment/user");
   }
 
   async postTeamTemplate(template: string): Promise<void> {
@@ -104,6 +104,21 @@ export class HttpInterface {
   async getTeamInfo(): Promise<TeamInfoType> {
     return this.apiClient.get<TeamInfoType>("/team");
   }
+
+  async getDashboardTeam<T>(): Promise<T> {
+    return this.apiClient.get<T>("/dashboard/statics/team");
+  }
+
+  async getDashboardTeamWeek(): Promise<StaticsTeamType> {
+    return this.apiClient.get<StaticsTeamType>("/dashboard/statics/team/week");
+  }
+
+  async getDashboardTeamAvg<T>(): Promise<T> {
+    return this.apiClient.get<T>("/dashboard/statics/team/avg");
+  }
+
+  async getCommentTeam(): Promise<TeamComment> {
+    return this.apiClient.get<TeamComment>("/comment/team");
 
   async getTeamMembers(): Promise<TeamMember[]> {
     return this.apiClient.get<TeamMember[]>("/team/members");
