@@ -13,7 +13,7 @@ import {
 } from "@/types/reportType";
 import { TeamComment, TeamInfoType, TeamMember } from "@/types/teamType";
 import { UserComment } from "@/types/userType";
-import { WeeklyReportType } from "@/types/weeklyReportType";
+import { WeeklyReport } from "@/types/weeklyReportType";
 import { api, api as ApiClientType } from "./http";
 
 /**
@@ -135,6 +135,7 @@ export class HttpInterface {
 
   async getCommentTeam(): Promise<TeamComment> {
     return this.apiClient.get<TeamComment>("/comment/team");
+  }
 
   async getTeamMembers(): Promise<TeamMember[]> {
     return this.apiClient.get<TeamMember[]>("/team/members");
@@ -163,12 +164,8 @@ export class HttpInterface {
     );
   }
 
-  async getCommentUser(): Promise<UserComment> {
-    return this.apiClient.get<UserComment>("/comment/user");
-  }
-
   // 개인 Weekly
-  async getUserWeeklyReport(id: number): Promise<WeeklyReportType> {
+  async getUserWeeklyReport(id: number): Promise<WeeklyReport> {
     return this.apiClient.get(`/reports/user/weekly/${id}`);
   }
 
