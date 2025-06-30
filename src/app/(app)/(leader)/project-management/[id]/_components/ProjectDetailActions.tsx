@@ -26,7 +26,7 @@ export function ProjectDetailActions({ projectId }: ProjectDetailActionsProps) {
       <Button
         variant='outline'
         onClick={handleGoBack}
-        className='flex items-center gap-2'
+        className='flex items-center gap-2 hover:bg-primary hover:text-primary-foreground transition-colors'
       >
         <ArrowLeft className='w-4 h-4' />
         뒤로가기
