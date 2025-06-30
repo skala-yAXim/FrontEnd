@@ -8,7 +8,7 @@ import { ReportHeader } from "./ReportHeader";
  */
 export default function DailyReport({ title, report }: DailyReportData) {
   return (
-    <div className='min-h-screen bg-muted w-full max-w-5xl rounded-lg mx-auto py-8 px-4 sm:px-6 lg:px-16'>
+    <div className='min-h-screen bg-background w-full max-w-5xl rounded-lg mx-auto py-8 px-4 sm:px-6 lg:px-16'>
       {/* 헤더 */}
       <ReportHeader
         title={report.report_title}

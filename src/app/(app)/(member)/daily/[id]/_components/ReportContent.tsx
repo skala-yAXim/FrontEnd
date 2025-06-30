@@ -9,6 +9,10 @@ import {
 } from "@/components/ui/tooltip";
 import { ReportItem } from "@/types/reportType";
 import { formatBoldText } from "@/utils/formatBoldText";
+import {
+  formatBoldText as formatBoldTextNew,
+  formatToReadableList,
+} from "@/utils/formatReadableText";
 import { getSourceIcon } from "@/utils/getSourceIcon";
 
 interface ReportContentProps {
@@ -19,6 +23,65 @@ interface ReportContentProps {
 const removeWbsPrefix = (text: string) => {
   return text.replace("[WBS 매칭]", "").replace("[WBS 미매칭]", "");
 };
+
+const renderSafeContent = (
+  content: any,
+  bulletSymbol: string = "•",
+  marginClass: string = ""
+) => {
+  if (!content) {
+    return (
+      <p className='text-sm text-muted-foreground italic'>내용이 없습니다.</p>
+    );
+  }
+
+  const contentStr = String(content).trim();
+  if (!contentStr) {
+    return (
+      <p className='text-sm text-muted-foreground italic'>
+        내용이 비어있습니다.
+      </p>
+    );
+  }
+
+  const formattedItems = formatToReadableList(contentStr);
+
+  if (formattedItems.length == 0) {
+    return (
+      <p className='text-sm text-muted-foreground leading-relaxed'>
+        {formatBoldTextNew(contentStr)}
+      </p>
+    );
+  }
+
+  return (
+    <div className={`text-sm text-muted-foreground space-y-2 ${marginClass}`}>
+      {formattedItems.map((item, idx) => (
+        <div key={idx} className='pl-4 relative leading-relaxed'>
+          <span className='absolute left-0 top-1 text-xs'>{bulletSymbol}</span>
+          <span>{formatBoldTextNew(item)}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// 섹션 헤더 렌더링 헬퍼 함수
+const renderSectionHeader = (
+  icon: string,
+  title: string,
+  subtitle?: string
+) => (
+  <div className='flex items-start gap-3'>
+    <div className='mt-0.5 w-6 h-6 flex items-center justify-center flex-shrink-0 text-base'>
+      {icon}
+    </div>
+    <div className='flex-1'>
+      <p className='font-semibold text-popover-foreground mb-1'>{title}</p>
+      {subtitle && <p className='text-sm text-muted-foreground'>{subtitle}</p>}
+    </div>
+  </div>
+);
 
 /**
  * 보고서 콘텐츠 컴포넌트
@@ -72,37 +135,23 @@ export function ReportContent({ contents }: ReportContentProps) {
                       </span>
                     </Badge>
                   </TooltipTrigger>
-                  <TooltipContent className='bg-popover border border-border shadow-lg text-sm px-4 py-3 max-w-md'>
+                  <TooltipContent className='bg-popover border border-border shadow-lg text-sm px-4 py-3 max-w-lg'>
                     <div className='space-y-3'>
-                      <div className='flex items-start gap-2'>
-                        <div className='mt-0.5'>📋</div>
-                        <div>
-                          <p className='font-semibold text-popover-foreground'>
-                            출처
-                          </p>
-                          <p className='text-sm text-muted-foreground'>
-                            {ev.title}
-                          </p>
-                        </div>
+                      {/* 출처 섹션 */}
+                      {renderSectionHeader("📋", "출처", ev.title)}
+
+                      {/* 출처 내용 */}
+                      <div className='bg-muted/80 p-3 rounded'>
+                        {renderSafeContent(ev.content)}
                       </div>
 
-                      <div className='text-sm text-muted-foreground bg-muted p-2 rounded'>
-                        {ev.content}
-                      </div>
-
+                      {/* AI 분석 근거 */}
                       {ev.llm_reference && (
                         <>
-                          <div className='border-t border-border'></div>
-                          <div className='flex items-start gap-2'>
-                            <div className='text-muted-foreground'>🤖</div>
-                            <div>
-                              <p className='font-semibold text-popover-foreground mb-1'>
-                                AI 분석 근거
-                              </p>
-                              <p className='text-sm text-muted-foreground leading-relaxed'>
-                                {ev.llm_reference}
-                              </p>
-                            </div>
+                          <div className='border-t border-border/50'></div>
+                          {renderSectionHeader("🤖", "AI 분석 근거")}
+                          <div className='bg-muted/80 p-3 rounded'>
+                            {renderSafeContent(ev.llm_reference, "▸", "-ml-0")}
                           </div>
                         </>
                       )}
@@ -118,7 +167,7 @@ export function ReportContent({ contents }: ReportContentProps) {
   );
 
   return (
-    <section className='bg-muted/20'>
+    <section className='bg-transparent'>
       <div className='max-w-3xl mx-auto px-8 py-6'>
         {/* 프로젝트별 섹션 렌더링 */}
         {Object.entries(projectGroups).map(
@@ -136,7 +185,7 @@ export function ReportContent({ contents }: ReportContentProps) {
               </div>
 
               {/* 작업 목록 */}
-              <div className='bg-muted-80 rounded-lg px-4'>
+              <div className='bg-muted/10 border border-border/50 rounded-lg px-4'>
                 <div className='space-y-0'>
                   {items.map((item, index) => renderTaskItem(item, index))}
                 </div>

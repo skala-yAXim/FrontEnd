@@ -8,6 +8,7 @@ import {
   BreadcrumbSeparator,
   Breadcrumb as BreadcrumbUI,
 } from "@/components/ui/breadcrumb";
+import { useGetDailyReport } from "@/hooks/useUserDailyQueries";
 import { ChevronRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
@@ -29,22 +30,17 @@ const PATH_LABELS: Record<string, string> = {
   "/profile": "프로필",
 };
 
-// 경로에 대한 아이콘 정의
-// const PATH_ICONS: Record<string, React.ElementType> = {
-//   "/dashboard": Home,
-//   "/weekly": Calendar,
-//   "/daily": Clock,
-//   "/mypage": User,
-//   "/settings": Settings,
-//   "/users": Users,
-//   "/products": PackageOpen,
-//   "/reports": FileText,
-//   "/analytics": BarChart4,
-//   "/profile": User,
-// };
-
 export function Breadcrumb() {
   const pathname = usePathname();
+
+  // daily 경로의 ID 추출
+  const dailyIdMatch = pathname.match(/\/daily\/(\d+)$/);
+  const dailyId = dailyIdMatch ? Number(dailyIdMatch[1]) : null;
+
+  // ID가 있으면 데이터 가져오기
+  const { data: reportData } = useGetDailyReport(dailyId!, {
+    enabled: !!dailyId,
+  });
 
   // 현재 경로에서 Breadcrumb 생성
   const breadcrumbs = useMemo(() => {
@@ -59,7 +55,6 @@ export function Breadcrumb() {
           href: "/dashboard",
           label: PATH_LABELS["/dashboard"] || "대시보드",
           isCurrentPage: true,
-          // icon: PATH_ICONS["/dashboard"] || Home,
         },
       ];
     }
@@ -77,7 +72,6 @@ export function Breadcrumb() {
             href: firstSegment,
             label: PATH_LABELS[firstSegment] || segments[0],
             isCurrentPage: true,
-            // icon: PATH_ICONS[firstSegment],
           },
         ];
       }
@@ -88,7 +82,6 @@ export function Breadcrumb() {
           href: firstSegment,
           label: PATH_LABELS[firstSegment] || segments[0],
           isCurrentPage: false,
-          // icon: PATH_ICONS[firstSegment],
         },
       ];
 
@@ -101,17 +94,37 @@ export function Breadcrumb() {
 
         // 커스텀 레이블이 있으면 사용, 없으면 세그먼트를 변환하여 사용
         const customLabel = PATH_LABELS[currentPath];
-        const formattedSegment = segment
-          .replace(/-/g, " ")
-          .split(" ")
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ");
+
+        // daily 경로의 ID인 경우 처리
+        let displayLabel = customLabel;
+        if (!customLabel) {
+          if (firstSegment === "/daily" && /^\d+$/.test(segment)) {
+            // 실제 날짜가 있으면 포맷된 날짜 사용, 없으면 기본값
+            if (reportData?.date) {
+              displayLabel = new Date(reportData.date)
+                .toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                })
+                .replace(/\s/g, ""); // "2025. 6. 4." 형태
+            } else {
+              displayLabel = "보고서 상세";
+            }
+          } else {
+            const formattedSegment = segment
+              .replace(/-/g, " ")
+              .split(" ")
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ");
+            displayLabel = formattedSegment;
+          }
+        }
 
         items.push({
           href: currentPath,
-          label: customLabel || formattedSegment,
+          label: displayLabel,
           isCurrentPage,
-          // icon: PATH_ICONS[currentPath],
         });
       }
 
@@ -124,7 +137,6 @@ export function Breadcrumb() {
           href: "/dashboard",
           label: PATH_LABELS["/dashboard"] || "대시보드",
           isCurrentPage: false,
-          // icon: PATH_ICONS["/dashboard"],
         },
       ];
 
@@ -137,23 +149,43 @@ export function Breadcrumb() {
 
         // 커스텀 레이블이 있으면 사용, 없으면 세그먼트를 변환하여 사용
         const customLabel = PATH_LABELS[currentPath];
-        const formattedSegment = segment
-          .replace(/-/g, " ")
-          .split(" ")
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ");
+
+        // daily 경로의 ID인 경우 처리
+        let displayLabel = customLabel;
+        if (!customLabel) {
+          if (currentPath.includes("/daily/") && /^\d+$/.test(segment)) {
+            // 실제 날짜가 있으면 포맷된 날짜 사용, 없으면 기본값
+            if (reportData?.date) {
+              displayLabel = new Date(reportData.date)
+                .toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                })
+                .replace(/\s/g, ""); // "2025. 6. 4." 형태
+            } else {
+              displayLabel = "보고서 상세";
+            }
+          } else {
+            const formattedSegment = segment
+              .replace(/-/g, " ")
+              .split(" ")
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ");
+            displayLabel = formattedSegment;
+          }
+        }
 
         items.push({
           href: currentPath,
-          label: customLabel || formattedSegment,
+          label: displayLabel,
           isCurrentPage,
-          // icon: PATH_ICONS[currentPath],
         });
       }
 
       return items;
     }
-  }, [pathname]);
+  }, [pathname, reportData]); // reportData 의존성 추가
 
   // 모바일에서는 마지막 항목만, 데스크톱에서는 모든 항목 표시
   const displayedBreadcrumbs = useMemo(() => {
@@ -185,7 +217,6 @@ export function Breadcrumb() {
               <BreadcrumbItem>
                 {breadcrumb.isCurrentPage ? (
                   <BreadcrumbPage className='flex items-center gap-1'>
-                    {/* {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />} */}
                     {breadcrumb.label}
                   </BreadcrumbPage>
                 ) : (
@@ -193,7 +224,6 @@ export function Breadcrumb() {
                     href={breadcrumb.href}
                     className='flex items-center gap-1'
                   >
-                    {/* {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />} */}
                     {breadcrumb.label}
                   </BreadcrumbLink>
                 )}
@@ -214,7 +244,6 @@ export function Breadcrumb() {
               <BreadcrumbItem>
                 {breadcrumb.isCurrentPage ? (
                   <BreadcrumbPage className='flex items-center gap-1'>
-                    {/* {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />} */}
                     {breadcrumb.label}
                   </BreadcrumbPage>
                 ) : (
@@ -222,7 +251,6 @@ export function Breadcrumb() {
                     href={breadcrumb.href}
                     className='flex items-center gap-1'
                   >
-                    {/* {breadcrumb.icon && <breadcrumb.icon className='h-4 w-4' />} */}
                     {breadcrumb.label}
                   </BreadcrumbLink>
                 )}
