@@ -48,7 +48,7 @@ export default function TeamWeeklyReportDetail({
 
   return (
     <div className='min-h-screen bg-muted/20 py-12 px-4 sm:px-6 lg:px-12'>
-      <h2 className='text-3xl font-bold mb-8'>팀 업무 상세</h2>
+      <h2 className='text-2xl font-bold mb-8'>팀 업무 상세</h2>
 
       {reportJson.team_weekly_report.map((item, index) =>
         renderProjectItem(item, index)
