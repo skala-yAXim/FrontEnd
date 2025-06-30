@@ -124,12 +124,15 @@ export default function ManagerWeeklyPage() {
       <div className='w-full mt-6'>
         <CardContent className='space-y-6'>
           {/* 필터 영역 */}
-          <div className='flex justify-between'>
-            <div className='space-y-2'>
-              <Label>팀원 선택</Label>
+          <div className='flex justify-between items-end'>
+            <div className='flex items-center gap-4'>
+              <Label className='whitespace-nowrap'>팀원 선택</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant='outline' className='w-80 justify-between'>
+                  <Button
+                    variant='outline'
+                    className='w-80 h-10 justify-between'
+                  >
                     <span className='truncate'>{getSelectedMemberText()}</span>
                     <ChevronDown className='h-4 w-4 shrink-0 opacity-50' />
                   </Button>
@@ -164,7 +167,7 @@ export default function ManagerWeeklyPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className='flex gap-4'>
+            <div className='flex gap-2 items-end'>
               <div className='space-y-2 w-40'>
                 <Label htmlFor='startDate'>시작 날짜</Label>
                 <Input
@@ -172,6 +175,7 @@ export default function ManagerWeeklyPage() {
                   type='date'
                   value={filters.startDate}
                   onChange={e => handleDateChange("startDate", e.target.value)}
+                  className='h-10'
                 />
               </div>
               <div className='space-y-2 w-40'>
@@ -181,10 +185,9 @@ export default function ManagerWeeklyPage() {
                   type='date'
                   value={filters.endDate}
                   onChange={e => handleDateChange("endDate", e.target.value)}
+                  className='h-10'
                 />
               </div>
-            </div>
-            <div className='flex items-end'>
               <Button
                 onClick={handleSearch}
                 className='h-10'

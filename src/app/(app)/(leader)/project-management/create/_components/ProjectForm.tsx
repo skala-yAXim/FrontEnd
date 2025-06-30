@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
 import { Textarea } from "@/components/ui/textarea";
 import {
   ALLOWED_EXTENSIONS,
@@ -13,7 +14,7 @@ import {
   MAX_NAME_LENGTH,
 } from "@/const/file";
 import { ProjectCreateForm, ProjectFileReq } from "@/types/projectType";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
 import React from "react";
 import { validateForm } from "../_utils/utils";
 import { ConfirmDialog } from "./ConfirmDialog";
@@ -24,6 +25,18 @@ interface ProjectFormProps {
   onCancel: () => void;
   isSubmitting?: boolean;
 }
+
+// 기간 계산 함수
+const calculateDuration = (startDate: string, endDate: string) => {
+  if (!startDate || !endDate) return null;
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diffTime = Math.abs(end.getTime() - start.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  return diffDays;
+};
 
 export function ProjectForm({
   onSubmit,
@@ -46,6 +59,9 @@ export function ProjectForm({
 
   // 에러 상태
   const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
+
+  // 진행률 및 기간 계산
+  const duration = calculateDuration(form.startDate, form.endDate);
 
   // 폼 값 변경 핸들러
   const handleFormChange = (
@@ -197,7 +213,7 @@ export function ProjectForm({
     showConfirmCreate || showConfirmCancel || fileToDelete !== null;
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-7'>
       {/* 등록 확인 메시지 */}
       {showConfirmCreate && (
         <ConfirmDialog
@@ -230,84 +246,131 @@ export function ProjectForm({
         />
       )}
 
-      {/* 프로젝트명 */}
-      <div className='space-y-2'>
-        <Label htmlFor='name' className='text-base font-semibold'>
-          프로젝트명 <span className='text-red-500'>*</span>
-        </Label>
-        <Input
-          id='name'
-          placeholder='프로젝트명을 입력해주세요'
-          value={form.name}
-          onChange={handleNameChange}
-          className={errors.name ? "border-red-500" : ""}
-        />
-        <div className='flex justify-between'>
-          {errors.name && (
-            <p className='text-sm text-red-500 flex items-center gap-1'>
-              <AlertCircle className='w-3 h-3' />
-              {errors.name}
+      {/* 기본 정보 */}
+      <div className='space-y-5'>
+        {/* 프로젝트명 */}
+        <div className='space-y-2'>
+          <Label htmlFor='name' className='text-base font-semibold'>
+            프로젝트명 <span className='text-red-500'>*</span>
+          </Label>
+          <div className='relative'>
+            <Input
+              id='name'
+              placeholder='프로젝트명을 입력해주세요'
+              value={form.name}
+              onChange={handleNameChange}
+              className={`h-11 ${
+                errors.name
+                  ? "border-red-500 bg-red-50"
+                  : form.name.trim()
+                    ? "border-green-500 bg-green-50"
+                    : ""
+              }`}
+            />
+            {form.name.trim() && !errors.name && (
+              <CheckCircle2 className='absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-500' />
+            )}
+          </div>
+          <div className='flex justify-between items-center'>
+            {errors.name && (
+              <p className='text-sm text-red-500 flex items-center gap-1'>
+                <AlertCircle className='w-3 h-3' />
+                {errors.name}
+              </p>
+            )}
+            <p className='text-xs text-gray-500 ml-auto'>
+              {form.name.length}/{MAX_NAME_LENGTH}
             </p>
-          )}
-          <p className='text-sm text-muted-foreground ml-auto'>
-            {form.name.length}/{MAX_NAME_LENGTH}
-          </p>
+          </div>
+        </div>
+
+        {/* 프로젝트 기간 */}
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+          <div className='space-y-2'>
+            <Label htmlFor='startDate' className='text-base font-semibold'>
+              시작 날짜 <span className='text-red-500'>*</span>
+            </Label>
+            <Input
+              id='startDate'
+              type='date'
+              value={form.startDate}
+              onChange={e => handleFormChange("startDate", e.target.value)}
+              max={form.endDate || undefined}
+              className={`h-11 ${
+                errors.startDate
+                  ? "border-red-500 bg-red-50"
+                  : form.startDate
+                    ? "border-green-500 bg-green-50"
+                    : ""
+              }`}
+            />
+            {errors.startDate && (
+              <p className='text-sm text-red-500 flex items-center gap-1'>
+                <AlertCircle className='w-3 h-3' />
+                {errors.startDate}
+              </p>
+            )}
+          </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='endDate' className='text-base font-semibold'>
+              종료 날짜 <span className='text-red-500'>*</span>
+            </Label>
+            <Input
+              id='endDate'
+              type='date'
+              value={form.endDate}
+              onChange={e => handleFormChange("endDate", e.target.value)}
+              min={form.startDate || undefined}
+              className={`h-11 ${
+                errors.endDate
+                  ? "border-red-500 bg-red-50"
+                  : form.endDate
+                    ? "border-green-500 bg-green-50"
+                    : ""
+              }`}
+            />
+            {errors.endDate && (
+              <p className='text-sm text-red-500 flex items-center gap-1'>
+                <AlertCircle className='w-3 h-3' />
+                {errors.endDate}
+              </p>
+            )}
+          </div>
+
+          {/* 기간 자동 계산 표시 */}
+          <div className='space-y-2'>
+            <Label className='text-sm font-medium text-gray-700 flex items-center gap-2'>
+              <Clock className='text-base font-semibold' />
+              프로젝트 기간
+            </Label>
+            <div className='h-11 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md flex items-center'>
+              <span className='text-sm text-gray-600 font-medium'>
+                {duration ? `${duration}일` : "날짜를 선택해주세요"}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 기간 설정 */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        <div className='space-y-2'>
-          <Label htmlFor='startDate' className='text-base font-semibold'>
-            시작 날짜 <span className='text-red-500'>*</span>
-          </Label>
-          <Input
-            id='startDate'
-            type='date'
-            value={form.startDate}
-            onChange={e => handleFormChange("startDate", e.target.value)}
-            max={form.endDate || undefined}
-            className={errors.startDate ? "border-red-500" : ""}
-          />
-          {errors.startDate && (
-            <p className='text-sm text-red-500 flex items-center gap-1'>
-              <AlertCircle className='w-3 h-3' />
-              {errors.startDate}
-            </p>
-          )}
-        </div>
-
-        <div className='space-y-2'>
-          <Label htmlFor='endDate' className='text-base font-semibold'>
-            종료 날짜 <span className='text-red-500'>*</span>
-          </Label>
-          <Input
-            id='endDate'
-            type='date'
-            value={form.endDate}
-            onChange={e => handleFormChange("endDate", e.target.value)}
-            min={form.startDate || undefined}
-            className={errors.endDate ? "border-red-500" : ""}
-          />
-          {errors.endDate && (
-            <p className='text-sm text-red-500 flex items-center gap-1'>
-              <AlertCircle className='w-3 h-3' />
-              {errors.endDate}
-            </p>
-          )}
-        </div>
-      </div>
+      {/* 구분선 */}
+      <div className='border-t border-gray-100'></div>
 
       {/* 파일 첨부 */}
-      <FileUpload
-        files={form.files}
-        onFileSelect={handleFileSelect}
-        onFileDelete={handleFileDeleteRequest}
-        error={errors.files}
-        disabled={isDialogOpen}
-      />
+      <div className='space-y-1'>
+        <FileUpload
+          files={form.files}
+          onFileSelect={handleFileSelect}
+          onFileDelete={handleFileDeleteRequest}
+          error={errors.files}
+          disabled={isDialogOpen}
+        />
+      </div>
 
-      {/* 개요 */}
+      {/* 구분선 */}
+      <div className='border-t border-gray-100'></div>
+
+      {/* 프로젝트 개요 */}
       <div className='space-y-2'>
         <Label htmlFor='description' className='text-base font-semibold'>
           프로젝트 개요
@@ -317,25 +380,31 @@ export function ProjectForm({
           placeholder='프로젝트에 대한 개요를 입력해주세요...'
           value={form.description}
           onChange={handleDescriptionChange}
-          className='min-h-[150px] resize-none'
+          className={`min-h-[120px] resize-none ${
+            form.description.trim() ? "bg-green-50 border-green-500" : ""
+          }`}
         />
-        <div className='flex justify-end text-sm text-muted-foreground'>
-          {form.description.length}/{MAX_DESCRIPTION_LENGTH}
+        <div className='flex justify-end'>
+          <span className='text-xs text-gray-500'>
+            {form.description.length}/{MAX_DESCRIPTION_LENGTH}
+          </span>
         </div>
       </div>
 
-      {/* 버튼 */}
+      {/* 액션 버튼 */}
       <div className='flex justify-end gap-3 pt-4'>
         <Button
           variant='outline'
           onClick={handleCancelRequest}
           disabled={isDialogOpen || isSubmitting}
+          className='h-10 px-6'
         >
           취소
         </Button>
         <Button
           onClick={handleCreateRequest}
           disabled={isDialogOpen || isSubmitting}
+          className='h-10 px-6 bg-blue-600 hover:bg-blue-700'
         >
           {isSubmitting ? "등록 중..." : "프로젝트 등록"}
         </Button>
