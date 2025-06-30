@@ -177,7 +177,7 @@ export default function ProjectListClient() {
                   projects.map(project => (
                     <tr
                       key={project.id}
-                      className='border-b hover:bg-slate-100 hover:shadow-lg transition-all duration-200 cursor-pointer'
+                      className='border-b hover:bg-primary/5 hover:shadow-lg transition-all duration-200 cursor-pointer'
                       onClick={() => handleProjectDetail(project.id)}
                     >
                       <td className='py-3 px-4'>
@@ -201,7 +201,9 @@ export default function ProjectListClient() {
                         </div>
                       </td>
                       <td className='py-3 px-4'>
-                        <Badge className={getStatusColor(project.status)}>
+                        <Badge
+                          className={`${getStatusColor(project.status)} !hover:bg-current !hover:text-current pointer-events-none`}
+                        >
                           {project.status}
                         </Badge>
                       </td>
