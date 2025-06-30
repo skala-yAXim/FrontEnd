@@ -108,10 +108,12 @@ export function ReportContent({ contents }: ReportContentProps) {
           <ul className='list-disc pl-5 space-y-2'>
             <li className='text-foreground leading-relaxed'>
               <div className='flex flex-col'>
-                <span>{formatBoldText(removeWbsPrefix(item.text))}</span>
+                <span className='text-l font-bold'>
+                  {formatBoldText(removeWbsPrefix(item.text))}
+                </span>
                 {item.task && (
-                  <span className='font-medium text-sm text-foreground mt-1'>
-                    <span className='text-muted-foreground'>Task: </span>
+                  <span className='text-muted-foreground font-medium text-sm'>
+                    <span>Matched Task: </span>
                     {item.task}
                   </span>
                 )}
