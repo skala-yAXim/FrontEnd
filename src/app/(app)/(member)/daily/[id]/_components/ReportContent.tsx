@@ -168,7 +168,7 @@ export function ReportContent({ contents }: ReportContentProps) {
 
   return (
     <section className='bg-transparent'>
-      <div className='max-w-3xl mx-auto px-8 py-6'>
+      <div className='max-w-4xl mx-auto px-8 py-8'>
         {/* 프로젝트별 섹션 렌더링 */}
         {Object.entries(projectGroups).map(
           ([projectName, items], groupIndex) => (
