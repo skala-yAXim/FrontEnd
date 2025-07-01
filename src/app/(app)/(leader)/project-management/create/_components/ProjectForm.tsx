@@ -392,7 +392,7 @@ export function ProjectForm({
       </div>
 
       {/* 액션 버튼 */}
-      <div className='flex justify-end gap-3 pt-4'>
+      <div className='flex justify-end gap-3 pt-4 hover:cursor-pointer'>
         <Button
           variant='outline'
           onClick={handleCancelRequest}
@@ -404,7 +404,7 @@ export function ProjectForm({
         <Button
           onClick={handleCreateRequest}
           disabled={isDialogOpen || isSubmitting}
-          className='h-10 px-6 bg-blue-600 hover:bg-blue-700'
+          className='h-10 px-6'
         >
           {isSubmitting ? "등록 중..." : "프로젝트 등록"}
         </Button>

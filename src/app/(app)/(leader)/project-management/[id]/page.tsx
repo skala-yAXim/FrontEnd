@@ -142,7 +142,7 @@ export default async function ProjectDetailPage({
                         <Button
                           size='sm'
                           variant='outline'
-                          className='flex items-center gap-2'
+                          className='flex items-center gap-2 hover:cursor-pointer'
                         >
                           <Download className='w-4 h-4' />
                           다운로드

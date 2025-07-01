@@ -85,6 +85,7 @@ export interface MemberWeeklyReportList {
   endDate?: string;
   title: string;
   preview: string;
+  userName: string;
 }
 
 export interface MemberWeeklyReportData {

@@ -41,7 +41,7 @@ export function ReportActions({
           <Button
             variant='outline'
             size='sm'
-            className='hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-200'
+            className='hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-200 hover:cursor-pointer'
           >
             <ArrowLeft className='mr-2 h-4 w-4' />
             {backButtonText}
@@ -51,7 +51,7 @@ export function ReportActions({
         <h1 className='text-lg font-semibold'>{title}</h1>
       </div>
 
-      <div className='flex items-center space-x-2'>
+      <div className='flex items-center space-x-2 hover:cursor-pointer'>
         {additionalActions}
         <Button onClick={onPdfDownload} size='sm'>
           <Download className='mr-2 h-4 w-4' />

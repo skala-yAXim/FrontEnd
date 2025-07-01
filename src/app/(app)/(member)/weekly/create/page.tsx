@@ -96,7 +96,7 @@ export default function CreateWeeklyReportPage() {
                 variant='ghost'
                 size='sm'
                 onClick={handleGoBack}
-                className='flex items-center gap-1'
+                className='flex items-center gap-1 hover:cursor-pointer'
               >
                 <ArrowLeft className='w-4 h-4' />
                 뒤로가기

@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -51,6 +52,14 @@ export default function ManagerWeeklyPage() {
     endDate: "2025-12-31",
   });
 
+  // 정렬 상태 추가
+  const [sortField, setSortField] = React.useState<
+    "title" | "userName" | "createdAt" | null
+  >(null);
+  const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">(
+    "asc"
+  );
+
   const { data: memberReports, isLoading: isLoadingReports } =
     useGetMemberWeeklyReports(pageRequest, {
       userId: searchParams.selectedMembers,
@@ -63,7 +72,35 @@ export default function ManagerWeeklyPage() {
     id: report.id.toString(),
     title: report.title,
     createdAt: report.createdAt,
+    userName: report.userName, // 작성자 정보 추가
   }));
+
+  // 정렬 핸들러
+  const handleSort = (field: "title" | "userName" | "createdAt") => {
+    setSortField(field);
+    setSortDirection("asc");
+  };
+
+  // 정렬된 보고서 계산
+  const sortedReports = React.useMemo(() => {
+    if (!sortField) return paginatedReports;
+
+    return [...paginatedReports].sort((a, b) => {
+      let compareValue = 0;
+
+      if (sortField === "userName") {
+        compareValue = (a.userName || "").localeCompare(b.userName || "");
+      } else if (sortField === "title") {
+        compareValue = (a.title || "").localeCompare(b.title || "");
+      } else if (sortField === "createdAt") {
+        compareValue =
+          new Date(a.createdAt || "").getTime() -
+          new Date(b.createdAt || "").getTime();
+      }
+
+      return sortDirection === "asc" ? compareValue : -compareValue;
+    });
+  }, [paginatedReports, sortField, sortDirection]);
 
   const handleMemberToggle = (memberId: string) => {
     setFilters(prev => ({
@@ -198,14 +235,131 @@ export default function ManagerWeeklyPage() {
             </div>
           </div>
 
-          {/* 선택 요약 */}
-          <div className='text-sm text-muted-foreground bg-muted/30 p-3 rounded-md'>
-            <p>
-              <strong>{searchParams.selectedMembers.length}명</strong>의 팀원
-              위클리 보고서 {hasSelectedMembers && <>({selectedMemberNames})</>}
-              , <strong>{searchParams.startDate}</strong> ~{" "}
-              <strong>{searchParams.endDate}</strong> 기간
-            </p>
+          {/* 선택 요약 및 정렬 */}
+          <div className='flex justify-between items-center'>
+            <div className='text-sm text-muted-foreground bg-muted/30 p-3 rounded-md flex-1 mr-4'>
+              <p>
+                <strong>{searchParams.selectedMembers.length}명</strong>의 팀원
+                위클리 보고서{" "}
+                {hasSelectedMembers && <>({selectedMemberNames})</>},{" "}
+                <strong>{searchParams.startDate}</strong> ~{" "}
+                <strong>{searchParams.endDate}</strong> 기간
+              </p>
+            </div>
+
+            {/* 정렬 드롭다운 */}
+            {searchParams.selectedMembers.length > 0 && (
+              <div className='flex items-center gap-2'>
+                <Label className='text-sm'>정렬:</Label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant='outline' size='sm' className='w-44'>
+                      <span className='truncate'>
+                        {sortField
+                          ? `${
+                              sortField === "title"
+                                ? "제목"
+                                : sortField === "userName"
+                                  ? "작성자"
+                                  : "생성일자"
+                            } (${
+                              sortDirection === "asc"
+                                ? sortField === "createdAt"
+                                  ? "오래된순"
+                                  : "가나다순"
+                                : sortField === "createdAt"
+                                  ? "최신순"
+                                  : "다가나순"
+                            })`
+                          : "정렬 기준 선택"}
+                      </span>
+                      <ChevronDown className='h-4 w-4 ml-2' />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align='end'>
+                    <DropdownMenuLabel>정렬 기준</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortField("title");
+                        setSortDirection("asc");
+                      }}
+                    >
+                      제목 (가나다순){" "}
+                      {sortField === "title" && sortDirection === "asc"
+                        ? "✓"
+                        : ""}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortField("title");
+                        setSortDirection("desc");
+                      }}
+                    >
+                      제목 (다가나순){" "}
+                      {sortField === "title" && sortDirection === "desc"
+                        ? "✓"
+                        : ""}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortField("userName");
+                        setSortDirection("asc");
+                      }}
+                    >
+                      작성자 (가나다순){" "}
+                      {sortField === "userName" && sortDirection === "asc"
+                        ? "✓"
+                        : ""}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortField("userName");
+                        setSortDirection("desc");
+                      }}
+                    >
+                      작성자 (다가나순){" "}
+                      {sortField === "userName" && sortDirection === "desc"
+                        ? "✓"
+                        : ""}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortField("createdAt");
+                        setSortDirection("asc");
+                      }}
+                    >
+                      생성일자 (오래된순){" "}
+                      {sortField === "createdAt" && sortDirection === "asc"
+                        ? "✓"
+                        : ""}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortField("createdAt");
+                        setSortDirection("desc");
+                      }}
+                    >
+                      생성일자 (최신순){" "}
+                      {sortField === "createdAt" && sortDirection === "desc"
+                        ? "✓"
+                        : ""}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSortField(null);
+                        setSortDirection("asc");
+                      }}
+                    >
+                      기본 정렬 {!sortField ? "✓" : ""}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
           </div>
 
           {/* 보고서 테이블 */}
@@ -226,22 +380,25 @@ export default function ManagerWeeklyPage() {
                       제목
                     </th>
                     <th className='text-left py-3 px-4 font-semibold text-sm'>
+                      작성자
+                    </th>
+                    <th className='text-left py-3 px-4 font-semibold text-sm'>
                       생성일자
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedReports.length === 0 ? (
+                  {sortedReports.length === 0 ? (
                     <tr>
                       <td
-                        colSpan={2}
+                        colSpan={3}
                         className='text-center py-8 text-muted-foreground'
                       >
                         선택한 조건에 맞는 위클리 보고서가 없습니다.
                       </td>
                     </tr>
                   ) : (
-                    paginatedReports.map(report => (
+                    sortedReports.map(report => (
                       <tr
                         key={report.id}
                         className='border-b hover:bg-primary/5 hover:shadow-lg transition-all duration-200 cursor-pointer'
@@ -251,6 +408,9 @@ export default function ManagerWeeklyPage() {
                       >
                         <td className='py-3 px-4'>
                           <div className='font-medium'>{report.title}</div>
+                        </td>
+                        <td className='py-3 px-4 text-sm text-muted-foreground'>
+                          {report.userName || "알 수 없음"}
                         </td>
                         <td className='py-3 px-4 text-sm text-muted-foreground'>
                           {report.createdAt
