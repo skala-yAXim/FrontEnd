@@ -11,7 +11,7 @@ import { useDeleteProject, useGetProjects } from "@/hooks/useProjectQueries";
 import { useServerPagination } from "@/hooks/useServerPagination";
 import { Project } from "@/types/projectType";
 import { getStatusColor } from "@/utils/statusColor";
-import { AlertCircle, ChevronLeft, Eye, Trash2 } from "lucide-react";
+import { AlertCircle, ChevronLeft, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 // API 응답이 프로젝트 배열만 반환하고 페이지 정보가 없다면,
@@ -177,7 +177,8 @@ export default function ProjectListClient() {
                   projects.map(project => (
                     <tr
                       key={project.id}
-                      className='border-b hover:bg-muted/20 transition-colors'
+                      className='border-b hover:bg-primary/5 hover:shadow-lg transition-all duration-200 cursor-pointer'
+                      onClick={() => handleProjectDetail(project.id)}
                     >
                       <td className='py-3 px-4'>
                         <div>
@@ -200,19 +201,17 @@ export default function ProjectListClient() {
                         </div>
                       </td>
                       <td className='py-3 px-4'>
-                        <Badge className={getStatusColor(project.status)}>
+                        <Badge
+                          className={`${getStatusColor(project.status)} !hover:bg-current !hover:text-current pointer-events-none`}
+                        >
                           {project.status}
                         </Badge>
                       </td>
-                      <td className='py-3 px-4'>
-                        <div className='flex items-center justify-center gap-2'>
-                          <Button
-                            size='sm'
-                            variant='outline'
-                            onClick={() => handleProjectDetail(project.id)}
-                          >
-                            <Eye className='w-3 h-3' />
-                          </Button>
+                      <td
+                        className='py-3 px-4'
+                        onClick={e => e.stopPropagation()}
+                      >
+                        <div className='flex items-center justify-center'>
                           <Button
                             size='sm'
                             variant='outline'

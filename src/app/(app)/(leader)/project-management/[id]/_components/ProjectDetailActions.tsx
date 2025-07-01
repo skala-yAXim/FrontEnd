@@ -23,11 +23,7 @@ export function ProjectDetailActions({ projectId }: ProjectDetailActionsProps) {
 
   return (
     <div className='flex justify-between items-center mb-6'>
-      <Button
-        variant='outline'
-        onClick={handleGoBack}
-        className='flex items-center gap-2'
-      >
+      <Button variant='outline' onClick={handleGoBack}>
         <ArrowLeft className='w-4 h-4' />
         뒤로가기
       </Button>

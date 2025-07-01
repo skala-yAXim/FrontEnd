@@ -1,10 +1,9 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import { useCreateProjects } from "@/hooks/useProjectQueries";
 import { ProjectCreateForm } from "@/types/projectType";
-import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ProjectForm } from "./_components/ProjectForm";
 
@@ -46,12 +45,12 @@ export default function ProjectCreatePage() {
     <>
       <PageHeader title='프로젝트 정보 등록' />
 
-      <CardHeader>
+      {/* <CardHeader>
         <CardTitle className='flex items-center gap-2'>
           <Plus className='w-5 h-5' />
           프로젝트 정보 등록
         </CardTitle>
-      </CardHeader>
+      </CardHeader> */}
 
       <CardContent>
         <ProjectForm

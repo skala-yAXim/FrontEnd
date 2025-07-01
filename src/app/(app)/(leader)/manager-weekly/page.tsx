@@ -45,11 +45,17 @@ export default function ManagerWeeklyPage() {
     endDate: "2025-12-31",
   });
 
+  const [searchParams, setSearchParams] = React.useState<FilterState>({
+    selectedMembers: [],
+    startDate: "2025-01-01",
+    endDate: "2025-12-31",
+  });
+
   const { data: memberReports, isLoading: isLoadingReports } =
     useGetMemberWeeklyReports(pageRequest, {
-      userId: filters.selectedMembers,
-      startDate: filters.startDate,
-      endDate: filters.endDate,
+      userId: searchParams.selectedMembers,
+      startDate: searchParams.startDate,
+      endDate: searchParams.endDate,
     });
 
   const totalItems = memberReports?.totalElements || 0;
@@ -66,11 +72,14 @@ export default function ManagerWeeklyPage() {
         ? prev.selectedMembers.filter(id => id !== memberId)
         : [...prev.selectedMembers, memberId],
     }));
-    onPageChange(1);
   };
 
   const handleDateChange = (field: "startDate" | "endDate", value: string) => {
     setFilters(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSearch = () => {
+    setSearchParams({ ...filters });
     onPageChange(1);
   };
 
@@ -100,10 +109,12 @@ export default function ManagerWeeklyPage() {
     );
   }
 
-  const hasSelectedMembers = filters.selectedMembers.length > 0;
+  const hasSelectedMembers = searchParams.selectedMembers.length > 0;
   const selectedMemberNames =
     teamMembers
-      ?.filter(member => filters.selectedMembers.includes(member.id.toString()))
+      ?.filter(member =>
+        searchParams.selectedMembers.includes(member.id.toString())
+      )
       .map(member => member.name)
       .join(", ") || "";
 
@@ -113,12 +124,15 @@ export default function ManagerWeeklyPage() {
       <div className='w-full mt-6'>
         <CardContent className='space-y-6'>
           {/* 필터 영역 */}
-          <div className='flex justify-between'>
-            <div className='space-y-2'>
-              <Label>팀원 선택</Label>
+          <div className='flex justify-between items-end'>
+            <div className='flex items-center gap-4'>
+              <Label className='whitespace-nowrap'>팀원 선택</Label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant='outline' className='w-80 justify-between'>
+                  <Button
+                    variant='outline'
+                    className='w-80 h-10 justify-between'
+                  >
                     <span className='truncate'>{getSelectedMemberText()}</span>
                     <ChevronDown className='h-4 w-4 shrink-0 opacity-50' />
                   </Button>
@@ -153,7 +167,7 @@ export default function ManagerWeeklyPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className='flex gap-4'>
+            <div className='flex gap-2 items-end'>
               <div className='space-y-2 w-40'>
                 <Label htmlFor='startDate'>시작 날짜</Label>
                 <Input
@@ -161,6 +175,7 @@ export default function ManagerWeeklyPage() {
                   type='date'
                   value={filters.startDate}
                   onChange={e => handleDateChange("startDate", e.target.value)}
+                  className='h-10'
                 />
               </div>
               <div className='space-y-2 w-40'>
@@ -170,23 +185,31 @@ export default function ManagerWeeklyPage() {
                   type='date'
                   value={filters.endDate}
                   onChange={e => handleDateChange("endDate", e.target.value)}
+                  className='h-10'
                 />
               </div>
+              <Button
+                onClick={handleSearch}
+                className='h-10'
+                disabled={filters.selectedMembers.length === 0}
+              >
+                검색
+              </Button>
             </div>
           </div>
 
           {/* 선택 요약 */}
           <div className='text-sm text-muted-foreground bg-muted/30 p-3 rounded-md'>
             <p>
-              <strong>{filters.selectedMembers.length}명</strong>의 팀원 위클리
-              보고서 {hasSelectedMembers && <>({selectedMemberNames})</>},{" "}
-              <strong>{filters.startDate}</strong> ~{" "}
-              <strong>{filters.endDate}</strong> 기간
+              <strong>{searchParams.selectedMembers.length}명</strong>의 팀원
+              위클리 보고서 {hasSelectedMembers && <>({selectedMemberNames})</>}
+              , <strong>{searchParams.startDate}</strong> ~{" "}
+              <strong>{searchParams.endDate}</strong> 기간
             </p>
           </div>
 
           {/* 보고서 테이블 */}
-          {!hasSelectedMembers ? (
+          {searchParams.selectedMembers.length === 0 ? (
             <div className='text-center py-8 text-muted-foreground'>
               팀원을 선택해주세요.
             </div>
@@ -245,7 +268,7 @@ export default function ManagerWeeklyPage() {
           )}
 
           {/* 페이지네이션 */}
-          {hasSelectedMembers && (
+          {searchParams.selectedMembers.length > 0 && (
             <div className='flex justify-between items-center'>
               <div className='text-sm text-muted-foreground'>
                 총 {totalItems}개 중{" "}

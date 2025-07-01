@@ -7,6 +7,26 @@ const getProgressColor = (progress: number) => {
   return "bg-green-500";
 };
 
+const ProgressLegend = () => (
+  <div className='flex items-center gap-6 mb-4 px-3'>
+    <span className='text-sm font-medium text-gray-600'>진행도 범례:</span>
+    <div className='flex items-center gap-4'>
+      <div className='flex items-center gap-1'>
+        <div className='w-4 h-4 bg-red-500 rounded'></div>
+        <span className='text-xs text-gray-600'>(0-30%)</span>
+      </div>
+      <div className='flex items-center gap-1'>
+        <div className='w-4 h-4 bg-yellow-500 rounded'></div>
+        <span className='text-xs text-gray-600'>(31-70%)</span>
+      </div>
+      <div className='flex items-center gap-1'>
+        <div className='w-4 h-4 bg-green-500 rounded'></div>
+        <span className='text-xs text-gray-600'>(71-100%)</span>
+      </div>
+    </div>
+  </div>
+);
+
 export default function TeamWeeklyReportDetail({
   reportJson,
 }: TeamWeeklyReportData) {
@@ -18,6 +38,8 @@ export default function TeamWeeklyReportDetail({
       <div className='w-full h-px bg-gray-300 my-4' />
 
       <p className='text-gray-700 mb-6 px-3 leading-relaxed'>{item.summary}</p>
+
+      <ProgressLegend />
 
       <div className='flex items-center mb-6 px-3'>
         <span className='text-sm font-medium text-gray-700 mr-4 whitespace-nowrap'>
