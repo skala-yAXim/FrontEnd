@@ -1,26 +1,33 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
-import WeeklyReportPagination from "@/components/reports/WeeklyReportPagination";
+import Pagination from "@/components/Pagination";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   useGetMemberWeeklyReports,
   useGetTeamMembers,
 } from "@/hooks/useMemberWeeklyQueries";
 import { useServerPagination } from "@/hooks/useServerPagination";
-import { ChevronDown } from "lucide-react";
+import {
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  Filter,
+  Search,
+  Users,
+  X,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -34,7 +41,7 @@ export default function ManagerWeeklyPage() {
   const router = useRouter();
   const { data: teamMembers, isLoading: isLoadingMembers } =
     useGetTeamMembers();
-  const { pageRequest, currentPage, onPageChange } = useServerPagination({
+  const pagination = useServerPagination({
     initialPage: 0,
     initialSize: 10,
     initialSort: "createdAt,desc",
@@ -54,31 +61,42 @@ export default function ManagerWeeklyPage() {
 
   // 정렬 상태 추가
   const [sortField, setSortField] = React.useState<
-    "title" | "userName" | "createdAt" | null
+    "userName" | "createdAt" | null
   >(null);
   const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">(
     "asc"
   );
 
   const { data: memberReports, isLoading: isLoadingReports } =
-    useGetMemberWeeklyReports(pageRequest, {
+    useGetMemberWeeklyReports(pagination.pageRequest, {
       userId: searchParams.selectedMembers,
       startDate: searchParams.startDate,
       endDate: searchParams.endDate,
     });
 
   const totalItems = memberReports?.totalElements || 0;
+
+  // 페이지네이션된 보고서 데이터
   const paginatedReports = (memberReports?.content || []).map(report => ({
     id: report.id.toString(),
     title: report.title,
     createdAt: report.createdAt,
-    userName: report.userName, // 작성자 정보 추가
+    userName: report.userName,
   }));
 
   // 정렬 핸들러
-  const handleSort = (field: "title" | "userName" | "createdAt") => {
-    setSortField(field);
-    setSortDirection("asc");
+  const handleSort = (
+    field: "userName" | "createdAt",
+    direction: "asc" | "desc"
+  ) => {
+    // 같은 필드의 같은 방향을 클릭하면 정렬 해제
+    if (sortField === field && sortDirection === direction) {
+      setSortField(null);
+      setSortDirection("asc");
+    } else {
+      setSortField(field);
+      setSortDirection(direction);
+    }
   };
 
   // 정렬된 보고서 계산
@@ -90,8 +108,6 @@ export default function ManagerWeeklyPage() {
 
       if (sortField === "userName") {
         compareValue = (a.userName || "").localeCompare(b.userName || "");
-      } else if (sortField === "title") {
-        compareValue = (a.title || "").localeCompare(b.title || "");
       } else if (sortField === "createdAt") {
         compareValue =
           new Date(a.createdAt || "").getTime() -
@@ -111,25 +127,28 @@ export default function ManagerWeeklyPage() {
     }));
   };
 
+  const handleMemberRemove = (memberId: string) => {
+    setFilters(prev => ({
+      ...prev,
+      selectedMembers: prev.selectedMembers.filter(id => id !== memberId),
+    }));
+  };
+
   const handleDateChange = (field: "startDate" | "endDate", value: string) => {
     setFilters(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSearch = () => {
     setSearchParams({ ...filters });
-    onPageChange(1);
+    pagination.onPageChange(1);
   };
 
-  const getSelectedMemberText = () => {
-    const count = filters.selectedMembers.length;
-    if (count === 0) return "팀원을 선택하세요";
-    if (count === 1) {
-      const member = teamMembers?.find(
-        m => m.id.toString() === filters.selectedMembers[0]
-      );
-      return member?.name || "1명 선택됨";
-    }
-    return `${count}명 선택됨`;
+  const getSelectedMembers = () => {
+    return (
+      teamMembers?.filter(member =>
+        filters.selectedMembers.includes(member.id.toString())
+      ) || []
+    );
   };
 
   if (isLoadingMembers) {
@@ -146,244 +165,208 @@ export default function ManagerWeeklyPage() {
     );
   }
 
+  const selectedMembers = getSelectedMembers();
   const hasSelectedMembers = searchParams.selectedMembers.length > 0;
-  const selectedMemberNames =
-    teamMembers
-      ?.filter(member =>
-        searchParams.selectedMembers.includes(member.id.toString())
-      )
-      .map(member => member.name)
-      .join(", ") || "";
 
   return (
     <div>
       <PageHeader title='위클리 보고서' description='팀원 위클리 보고서 목록' />
+
       <div className='w-full mt-6'>
         <CardContent className='space-y-6'>
-          {/* 필터 영역 */}
-          <div className='flex justify-between items-end'>
-            <div className='flex items-center gap-4'>
-              <Label className='whitespace-nowrap'>팀원 선택</Label>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant='outline'
-                    className='w-80 h-10 justify-between'
-                  >
-                    <span className='truncate'>{getSelectedMemberText()}</span>
-                    <ChevronDown className='h-4 w-4 shrink-0 opacity-50' />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className='w-80 max-h-64 overflow-y-auto'
-                  align='start'
-                  side='bottom'
-                  sideOffset={4}
-                >
-                  <DropdownMenuLabel>팀원 선택</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {teamMembers?.map(member => (
-                    <DropdownMenuCheckboxItem
-                      key={member.id}
-                      checked={filters.selectedMembers.includes(
-                        member.id.toString()
-                      )}
-                      onCheckedChange={() =>
-                        handleMemberToggle(member.id.toString())
-                      }
-                      onSelect={e => e.preventDefault()}
-                    >
-                      <div>
-                        <div className='font-medium'>{member.name}</div>
-                        <div className='text-sm text-muted-foreground'>
-                          {member.email}
+          {/* 현대적인 필터 바 */}
+          <div className='bg-muted/30 rounded-xl p-4'>
+            <div className='flex flex-wrap items-center gap-4'>
+              {/* 팀원 선택 필터 */}
+              <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-2 text-sm font-medium text-muted-foreground'>
+                  <Users className='h-4 w-4' />
+                  팀원:
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant='outline' size='sm' className='h-8'>
+                      {filters.selectedMembers.length === 0
+                        ? "전체"
+                        : `${filters.selectedMembers.length}명 선택`}
+                      <ChevronDown className='h-3 w-3 ml-1' />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className='w-80'>
+                    <DropdownMenuLabel>팀원 선택</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {teamMembers?.map(member => (
+                      <DropdownMenuCheckboxItem
+                        key={member.id}
+                        checked={filters.selectedMembers.includes(
+                          member.id.toString()
+                        )}
+                        onCheckedChange={() =>
+                          handleMemberToggle(member.id.toString())
+                        }
+                        onSelect={e => e.preventDefault()}
+                      >
+                        <div>
+                          <div className='font-medium'>{member.name}</div>
+                          <div className='text-xs text-muted-foreground'>
+                            {member.email}
+                          </div>
                         </div>
-                      </div>
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <div className='flex gap-2 items-end'>
-              <div className='space-y-2 w-40'>
-                <Label htmlFor='startDate'>시작 날짜</Label>
-                <Input
-                  id='startDate'
-                  type='date'
-                  value={filters.startDate}
-                  onChange={e => handleDateChange("startDate", e.target.value)}
-                  className='h-10'
-                />
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-              <div className='space-y-2 w-40'>
-                <Label htmlFor='endDate'>종료 날짜</Label>
-                <Input
-                  id='endDate'
-                  type='date'
-                  value={filters.endDate}
-                  onChange={e => handleDateChange("endDate", e.target.value)}
-                  className='h-10'
-                />
+
+              {/* 날짜 범위 필터 */}
+              <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-2 text-sm font-medium text-muted-foreground'>
+                  <Calendar className='h-4 w-4' />
+                  기간:
+                </div>
+                <div className='flex items-center gap-1'>
+                  <Input
+                    type='date'
+                    value={filters.startDate}
+                    onChange={e =>
+                      handleDateChange("startDate", e.target.value)
+                    }
+                    className='h-8 w-36 text-xs'
+                  />
+                  <span className='text-muted-foreground'>~</span>
+                  <Input
+                    type='date'
+                    value={filters.endDate}
+                    onChange={e => handleDateChange("endDate", e.target.value)}
+                    className='h-8 w-36 text-xs'
+                  />
+                </div>
               </div>
+
+              {/* 검색 버튼 */}
               <Button
                 onClick={handleSearch}
-                className='h-10'
+                size='sm'
+                className='h-8 ml-auto'
                 disabled={filters.selectedMembers.length === 0}
               >
+                <Search className='h-3 w-3 mr-1' />
                 검색
               </Button>
             </div>
-          </div>
 
-          {/* 선택 요약 및 정렬 */}
-          <div className='flex justify-between items-center'>
-            <div className='text-sm text-muted-foreground bg-muted/30 p-3 rounded-md flex-1 mr-4'>
-              <p>
-                <strong>{searchParams.selectedMembers.length}명</strong>의 팀원
-                위클리 보고서{" "}
-                {hasSelectedMembers && <>({selectedMemberNames})</>},{" "}
-                <strong>{searchParams.startDate}</strong> ~{" "}
-                <strong>{searchParams.endDate}</strong> 기간
-              </p>
-            </div>
-
-            {/* 정렬 드롭다운 */}
-            {searchParams.selectedMembers.length > 0 && (
-              <div className='flex items-center gap-2'>
-                <Label className='text-sm'>정렬:</Label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant='outline' size='sm' className='w-44'>
-                      <span className='truncate'>
-                        {sortField
-                          ? `${
-                              sortField === "title"
-                                ? "제목"
-                                : sortField === "userName"
-                                  ? "작성자"
-                                  : "생성일자"
-                            } (${
-                              sortDirection === "asc"
-                                ? sortField === "createdAt"
-                                  ? "오래된순"
-                                  : "가나다순"
-                                : sortField === "createdAt"
-                                  ? "최신순"
-                                  : "다가나순"
-                            })`
-                          : "정렬 기준 선택"}
-                      </span>
-                      <ChevronDown className='h-4 w-4 ml-2' />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align='end'>
-                    <DropdownMenuLabel>정렬 기준</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSortField("title");
-                        setSortDirection("asc");
-                      }}
+            {/* 선택된 팀원 태그들 */}
+            {selectedMembers.length > 0 && (
+              <div className='flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/50'>
+                <span className='text-xs font-medium text-muted-foreground'>
+                  선택된 팀원:
+                </span>
+                {selectedMembers.map(member => (
+                  <Badge
+                    key={member.id}
+                    variant='secondary'
+                    className='text-xs px-2 py-1 flex items-center gap-1'
+                  >
+                    {member.name}
+                    <button
+                      onClick={() => handleMemberRemove(member.id.toString())}
+                      className='ml-1 hover:bg-muted rounded-full p-0.5 transition-colors'
                     >
-                      제목 (가나다순){" "}
-                      {sortField === "title" && sortDirection === "asc"
-                        ? "✓"
-                        : ""}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSortField("title");
-                        setSortDirection("desc");
-                      }}
-                    >
-                      제목 (다가나순){" "}
-                      {sortField === "title" && sortDirection === "desc"
-                        ? "✓"
-                        : ""}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSortField("userName");
-                        setSortDirection("asc");
-                      }}
-                    >
-                      작성자 (가나다순){" "}
-                      {sortField === "userName" && sortDirection === "asc"
-                        ? "✓"
-                        : ""}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSortField("userName");
-                        setSortDirection("desc");
-                      }}
-                    >
-                      작성자 (다가나순){" "}
-                      {sortField === "userName" && sortDirection === "desc"
-                        ? "✓"
-                        : ""}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSortField("createdAt");
-                        setSortDirection("asc");
-                      }}
-                    >
-                      생성일자 (오래된순){" "}
-                      {sortField === "createdAt" && sortDirection === "asc"
-                        ? "✓"
-                        : ""}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSortField("createdAt");
-                        setSortDirection("desc");
-                      }}
-                    >
-                      생성일자 (최신순){" "}
-                      {sortField === "createdAt" && sortDirection === "desc"
-                        ? "✓"
-                        : ""}
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setSortField(null);
-                        setSortDirection("asc");
-                      }}
-                    >
-                      기본 정렬 {!sortField ? "✓" : ""}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      <X className='h-3 w-3' />
+                    </button>
+                  </Badge>
+                ))}
               </div>
             )}
           </div>
 
           {/* 보고서 테이블 */}
           {searchParams.selectedMembers.length === 0 ? (
-            <div className='text-center py-8 text-muted-foreground'>
-              팀원을 선택해주세요.
+            <div className='text-center py-12 text-muted-foreground'>
+              <Users className='h-12 w-12 mx-auto mb-4 opacity-50' />
+              <p className='text-lg font-medium mb-2'>팀원을 선택해주세요</p>
+              <p className='text-sm'>
+                위의 필터에서 팀원을 선택하고 검색해주세요.
+              </p>
             </div>
           ) : isLoadingReports ? (
-            <div className='flex justify-center p-8'>
-              보고서를 불러오는 중...
+            <div className='flex justify-center p-12'>
+              <div className='flex flex-col items-center gap-3'>
+                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+                <p className='text-sm text-muted-foreground'>
+                  보고서를 불러오는 중...
+                </p>
+              </div>
             </div>
           ) : (
-            <div className='overflow-x-auto'>
+            <div className='rounded-lg border bg-background overflow-hidden'>
               <table className='w-full'>
-                <thead>
+                <thead className='bg-gray-50'>
                   <tr className='border-b'>
-                    <th className='text-left py-3 px-4 font-semibold text-sm'>
+                    <th className='text-left py-4 px-6 font-semibold text-sm'>
                       제목
                     </th>
-                    <th className='text-left py-3 px-4 font-semibold text-sm'>
-                      작성자
+                    <th className='text-left py-4 px-6 font-semibold text-sm'>
+                      <div className='flex items-center gap-3'>
+                        <span>작성자</span>
+                        <div className='flex items-center gap-1'>
+                          <button
+                            onClick={() => handleSort("userName", "asc")}
+                            className={`p-1 rounded-md transition-all ${
+                              sortField === "userName" &&
+                              sortDirection === "asc"
+                                ? "bg-primary text-primary-foreground shadow-sm"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/20 hover:ring-1 hover:ring-black hover:cursor-pointer"
+                            }`}
+                            title='가나다순'
+                          >
+                            <ChevronUp className='h-3 w-3' />
+                          </button>
+                          <button
+                            onClick={() => handleSort("userName", "desc")}
+                            className={`p-1 rounded-md transition-all ${
+                              sortField === "userName" &&
+                              sortDirection === "desc"
+                                ? "bg-primary text-primary-foreground shadow-sm"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/20 hover:ring-1 hover:ring-black hover:cursor-pointer"
+                            }`}
+                            title='다나가순'
+                          >
+                            <ChevronDown className='h-3 w-3' />
+                          </button>
+                        </div>
+                      </div>
                     </th>
-                    <th className='text-left py-3 px-4 font-semibold text-sm'>
-                      생성일자
+                    <th className='text-left py-4 px-6 font-semibold text-sm'>
+                      <div className='flex items-center gap-3'>
+                        <span>생성일자</span>
+                        <div className='flex items-center gap-1'>
+                          <button
+                            onClick={() => handleSort("createdAt", "asc")}
+                            className={`p-1 rounded-md transition-all ${
+                              sortField === "createdAt" &&
+                              sortDirection === "asc"
+                                ? "bg-primary text-primary-foreground shadow-sm"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/20 hover:ring-1 hover:ring-black hover:cursor-pointer"
+                            }`}
+                            title='오래된순'
+                          >
+                            <ChevronUp className='h-3 w-3' />
+                          </button>
+                          <button
+                            onClick={() => handleSort("createdAt", "desc")}
+                            className={`p-1 rounded-md transition-all ${
+                              sortField === "createdAt" &&
+                              sortDirection === "desc"
+                                ? "bg-primary text-primary-foreground shadow-sm"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/20 hover:ring-1 hover:ring-black hover:cursor-pointer"
+                            }`}
+                            title='최신순'
+                          >
+                            <ChevronDown className='h-3 w-3' />
+                          </button>
+                        </div>
+                      </div>
                     </th>
                   </tr>
                 </thead>
@@ -392,27 +375,32 @@ export default function ManagerWeeklyPage() {
                     <tr>
                       <td
                         colSpan={3}
-                        className='text-center py-8 text-muted-foreground'
+                        className='text-center py-12 text-muted-foreground'
                       >
-                        선택한 조건에 맞는 위클리 보고서가 없습니다.
+                        <div className='flex flex-col items-center gap-3'>
+                          <Filter className='h-8 w-8 opacity-50' />
+                          <p>선택한 조건에 맞는 위클리 보고서가 없습니다.</p>
+                        </div>
                       </td>
                     </tr>
                   ) : (
                     sortedReports.map(report => (
                       <tr
                         key={report.id}
-                        className='border-b hover:bg-primary/5 hover:shadow-lg transition-all duration-200 cursor-pointer'
+                        className='border-b hover:bg-gradient-to-r hover:from-primary/3 hover:to-transparent hover:shadow-sm transition-all duration-200 cursor-pointer'
                         onClick={() =>
                           router.push(`/manager-weekly/${report.id}`)
                         }
                       >
-                        <td className='py-3 px-4'>
+                        <td className='py-4 px-6'>
                           <div className='font-medium'>{report.title}</div>
                         </td>
-                        <td className='py-3 px-4 text-sm text-muted-foreground'>
-                          {report.userName || "알 수 없음"}
+                        <td className='py-4 px-6 text-sm text-muted-foreground'>
+                          <Badge variant='outline' className='text-xs'>
+                            {report.userName || "알 수 없음"}
+                          </Badge>
                         </td>
-                        <td className='py-3 px-4 text-sm text-muted-foreground'>
+                        <td className='py-4 px-6 text-sm text-muted-foreground'>
                           {report.createdAt
                             ? new Date(report.createdAt).toLocaleDateString(
                                 "ko-KR"
@@ -428,23 +416,12 @@ export default function ManagerWeeklyPage() {
           )}
 
           {/* 페이지네이션 */}
-          {searchParams.selectedMembers.length > 0 && (
-            <div className='flex justify-between items-center'>
-              <div className='text-sm text-muted-foreground'>
-                총 {totalItems}개 중{" "}
-                {totalItems > 0 ? (currentPage - 1) * pageRequest.size + 1 : 0}-
-                {totalItems > 0
-                  ? Math.min(currentPage * pageRequest.size, totalItems)
-                  : 0}
-                개 표시
-              </div>
-              <WeeklyReportPagination
-                currentPage={currentPage}
-                totalItems={totalItems}
-                itemsPerPage={pageRequest.size}
-                onPageChange={onPageChange}
-              />
-            </div>
+          {hasSelectedMembers && totalItems > 0 && (
+            <Pagination
+              {...pagination.getPaginationProps(totalItems)}
+              showPageInfo={true}
+              showResultInfo={true}
+            />
           )}
         </CardContent>
       </div>
