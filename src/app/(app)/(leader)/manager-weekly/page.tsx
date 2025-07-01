@@ -5,6 +5,7 @@ import Pagination from "@/components/Pagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
+import DataTable, { Column, SortState } from "@/components/ui/data-table";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -19,15 +20,7 @@ import {
   useGetTeamMembers,
 } from "@/hooks/useMemberWeeklyQueries";
 import { useServerPagination } from "@/hooks/useServerPagination";
-import {
-  Calendar,
-  ChevronDown,
-  ChevronUp,
-  Filter,
-  Search,
-  Users,
-  X,
-} from "lucide-react";
+import { Calendar, ChevronDown, Search, Users, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -59,13 +52,11 @@ export default function ManagerWeeklyPage() {
     endDate: "2025-12-31",
   });
 
-  // 정렬 상태 추가
-  const [sortField, setSortField] = React.useState<
-    "userName" | "createdAt" | null
-  >(null);
-  const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">(
-    "asc"
-  );
+  // 정렬 상태
+  const [sortState, setSortState] = React.useState<SortState<any>>({
+    field: null,
+    direction: "asc",
+  });
 
   const { data: memberReports, isLoading: isLoadingReports } =
     useGetMemberWeeklyReports(pagination.pageRequest, {
@@ -85,38 +76,57 @@ export default function ManagerWeeklyPage() {
   }));
 
   // 정렬 핸들러
-  const handleSort = (
-    field: "userName" | "createdAt",
-    direction: "asc" | "desc"
-  ) => {
-    // 같은 필드의 같은 방향을 클릭하면 정렬 해제
-    if (sortField === field && sortDirection === direction) {
-      setSortField(null);
-      setSortDirection("asc");
-    } else {
-      setSortField(field);
-      setSortDirection(direction);
-    }
+  const handleSort = (field: any, direction: "asc" | "desc") => {
+    setSortState({ field, direction });
   };
 
   // 정렬된 보고서 계산
   const sortedReports = React.useMemo(() => {
-    if (!sortField) return paginatedReports;
+    if (!sortState.field) return paginatedReports;
 
     return [...paginatedReports].sort((a, b) => {
       let compareValue = 0;
 
-      if (sortField === "userName") {
+      if (sortState.field === "userName") {
         compareValue = (a.userName || "").localeCompare(b.userName || "");
-      } else if (sortField === "createdAt") {
+      } else if (sortState.field === "createdAt") {
         compareValue =
           new Date(a.createdAt || "").getTime() -
           new Date(b.createdAt || "").getTime();
       }
 
-      return sortDirection === "asc" ? compareValue : -compareValue;
+      return sortState.direction === "asc" ? compareValue : -compareValue;
     });
-  }, [paginatedReports, sortField, sortDirection]);
+  }, [paginatedReports, sortState]);
+
+  // 테이블 컬럼 정의
+  const columns: Column<any>[] = [
+    {
+      key: "title",
+      label: "제목",
+      render: value => <div className='font-medium'>{value}</div>,
+    },
+    {
+      key: "userName",
+      label: "작성자",
+      sortable: true,
+      render: value => (
+        <Badge variant='outline' className='text-xs'>
+          {value || "알 수 없음"}
+        </Badge>
+      ),
+    },
+    {
+      key: "createdAt",
+      label: "생성일자",
+      sortable: true,
+      render: value => (
+        <span className='text-sm text-muted-foreground'>
+          {value ? new Date(value).toLocaleDateString("ko-KR") : "-"}
+        </span>
+      ),
+    },
+  ];
 
   const handleMemberToggle = (memberId: string) => {
     setFilters(prev => ({
@@ -289,130 +299,16 @@ export default function ManagerWeeklyPage() {
                 위의 필터에서 팀원을 선택하고 검색해주세요.
               </p>
             </div>
-          ) : isLoadingReports ? (
-            <div className='flex justify-center p-12'>
-              <div className='flex flex-col items-center gap-3'>
-                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
-                <p className='text-sm text-muted-foreground'>
-                  보고서를 불러오는 중...
-                </p>
-              </div>
-            </div>
           ) : (
-            <div className='rounded-lg border bg-background overflow-hidden'>
-              <table className='w-full'>
-                <thead className='bg-gray-50'>
-                  <tr className='border-b'>
-                    <th className='text-left py-4 px-6 font-semibold text-sm'>
-                      제목
-                    </th>
-                    <th className='text-left py-4 px-6 font-semibold text-sm'>
-                      <div className='flex items-center gap-3'>
-                        <span>작성자</span>
-                        <div className='flex items-center gap-1'>
-                          <button
-                            onClick={() => handleSort("userName", "asc")}
-                            className={`p-1 rounded-md transition-all ${
-                              sortField === "userName" &&
-                              sortDirection === "asc"
-                                ? "bg-primary text-primary-foreground shadow-sm"
-                                : "text-muted-foreground hover:text-foreground hover:bg-muted/20 hover:ring-1 hover:ring-black hover:cursor-pointer"
-                            }`}
-                            title='가나다순'
-                          >
-                            <ChevronUp className='h-3 w-3' />
-                          </button>
-                          <button
-                            onClick={() => handleSort("userName", "desc")}
-                            className={`p-1 rounded-md transition-all ${
-                              sortField === "userName" &&
-                              sortDirection === "desc"
-                                ? "bg-primary text-primary-foreground shadow-sm"
-                                : "text-muted-foreground hover:text-foreground hover:bg-muted/20 hover:ring-1 hover:ring-black hover:cursor-pointer"
-                            }`}
-                            title='다나가순'
-                          >
-                            <ChevronDown className='h-3 w-3' />
-                          </button>
-                        </div>
-                      </div>
-                    </th>
-                    <th className='text-left py-4 px-6 font-semibold text-sm'>
-                      <div className='flex items-center gap-3'>
-                        <span>생성일자</span>
-                        <div className='flex items-center gap-1'>
-                          <button
-                            onClick={() => handleSort("createdAt", "asc")}
-                            className={`p-1 rounded-md transition-all ${
-                              sortField === "createdAt" &&
-                              sortDirection === "asc"
-                                ? "bg-primary text-primary-foreground shadow-sm"
-                                : "text-muted-foreground hover:text-foreground hover:bg-muted/20 hover:ring-1 hover:ring-black hover:cursor-pointer"
-                            }`}
-                            title='오래된순'
-                          >
-                            <ChevronUp className='h-3 w-3' />
-                          </button>
-                          <button
-                            onClick={() => handleSort("createdAt", "desc")}
-                            className={`p-1 rounded-md transition-all ${
-                              sortField === "createdAt" &&
-                              sortDirection === "desc"
-                                ? "bg-primary text-primary-foreground shadow-sm"
-                                : "text-muted-foreground hover:text-foreground hover:bg-muted/20 hover:ring-1 hover:ring-black hover:cursor-pointer"
-                            }`}
-                            title='최신순'
-                          >
-                            <ChevronDown className='h-3 w-3' />
-                          </button>
-                        </div>
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {sortedReports.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={3}
-                        className='text-center py-12 text-muted-foreground'
-                      >
-                        <div className='flex flex-col items-center gap-3'>
-                          <Filter className='h-8 w-8 opacity-50' />
-                          <p>선택한 조건에 맞는 위클리 보고서가 없습니다.</p>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : (
-                    sortedReports.map(report => (
-                      <tr
-                        key={report.id}
-                        className='border-b hover:bg-gradient-to-r hover:from-primary/3 hover:to-transparent hover:shadow-sm transition-all duration-200 cursor-pointer'
-                        onClick={() =>
-                          router.push(`/manager-weekly/${report.id}`)
-                        }
-                      >
-                        <td className='py-4 px-6'>
-                          <div className='font-medium'>{report.title}</div>
-                        </td>
-                        <td className='py-4 px-6 text-sm text-muted-foreground'>
-                          <Badge variant='outline' className='text-xs'>
-                            {report.userName || "알 수 없음"}
-                          </Badge>
-                        </td>
-                        <td className='py-4 px-6 text-sm text-muted-foreground'>
-                          {report.createdAt
-                            ? new Date(report.createdAt).toLocaleDateString(
-                                "ko-KR"
-                              )
-                            : "-"}
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <DataTable
+              data={sortedReports}
+              columns={columns}
+              onRowClick={item => router.push(`/manager-weekly/${item.id}`)}
+              isLoading={isLoadingReports}
+              emptyMessage='선택한 조건에 맞는 위클리 보고서가 없습니다.'
+              sortState={sortState}
+              onSort={handleSort}
+            />
           )}
 
           {/* 페이지네이션 */}

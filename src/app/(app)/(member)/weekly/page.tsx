@@ -5,8 +5,10 @@ import { AnimatedItem, AnimatedLayout } from "@/components/AnimatedLayout";
 import PageHeader from "@/components/PageHeader";
 import Pagination from "@/components/Pagination";
 import { CardContent } from "@/components/ui/card";
+import DataTable, { Column } from "@/components/ui/data-table";
 import { useServerPagination } from "@/hooks/useServerPagination";
 import { useGetWeeklyReports } from "@/hooks/useUserWeeklyQueries";
+import { WeeklyReportList } from "@/types/reportType";
 import { useRouter } from "next/navigation";
 
 export default function WeeklyReportsPage() {
@@ -29,8 +31,8 @@ export default function WeeklyReportsPage() {
   const totalPages = weeklyReportsData?.totalPages || 0;
 
   // 행 클릭 핸들러
-  const handleRowClick = (reportId: number) => {
-    router.push(`/weekly/${reportId}`);
+  const handleRowClick = (item: WeeklyReportList) => {
+    router.push(`/weekly/${item.id}`);
   };
 
   // 보고서 제목에서 날짜 추출 함수
@@ -44,6 +46,24 @@ export default function WeeklyReportsPage() {
     return new Date().toLocaleDateString("ko-KR");
   };
 
+  // 테이블 컬럼 정의
+  const columns: Column<WeeklyReportList>[] = [
+    {
+      key: "title",
+      label: "제목",
+      render: value => <div className='font-medium'>{value}</div>,
+    },
+    {
+      key: "createdAt",
+      label: "생성일자",
+      render: (value, item) => (
+        <span className='text-sm text-muted-foreground'>
+          {extractDateFromTitle(item.title)}
+        </span>
+      ),
+    },
+  ];
+
   return (
     <AnimatedLayout>
       <AnimatedItem>
@@ -53,51 +73,13 @@ export default function WeeklyReportsPage() {
         />
         <CardContent>
           {/* 테이블 */}
-          <div className='overflow-x-auto'>
-            <table className='w-full'>
-              <thead>
-                <tr className='border-b'>
-                  <th className='text-left py-3 px-4 font-semibold text-sm'>
-                    제목
-                  </th>
-                  <th className='text-left py-3 px-4 font-semibold text-sm'>
-                    생성일자
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {weeklyReports.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={2}
-                      className='text-center py-8 text-muted-foreground'
-                    >
-                      아직 생성된 위클리 보고서가 없습니다.
-                    </td>
-                  </tr>
-                ) : (
-                  weeklyReports.map(report => (
-                    <tr
-                      key={report.id}
-                      className={`border-b hover:bg-primary/5 hover:shadow-lg transition-all duration-200 cursor-pointer`}
-                      onClick={() => handleRowClick(report.id)}
-                      title={"클릭하여 상세보기"}
-                    >
-                      <td className='py-3 px-4'>
-                        <div className='font-medium'>{report.title}</div>
-                        {/* <TypographyMuted className='text-xs mt-1'>
-                          {report.preview.slice(0, 60) + "..."}
-                        </TypographyMuted> */}
-                      </td>
-                      <td className='py-3 px-4 text-sm text-muted-foreground'>
-                        {extractDateFromTitle(report.title)}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+          <DataTable
+            data={weeklyReports}
+            columns={columns}
+            onRowClick={handleRowClick}
+            isLoading={isLoading}
+            emptyMessage='아직 생성된 위클리 보고서가 없습니다.'
+          />
 
           {/* 페이지네이션 */}
           <Pagination

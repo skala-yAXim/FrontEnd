@@ -1,3 +1,4 @@
+import DataTable, { Column } from "@/components/ui/data-table";
 import { TeamWeeklyReportList } from "@/types/reportType";
 
 interface TeamWeeklyReportTableProps {
@@ -13,83 +14,38 @@ export default function WeeklyReportTable({
   isLoading = false,
   emptyMessage = "아직 생성된 위클리 보고서가 없습니다.",
 }: TeamWeeklyReportTableProps) {
-  const handleRowClick = (report: TeamWeeklyReportList) => {
+  // 행 클릭 핸들러
+  const handleRowClick = (item: TeamWeeklyReportList) => {
     if (onRowClick) {
-      onRowClick(report.id.toString());
+      onRowClick(item.id.toString());
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className='overflow-x-auto'>
-        <table className='w-full'>
-          <thead>
-            <tr className='border-b'>
-              <th className='text-left py-3 px-4 font-semibold text-sm'>
-                제목
-              </th>
-              <th className='text-left py-3 px-4 font-semibold text-sm'>
-                생성일자
-              </th>
-              <th className='text-left py-3 px-4 font-semibold text-sm'>
-                상태
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td
-                colSpan={3}
-                className='text-center py-8 text-muted-foreground'
-              >
-                로딩중...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+  // 테이블 컬럼 정의
+  const columns: Column<TeamWeeklyReportList>[] = [
+    {
+      key: "title",
+      label: "제목",
+      render: value => <div className='font-medium'>{value}</div>,
+    },
+    {
+      key: "createdAt",
+      label: "생성일자",
+      render: value => (
+        <span className='text-sm text-muted-foreground'>
+          {new Date(value).toLocaleDateString("ko-KR")}
+        </span>
+      ),
+    },
+  ];
 
   return (
-    <div className='overflow-x-auto'>
-      <table className='w-full'>
-        <thead>
-          <tr className='border-b'>
-            <th className='text-left py-3 px-4 font-semibold text-sm'>제목</th>
-            <th className='text-left py-3 px-4 font-semibold text-sm'>
-              생성일자
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {reports.length === 0 ? (
-            <tr>
-              <td
-                colSpan={2}
-                className='text-center py-8 text-muted-foreground'
-              >
-                {emptyMessage}
-              </td>
-            </tr>
-          ) : (
-            reports.map(report => (
-              <tr
-                key={report.id}
-                className='border-b hover:bg-primary/5 hover:shadow-lg transition-all duration-200 cursor-pointer'
-                onClick={() => handleRowClick(report)}
-              >
-                <td className='py-3 px-4'>
-                  <div className='font-medium'>{report.title}</div>
-                </td>
-                <td className='py-3 px-4 text-sm text-muted-foreground'>
-                  {new Date(report.createdAt).toLocaleDateString("ko-KR")}
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      data={reports}
+      columns={columns}
+      onRowClick={handleRowClick}
+      isLoading={isLoading}
+      emptyMessage={emptyMessage}
+    />
   );
 }
