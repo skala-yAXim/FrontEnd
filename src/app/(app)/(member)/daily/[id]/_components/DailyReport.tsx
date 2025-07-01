@@ -1,3 +1,4 @@
+import { ReportLayout } from "@/components/reports/ReportLayout";
 import { DailyReportData } from "@/types/reportType";
 import { ReportContent } from "./ReportContent";
 import { ReportHeader } from "./ReportHeader";
@@ -8,7 +9,7 @@ import { ReportHeader } from "./ReportHeader";
  */
 export default function DailyReport({ title, report }: DailyReportData) {
   return (
-    <div className='min-h-screen bg-background w-full max-w-5xl rounded-lg mx-auto py-8 px-4 sm:px-6 lg:px-16'>
+    <ReportLayout>
       {/* 헤더 */}
       <ReportHeader
         title={report.report_title}
@@ -19,6 +20,6 @@ export default function DailyReport({ title, report }: DailyReportData) {
       {report.daily_report?.contents && (
         <ReportContent contents={report.daily_report.contents} />
       )}
-    </div>
+    </ReportLayout>
   );
 }

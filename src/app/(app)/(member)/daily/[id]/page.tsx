@@ -44,7 +44,7 @@ export default function DailyReportDetailPage() {
   }
 
   return (
-    <div className='space-y-6 bg-muted/100'>
+    <div className='space-y-6'>
       {/* 클라이언트 컴포넌트 - 액션 버튼들 */}
       <ReportActions
         backHref='/daily'

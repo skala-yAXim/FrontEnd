@@ -1,3 +1,4 @@
+import { ReportLayout } from "@/components/reports/ReportLayout";
 import { WeeklyReport as WeeklyReportType } from "@/types/weeklyReportType";
 import NextWeekScheduleSection from "./NextWeekScheduleSection";
 import { ReflectionSection } from "./ReflectionSection";
@@ -19,7 +20,7 @@ export default function WeeklyReport({
   const nextWeekSchedule = report.next_week_schedule;
 
   return (
-    <div className='min-h-screen bg-muted w-full max-w-3xl rounded-lg mx-auto py-8 px-4 sm:px-6 lg:px-8'>
+    <ReportLayout>
       {/* 서버 컴포넌트 - 정적 헤더 */}
       <ReportHeader title={title} startDate={startDate} endDate={endDate} />
 
@@ -63,6 +64,6 @@ export default function WeeklyReport({
         <div className='h-0.5 w-full bg-muted-foreground/50 mb-4'></div>
         <NextWeekScheduleSection schedules={nextWeekSchedule} />
       </div>
-    </div>
+    </ReportLayout>
   );
 }

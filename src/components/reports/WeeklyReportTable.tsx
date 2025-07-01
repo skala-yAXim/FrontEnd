@@ -80,7 +80,7 @@ export default function WeeklyReportTable({
             reports.map(report => (
               <tr
                 key={report.id}
-                className='border-b transition-colors hover:bg-muted/50 cursor-pointer'
+                className='border-b hover:bg-primary/5 hover:shadow-lg transition-all duration-200 cursor-pointer'
                 onClick={() => handleRowClick(report)}
               >
                 <td className='py-3 px-4'>
