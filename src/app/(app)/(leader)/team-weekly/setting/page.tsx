@@ -271,7 +271,7 @@ export default function TeamWeeklySettingPage() {
                   <Button
                     onClick={handleSaveTemplate}
                     disabled={isSubmitting || isTeamInfoLoading}
-                    className='px-8 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-md hover:shadow-lg transition-all duration-300'
+                    className='px-8 bg-primary hover:bg-primary/80 text-primary-foreground'
                   >
                     {isSubmitting ? (
                       <div className='flex items-center gap-2'>

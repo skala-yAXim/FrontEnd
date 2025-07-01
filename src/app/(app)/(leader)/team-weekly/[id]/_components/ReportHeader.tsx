@@ -4,7 +4,7 @@ export default function ReportHeader(report: TeamWeeklyReportData) {
   console.log(report);
 
   const dateMatch = report.title.match(/(\d{4}-\d{2}-\d{2})/);
-  const date = dateMatch ? dateMatch[1] : "";
+  const date = report.endDate ? report.endDate.split("T")[0] : "";
   const nameMatch = report.title.match(/^(.+?)의/);
   const name = nameMatch ? nameMatch[1] : "";
   return (
