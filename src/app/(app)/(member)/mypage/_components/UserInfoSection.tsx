@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CardContent } from "@/components/ui/card";
 import { serverHttpInterface } from "@/lib/api/server/interface";
-import { Calendar, Mail, User } from "lucide-react";
+import { Mail, User } from "lucide-react";
 import React from "react";
 
 export const dynamic = "force-dynamic";
@@ -104,7 +104,7 @@ export default async function UserInfoSection(): Promise<React.ReactElement> {
         </div>
       </div>
 
-      <div className='flex items-center gap-3 p-3 rounded-lg transition-colors'>
+      {/* <div className='flex items-center gap-3 p-3 rounded-lg transition-colors'>
         <div className='w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center'>
           <Calendar className='w-5 h-5 text-primary' />
         </div>
@@ -114,7 +114,7 @@ export default async function UserInfoSection(): Promise<React.ReactElement> {
             {new Date().toLocaleDateString("ko-KR")}
           </p>
         </div>
-      </div>
+      </div> */}
     </CardContent>
   );
 }
