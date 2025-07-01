@@ -24,6 +24,12 @@ export const api = {
       body: JSON.stringify(body),
     }),
 
+  patchFormData: <T>(url: string, formData: FormData) =>
+    customFetch<T>(url, {
+      method: "PATCH",
+      body: formData,
+    }),
+
   delete: <T>(url: string) => customFetch<T>(url, { method: "DELETE" }),
 };
 
