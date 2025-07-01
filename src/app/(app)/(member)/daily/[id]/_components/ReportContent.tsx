@@ -137,7 +137,11 @@ export function ReportContent({ contents }: ReportContentProps) {
                       </span>
                     </Badge>
                   </TooltipTrigger>
-                  <TooltipContent className='bg-popover border border-border shadow-lg text-sm px-4 py-3 max-w-lg'>
+                  <TooltipContent
+                    side='right'
+                    sideOffset={40}
+                    className='bg-popover border border-border shadow-lg text-sm px-4 py-3 max-w-lg'
+                  >
                     <div className='space-y-3'>
                       {/* 출처 섹션 */}
                       {renderSectionHeader("📋", "출처", ev.title)}
