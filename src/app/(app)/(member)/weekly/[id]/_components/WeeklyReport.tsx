@@ -39,9 +39,7 @@ export default function WeeklyReport({
               프로젝트 기간: {report.project_period}
             </div>
             <div className='mb-6'>
-              <h3 className='text-md font-semibold text-muted-foreground mb-2'>
-                개요
-              </h3>
+              <h3 className='text-xl font-bold text-foreground mb-4'>개요</h3>
               <p className='text-foreground'>{report.summary}</p>
             </div>
 

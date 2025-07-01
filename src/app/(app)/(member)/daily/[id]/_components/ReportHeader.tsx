@@ -18,7 +18,7 @@ export function ReportHeader({ title, summary }: ReportHeaderProps) {
   const name = nameMatch ? nameMatch[1] : "";
 
   return (
-    <div className='bg-muted/20'>
+    <div>
       <div className='max-w-4xl mx-auto px-8 py-8'>
         {/* 보고서 제목 */}
         <div className='text-center mb-8'>
