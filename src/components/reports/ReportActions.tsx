@@ -38,7 +38,11 @@ export function ReportActions({
     <div className={`flex items-center justify-between p-6 pb-0 ${className}`}>
       <div className='flex items-center space-x-4'>
         <Link href={backHref}>
-          <Button variant='outline' size='sm'>
+          <Button
+            variant='outline'
+            size='sm'
+            className='hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-200'
+          >
             <ArrowLeft className='mr-2 h-4 w-4' />
             {backButtonText}
           </Button>
