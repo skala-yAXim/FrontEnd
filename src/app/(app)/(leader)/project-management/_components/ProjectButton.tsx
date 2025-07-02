@@ -12,7 +12,7 @@ export function AddProjectButton() {
   };
 
   return (
-    <Button onClick={handleAddProject} className='hover:cursor-pointer'>
+    <Button onClick={handleAddProject}>
       <Plus className='w-4 h-4' />
       프로젝트 추가
     </Button>

@@ -403,7 +403,7 @@ export function ProjectForm({
       </div>
 
       {/* 액션 버튼 */}
-      <div className='flex justify-end gap-3 pt-4 hover:cursor-pointer'>
+      <div className='flex justify-end gap-3 pt-4'>
         <Button
           variant='outline'
           onClick={handleCancelRequest}

@@ -211,7 +211,7 @@ export default function TeamWeeklySettingPage() {
                         size='sm'
                         onClick={() => loadTemplateExample("basic")}
                         disabled={isTeamInfoLoading || isSubmitting}
-                        className='text-xs hover:bg-primary/10 hover:text-primary transition-colors'
+                        className='text-xs border hover:bg-primary/10 hover:text-primary transition-colors'
                       >
                         기본 템플릿
                       </Button>
@@ -220,7 +220,7 @@ export default function TeamWeeklySettingPage() {
                         size='sm'
                         onClick={() => loadTemplateExample("detailed")}
                         disabled={isTeamInfoLoading || isSubmitting}
-                        className='text-xs hover:bg-primary/10 hover:text-primary transition-colors'
+                        className='text-xs border hover:bg-primary/10 hover:text-primary transition-colors'
                       >
                         상세 템플릿
                       </Button>
@@ -229,7 +229,7 @@ export default function TeamWeeklySettingPage() {
                         size='sm'
                         onClick={() => loadTemplateExample("agile")}
                         disabled={isTeamInfoLoading || isSubmitting}
-                        className='text-xs hover:bg-primary/10 hover:text-primary transition-colors'
+                        className='text-xs border hover:bg-primary/10 hover:text-primary transition-colors'
                       >
                         애자일 템플릿
                       </Button>
@@ -269,9 +269,10 @@ export default function TeamWeeklySettingPage() {
 
                 <div className='flex justify-end'>
                   <Button
+                    variant='outline'
                     onClick={handleSaveTemplate}
                     disabled={isSubmitting || isTeamInfoLoading}
-                    className='px-8 bg-primary hover:bg-primary/80 text-primary-foreground'
+                    className='px-8'
                   >
                     {isSubmitting ? (
                       <div className='flex items-center gap-2'>

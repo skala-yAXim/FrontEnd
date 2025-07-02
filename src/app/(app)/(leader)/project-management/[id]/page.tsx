@@ -139,11 +139,7 @@ export default async function ProjectDetailPage({
                         </div>
                       </div>
                       <a href={file.fileUrl} download={file.originalFileName}>
-                        <Button
-                          size='sm'
-                          variant='outline'
-                          className='flex items-center gap-2 hover:cursor-pointer'
-                        >
+                        <Button size='sm' variant='outline'>
                           <Download className='w-4 h-4' />
                           다운로드
                         </Button>

@@ -195,7 +195,7 @@ export default function ManagerWeeklyPage() {
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant='outline' size='sm' className='h-8'>
+                    <Button variant='outline' size='sm'>
                       {filters.selectedMembers.length === 0
                         ? "전체"
                         : `${filters.selectedMembers.length}명 선택`}
@@ -257,7 +257,7 @@ export default function ManagerWeeklyPage() {
               <Button
                 onClick={handleSearch}
                 size='sm'
-                className='h-8 ml-auto'
+                className='ml-auto'
                 disabled={filters.selectedMembers.length === 0}
               >
                 <Search className='h-3 w-3 mr-1' />
