@@ -1,6 +1,5 @@
 "use client";
 
-import PageHeader from "@/components/PageHeader";
 import { Card } from "@/components/ui/card";
 import { containerVariants, itemVariants } from "@/const/animate";
 import { motion } from "framer-motion";
@@ -25,18 +24,6 @@ export default function DashboardPage() {
         animate={isLoaded ? "visible" : "hidden"}
         variants={containerVariants}
       >
-        <motion.div
-          className='z-10'
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <PageHeader
-            title='대시보드'
-            description='지난 일주일 간의 활동 요약 및 통계'
-          />
-        </motion.div>
-
         <motion.div
           className='z-10 mb-6 px-4 lg:px-6'
           initial={{ opacity: 0, y: 20 }}
@@ -81,8 +68,6 @@ export default function DashboardPage() {
               </div>
             </Card>
           </motion.div>
-
-          {/* <DataTable data={data} /> */}
         </div>
       </motion.div>
     </div>
