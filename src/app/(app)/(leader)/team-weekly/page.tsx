@@ -17,7 +17,7 @@ export default function TeamWeeklyPage() {
 
   useEffect(() => {
     setIsLoaded(true);
-  });
+  }, []);
 
   // 페이지네이션 훅 사용
   const pagination = useServerPagination({

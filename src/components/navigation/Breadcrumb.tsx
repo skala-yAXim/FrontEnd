@@ -38,9 +38,7 @@ export function Breadcrumb() {
   const dailyId = dailyIdMatch ? Number(dailyIdMatch[1]) : null;
 
   // ID가 있으면 데이터 가져오기
-  const { data: reportData } = useGetDailyReport(dailyId!, {
-    enabled: !!dailyId,
-  });
+  const { data: reportData } = useGetDailyReport(dailyId!);
 
   // 현재 경로에서 Breadcrumb 생성
   const breadcrumbs = useMemo(() => {
