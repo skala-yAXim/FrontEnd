@@ -61,17 +61,17 @@ export function ReportContent({ contents }: ReportContentProps) {
 
                         {/* 출처 내용 */}
                         <div className='bg-muted/80 p-3 rounded'>
-                          {renderSafeContent(ev.detailed_activities)}
+                          {renderSafeContent(ev.detailed_activities.join("\n"))}
                         </div>
 
                         {/* AI 분석 근거 */}
-                        {ev.LLM_reference && (
+                        {ev.llm_reference && (
                           <>
                             <div className='border-t border-border/50'></div>
                             {renderSectionHeader("🤖", "AI 분석 근거")}
                             <div className='bg-muted/80 p-3 rounded'>
                               {renderSafeContent(
-                                ev.LLM_reference,
+                                ev.llm_reference,
                                 "▸",
                                 "-ml-0"
                               )}

@@ -9,19 +9,20 @@ export interface WeeklyReport {
     report_title: string;
     weekly_report: Report[];
     weekly_reflection: WeeklyReflection;
-    next_week_schedule: NextWeekSchedule[];
   };
 }
 
 export interface Evidence {
   source: string;
   title: string;
-  detailed_activities: string;
-  LLM_reference: string;
+  detailed_activities: string[];
+  llm_reference: string;
 }
 
 export interface ReportContent {
   text: string;
+  task_id: string | null;
+  task: string | null;
   evidence: Evidence[];
 }
 
@@ -31,9 +32,11 @@ export interface Report {
   summary: string;
   project_period: string;
   contents: ReportContent[];
+  next_week_schedule: NextWeekSchedule[];
 }
 
 export interface WeeklyReflection {
+  title: string;
   content: string[];
 }
 
