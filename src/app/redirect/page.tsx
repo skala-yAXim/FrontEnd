@@ -1,11 +1,12 @@
 "use client";
 
 import { AnimatedItem, AnimatedLayout } from "@/components/AnimatedLayout";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { httpInterface } from "@/lib/api/httpInterface";
 import { useAuthStore } from "@/store/authStore";
 import { User } from "@/types/userType";
 import { motion } from "framer-motion";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -143,21 +144,13 @@ export default function RedirectPage() {
                           : "bg-red-100"
                     }`}
                     animate={{
-                      scale: [1, 1.05, 1],
-                      rotate: status === "loading" ? [0, 360] : 0,
+                      scale: [1, 1.05, 1], // rotate 줄 삭제
                     }}
                     transition={{
-                      scale: { duration: 2, repeat: Infinity },
-                      rotate: {
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "linear",
-                      },
+                      scale: { duration: 2, repeat: Infinity }, // rotate 관련 4줄 삭제
                     }}
                   >
-                    {status === "loading" && (
-                      <Loader2 className='w-8 h-8 text-primary' />
-                    )}
+                    {status === "loading" && <LoadingSpinner size='lg' />}
                     {status === "success" && (
                       <motion.div
                         initial={{ scale: 0 }}

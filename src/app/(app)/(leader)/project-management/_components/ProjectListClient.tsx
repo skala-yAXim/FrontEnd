@@ -8,11 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import DataTable, { Column } from "@/components/ui/data-table";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useDeleteProject, useGetProjects } from "@/hooks/useProjectQueries";
 import { useServerPagination } from "@/hooks/useServerPagination";
 import { Project } from "@/types/projectType";
 import { getStatusColor } from "@/utils/statusColor";
-import { AlertCircle, ChevronLeft, Trash2 } from "lucide-react";
+import { AlertCircle, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 // API 응답이 프로젝트 배열만 반환하고 페이지 정보가 없다면,
@@ -134,7 +135,7 @@ export default function ProjectListClient() {
   if (isLoading) {
     return (
       <div className='flex items-center justify-center p-10'>
-        <ChevronLeft className='w-8 h-8 animate-spin text-muted-foreground' />
+        <LoadingSpinner size='lg' className='text-muted-foreground' />
         <p className='ml-2 text-muted-foreground'>
           프로젝트 목록을 불러오는 중입니다...
         </p>
@@ -156,9 +157,9 @@ export default function ProjectListClient() {
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full mt-6'>
       <div className='w-full max-w-none'>
-        <CardContent className='p-0'>
+        <CardContent className='p-6'>
           {projectToDelete && (
             <div className='p-6 border-b'>
               <Alert variant={deleteError ? "destructive" : "warning"}>

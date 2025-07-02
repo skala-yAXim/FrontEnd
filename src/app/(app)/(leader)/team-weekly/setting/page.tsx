@@ -4,6 +4,7 @@ import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetTeamInfo, usePostTemplate } from "@/hooks/useTeamQueries";
 import { motion } from "framer-motion";
@@ -258,7 +259,7 @@ export default function TeamWeeklySettingPage() {
                       transition={{ duration: 0.3 }}
                     >
                       <div className='flex flex-col items-center gap-2'>
-                        <div className='h-5 w-5 rounded-full border-2 border-primary/30 border-t-primary animate-spin'></div>
+                        <LoadingSpinner size='sm' />
                         <p className='text-sm font-medium text-muted-foreground'>
                           템플릿 불러오는 중...
                         </p>

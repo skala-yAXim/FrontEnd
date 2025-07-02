@@ -35,7 +35,7 @@ export function NavMain({
   }
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className='text-muted text-xs'>
+      <SidebarGroupLabel className='text-sidebar-foreground text-sm'>
         {groupLabel}
       </SidebarGroupLabel>
       <SidebarMenu>
@@ -46,7 +46,7 @@ export function NavMain({
                 asChild
                 tooltip={item.title}
                 disabled={item.disabled}
-                className='data-[state=open]:bg-accent/30 text-muted'
+                className='data-[state=open]:bg-sidebar-accent text-sidebar-foreground'
               >
                 <a
                   href={item.disabled ? undefined : item.url}
@@ -54,7 +54,7 @@ export function NavMain({
                   onClick={e => {
                     if (item.disabled) e.preventDefault();
                   }}
-                  className='group flex items-center gap-2 transition-all duration-200 ease-out hover:bg-accent/50 hover:text-accent-foreground'
+                  className='group flex items-center gap-2 transition-all duration-200 ease-out hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                 >
                   <item.icon className='transition-all duration-200 ease-out hover:scale-110' />
                   <span className='transition-all duration-200 ease-out hover:translate-x-1'>
