@@ -40,16 +40,16 @@ export default async function ProjectDetailPage({
                     <span>•</span>
                     <span>
                       생성일:{" "}
-                      {/* {new Date(projectDetail.createdAt).toLocaleDateString(
+                      {new Date(projectDetail.createdAt).toLocaleDateString(
                         "ko-KR"
-                      )} */}
+                      )}
                     </span>
                     <span>•</span>
                     <span>
                       수정일:{" "}
-                      {/* {new Date(projectDetail.updatedAt).toLocaleDateString(
+                      {new Date(projectDetail.updatedAt).toLocaleDateString(
                         "ko-KR"
-                      )} */}
+                      )}
                     </span>
                   </div>
                 </div>
@@ -103,6 +103,21 @@ export default async function ProjectDetailPage({
                   </div>
                 </div>
               </div>
+              {/* 진행도 정보 추가 */}
+              <div className='space-y-4'>
+                <h4 className='font-semibold flex items-center gap-2'>
+                  <FileText className='w-4 h-4' />
+                  진행 현황
+                </h4>
+                <div className='space-y-2 text-sm'>
+                  <div className='flex items-center gap-2'>
+                    <span className='text-muted-foreground'>진행도:</span>
+                    <span className='font-semibold text-primary'>
+                      {projectDetail.progress}%
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <Separator />
@@ -130,10 +145,10 @@ export default async function ProjectDetailPage({
                         <div>
                           <p className='font-medium'>{file.originalFileName}</p>
                           <p className='text-sm text-muted-foreground'>
-                            {/* {formatFileSize(file.size)} •{" "} */}
-                            {/* {new Date(file.uploadedAt).toLocaleDateString(
+                            {file.fileSize} •{" "}
+                            {new Date(file.createdAt).toLocaleDateString(
                               "ko-KR"
-                            )}{" "} */}
+                            )}{" "}
                             업로드
                           </p>
                         </div>

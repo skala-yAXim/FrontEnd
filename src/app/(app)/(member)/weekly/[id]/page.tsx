@@ -45,8 +45,8 @@ export default function WeeklyReportDetailPage() {
         onPdfDownload={handlePdfDownload}
       />
 
-      {/* 위클리 보고서 내용 */}
-      <WeeklyReport {...(data as WeeklyReportType)} />
+      {/* 위클리 보고서 내용 - 새로운 interface에 맞게 수정 */}
+      <WeeklyReport report={data as WeeklyReportType} />
     </div>
   );
 }

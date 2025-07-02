@@ -116,6 +116,17 @@ export default function ProjectListClient() {
       ),
     },
     {
+      key: "progress",
+      label: "진행도",
+      render: (value, item) => (
+        <div className='text-center'>
+          <span className='text-sm font-medium text-foreground'>
+            {item.progress}%
+          </span>
+        </div>
+      ),
+    },
+    {
       key: "id",
       label: "작업",
       render: (value, item) => (
