@@ -103,9 +103,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size='lg' asChild>
-              <Link href='/dashboard'>
-                {/* <div className='text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg'> */}
+            <SidebarMenuButton
+              size='lg'
+              asChild
+              className='text-sidebar-foreground'
+            >
+              <Link
+                href='/dashboard'
+                className='group flex items-center gap-3 transition-all duration-200 ease-out hover:bg-accent/50 hover:text-accent-foreground'
+              >
                 <Image
                   src='/favicon.png'
                   alt='SK Logo'
@@ -113,10 +119,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   width={30}
                   height={30}
                 />
-                {/* </div> */}
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-medium text-muted'>yAXim</span>
-                  <span className='truncate text-muted text-xs'>
+                  <span className='truncate font-medium'>yAXim</span>
+                  <span className='truncate text-sm'>
                     사내 업무 관리 플랫폼
                   </span>
                 </div>

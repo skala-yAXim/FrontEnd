@@ -1,7 +1,7 @@
 import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
 import type { GitHubInfo } from "@/types/githubType";
 import { PageRequest, PageResponse } from "@/types/pagination";
-import { Project } from "@/types/projectType";
+import { Project, ProjectResponse } from "@/types/projectType";
 import {
   DailyReportData,
   DailyReportList,
@@ -83,6 +83,19 @@ export class HttpInterface {
 
   async deleteProject<T>(projectId: number): Promise<T> {
     return this.apiClient.delete<T>(`/projects/${projectId}`);
+  }
+
+  // 프로젝트 수정 API 추가
+  async updateProject<T>(projectId: number, projectData: FormData): Promise<T> {
+    return this.apiClient.patchFormData<T>(
+      `/projects/${projectId}`,
+      projectData
+    );
+  }
+
+  // 프로젝트 상세 조회 API 추가 (수정 시 기존 데이터 로드용)
+  async getProjectDetail(projectId: number): Promise<ProjectResponse> {
+    return this.apiClient.get<ProjectResponse>(`/projects/${projectId}`);
   }
 
   async getGitInfo(): Promise<GitHubInfo> {

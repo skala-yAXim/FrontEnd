@@ -92,12 +92,7 @@ export default function CreateWeeklyReportPage() {
         <CardHeader>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-4'>
-              <Button
-                variant='ghost'
-                size='sm'
-                onClick={handleGoBack}
-                className='flex items-center gap-1'
-              >
+              <Button variant='ghost' size='sm' onClick={handleGoBack}>
                 <ArrowLeft className='w-4 h-4' />
                 뒤로가기
               </Button>

@@ -16,7 +16,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { AuthState, useAuthStore } from "@/store/authStore";
-import { ChevronsUpDown, LogOut, Settings, UserCircle } from "lucide-react";
+import { ChevronsUpDown, LogOut, UserCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -51,10 +51,10 @@ export const SidebarFooterDisplay = () => {
             >
               <Avatar className='mr-2 size-8 rounded-lg'>
                 <AvatarImage
-                  src={(user as any).avatar || undefined}
+                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name || "User"}`}
                   alt={user.name || "User"}
                 />
-                <AvatarFallback className='rounded-lg'>
+                <AvatarFallback className='rounded-lg bg-gradient-to-br from-primary/80 to-primary/40 text-white font-bold'>
                   {user.name ? user.name.charAt(0).toUpperCase() : "U"}
                 </AvatarFallback>
               </Avatar>
@@ -79,10 +79,10 @@ export const SidebarFooterDisplay = () => {
               <div className='flex items-center gap-2 px-2 py-1.5 text-left text-sm'>
                 <Avatar className='size-8 rounded-lg'>
                   <AvatarImage
-                    src={(user as any).avatar || undefined}
+                    src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name || "User"}`}
                     alt={user.name || "User"}
                   />
-                  <AvatarFallback className='rounded-lg'>
+                  <AvatarFallback className='rounded-lg bg-gradient-to-br from-primary/80 to-primary/40 text-white font-bold'>
                     {user.name ? user.name.charAt(0).toUpperCase() : "U"}
                   </AvatarFallback>
                 </Avatar>
@@ -102,12 +102,6 @@ export const SidebarFooterDisplay = () => {
                 <Link href='/mypage'>
                   <UserCircle className='mr-2 size-4' />
                   마이페이지
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href='/settings'>
-                  <Settings className='mr-2 size-4' />
-                  설정
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>

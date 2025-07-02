@@ -69,11 +69,11 @@
   --chart-4: 239 94% 68%; /* #6263F8 - 밝은 보라색 */
   --chart-5: 264 90% 68%; /* #9463F7 - 요청한 색상 */
   --sidebar: #11113f;
-  --sidebar-foreground: #252525;
+  --sidebar-foreground: #fbfbfb;
   --sidebar-primary: #343434;
   --sidebar-primary-foreground: #fbfbfb;
-  --sidebar-accent: #f8f8f8;
-  --sidebar-accent-foreground: #343434;
+  --sidebar-accent: #fbfbfb;
+  --sidebar-accent-foreground: #000000;
   --sidebar-border: #ebebeb;
   --sidebar-ring: #b4b4b4;
 }

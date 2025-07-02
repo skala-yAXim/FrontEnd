@@ -24,12 +24,12 @@ export function ProjectDetailActions({ projectId }: ProjectDetailActionsProps) {
   return (
     <div className='flex justify-between items-center mb-6'>
       <Button variant='outline' onClick={handleGoBack}>
-        <ArrowLeft className='w-4 h-4' />
+        <ArrowLeft className='w-4 h-4 hover:cursor-pointer' />
         뒤로가기
       </Button>
 
       <Button onClick={handleEditProject} className='flex items-center gap-2'>
-        <Edit className='w-4 h-4' />
+        <Edit className='w-4 h-4 hover:cursor-pointer' />
         프로젝트 수정
       </Button>
     </div>

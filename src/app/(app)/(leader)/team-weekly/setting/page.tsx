@@ -4,6 +4,7 @@ import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetTeamInfo, usePostTemplate } from "@/hooks/useTeamQueries";
 import { motion } from "framer-motion";
@@ -211,7 +212,7 @@ export default function TeamWeeklySettingPage() {
                         size='sm'
                         onClick={() => loadTemplateExample("basic")}
                         disabled={isTeamInfoLoading || isSubmitting}
-                        className='text-xs hover:bg-primary/10 hover:text-primary transition-colors'
+                        className='text-xs border hover:bg-primary/10 hover:text-primary transition-colors'
                       >
                         기본 템플릿
                       </Button>
@@ -220,7 +221,7 @@ export default function TeamWeeklySettingPage() {
                         size='sm'
                         onClick={() => loadTemplateExample("detailed")}
                         disabled={isTeamInfoLoading || isSubmitting}
-                        className='text-xs hover:bg-primary/10 hover:text-primary transition-colors'
+                        className='text-xs border hover:bg-primary/10 hover:text-primary transition-colors'
                       >
                         상세 템플릿
                       </Button>
@@ -229,7 +230,7 @@ export default function TeamWeeklySettingPage() {
                         size='sm'
                         onClick={() => loadTemplateExample("agile")}
                         disabled={isTeamInfoLoading || isSubmitting}
-                        className='text-xs hover:bg-primary/10 hover:text-primary transition-colors'
+                        className='text-xs border hover:bg-primary/10 hover:text-primary transition-colors'
                       >
                         애자일 템플릿
                       </Button>
@@ -258,7 +259,7 @@ export default function TeamWeeklySettingPage() {
                       transition={{ duration: 0.3 }}
                     >
                       <div className='flex flex-col items-center gap-2'>
-                        <div className='h-5 w-5 rounded-full border-2 border-primary/30 border-t-primary animate-spin'></div>
+                        <LoadingSpinner size='sm' />
                         <p className='text-sm font-medium text-muted-foreground'>
                           템플릿 불러오는 중...
                         </p>
@@ -269,9 +270,10 @@ export default function TeamWeeklySettingPage() {
 
                 <div className='flex justify-end'>
                   <Button
+                    variant='outline'
                     onClick={handleSaveTemplate}
                     disabled={isSubmitting || isTeamInfoLoading}
-                    className='px-8 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary shadow-md hover:shadow-lg transition-all duration-300'
+                    className='px-8'
                   >
                     {isSubmitting ? (
                       <div className='flex items-center gap-2'>

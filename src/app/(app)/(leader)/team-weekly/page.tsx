@@ -48,10 +48,7 @@ export default function TeamWeeklyPage() {
 
   const MyButton = () => {
     return (
-      <Button
-        onClick={handleCreateNew}
-        className='flex items-center gap-2 bg-primary hover:bg-primary/80 text-primary-foreground w-full'
-      >
+      <Button onClick={handleCreateNew} className='w-full'>
         <Settings className='w-4 h-4' />
         설정
       </Button>

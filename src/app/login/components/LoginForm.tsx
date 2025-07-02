@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -66,32 +67,11 @@ export function LoginForm() {
             <Button
               onClick={handleMicrosoftLogin}
               variant='outline'
-              className='w-full flex items-center justify-center px-4 py-6 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm'
+              className='w-full flex items-center justify-center px-4 py-6 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 hover:text-black dark:hover:bg-gray-700 dark:hover:text-black transition-colors shadow-sm'
               disabled={isLoading}
             >
               {isLoading ? (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 1,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
-                  className='mr-2'
-                >
-                  <svg className='w-5 h-5' viewBox='0 0 24 24'>
-                    <circle
-                      cx='12'
-                      cy='12'
-                      r='10'
-                      stroke='currentColor'
-                      strokeWidth='4'
-                      fill='none'
-                      strokeDasharray='32'
-                      strokeDashoffset='12'
-                    />
-                  </svg>
-                </motion.div>
+                <LoadingSpinner size='sm' className='mr-2' />
               ) : (
                 <motion.svg
                   className='w-5 h-5 mr-3'

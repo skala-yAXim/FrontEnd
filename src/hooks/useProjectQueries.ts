@@ -49,3 +49,34 @@ export const useDeleteProject = () => {
 
   return { deleteProject, isPending };
 };
+
+export const useUpdateProject = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: ({
+      projectId,
+      formData,
+    }: {
+      projectId: number;
+      formData: FormData;
+    }) => httpInterface.updateProject(projectId, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      router.push("/project-management");
+    },
+    onError: error => {
+      console.error("프로젝트 수정 실패:", error);
+    },
+  });
+};
+
+// 새로 추가: 프로젝트 상세 조회 Hook
+export const useGetProjectDetail = (projectId: string | null) => {
+  return useQuery({
+    queryKey: ["project", projectId],
+    queryFn: () => httpInterface.getProjectDetail(Number(projectId)),
+    enabled: !!projectId,
+  });
+};

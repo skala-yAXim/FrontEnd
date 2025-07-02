@@ -7,11 +7,13 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
+import DataTable, { Column } from "@/components/ui/data-table";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useDeleteProject, useGetProjects } from "@/hooks/useProjectQueries";
 import { useServerPagination } from "@/hooks/useServerPagination";
 import { Project } from "@/types/projectType";
 import { getStatusColor } from "@/utils/statusColor";
-import { AlertCircle, ChevronLeft, Trash2 } from "lucide-react";
+import { AlertCircle, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 // API 응답이 프로젝트 배열만 반환하고 페이지 정보가 없다면,
@@ -68,14 +70,72 @@ export default function ProjectListClient() {
     setDeleteError(null);
   };
 
-  const handleProjectDetail = (projectId: number) => {
-    router.push(`/project-management/${projectId}`);
+  const handleProjectDetail = (item: Project) => {
+    router.push(`/project-management/${item.id}`);
   };
+
+  // 테이블 컬럼 정의
+  const columns: Column<Project>[] = [
+    {
+      key: "name",
+      label: "프로젝트명",
+      render: value => <div className='font-medium'>{value}</div>,
+    },
+    {
+      key: "startDate",
+      label: "기간",
+      render: (value, item) => (
+        <div className='text-sm text-muted-foreground'>
+          <div>
+            {new Date(item.startDate).toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}{" "}
+            ~
+          </div>
+          <div>
+            {new Date(item.endDate).toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "status",
+      label: "상태",
+      render: value => (
+        <Badge
+          className={`${getStatusColor(value)} !hover:bg-current !hover:text-current pointer-events-none`}
+        >
+          {value}
+        </Badge>
+      ),
+    },
+    {
+      key: "id",
+      label: "작업",
+      render: (value, item) => (
+        <div className='flex items-center' onClick={e => e.stopPropagation()}>
+          <Button
+            size='sm'
+            variant='outline'
+            onClick={() => handleDeleteRequest(item)}
+          >
+            <Trash2 className='w-3 h-3' />
+          </Button>
+        </div>
+      ),
+    },
+  ];
 
   if (isLoading) {
     return (
       <div className='flex items-center justify-center p-10'>
-        <ChevronLeft className='w-8 h-8 animate-spin text-muted-foreground' />
+        <LoadingSpinner size='lg' className='text-muted-foreground' />
         <p className='ml-2 text-muted-foreground'>
           프로젝트 목록을 불러오는 중입니다...
         </p>
@@ -97,9 +157,9 @@ export default function ProjectListClient() {
   }
 
   return (
-    <div className='w-full'>
+    <div className='w-full mt-6'>
       <div className='w-full max-w-none'>
-        <CardContent className='p-0'>
+        <CardContent className='p-6'>
           {projectToDelete && (
             <div className='p-6 border-b'>
               <Alert variant={deleteError ? "destructive" : "warning"}>
@@ -145,88 +205,14 @@ export default function ProjectListClient() {
               </Alert>
             </div>
           )}
-          <div className='overflow-x-auto'>
-            <table className='w-full'>
-              <thead>
-                <tr className='border-b bg-muted/30'>
-                  <th className='text-left py-3 px-4 font-semibold text-sm'>
-                    프로젝트명
-                  </th>
-                  <th className='text-left py-3 px-4 font-semibold text-sm'>
-                    기간
-                  </th>
-                  <th className='text-left py-3 px-4 font-semibold text-sm'>
-                    상태
-                  </th>
-                  <th className='text-center py-3 px-4 font-semibold text-sm'>
-                    작업
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {projects.length === 0 && !isLoading ? (
-                  <tr>
-                    <td
-                      colSpan={4}
-                      className='text-center py-8 text-muted-foreground'
-                    >
-                      아직 프로젝트가 없습니다.
-                    </td>
-                  </tr>
-                ) : (
-                  projects.map(project => (
-                    <tr
-                      key={project.id}
-                      className='border-b hover:bg-primary/5 hover:shadow-lg transition-all duration-200 cursor-pointer'
-                      onClick={() => handleProjectDetail(project.id)}
-                    >
-                      <td className='py-3 px-4'>
-                        <div>
-                          <div className='font-medium'>{project.name}</div>
-                        </div>
-                      </td>
-                      <td className='py-3 px-4 text-sm text-muted-foreground'>
-                        <div>
-                          {new Date(project.startDate).toLocaleDateString(
-                            "ko-KR",
-                            { year: "numeric", month: "short", day: "numeric" }
-                          )}{" "}
-                          ~
-                        </div>
-                        <div>
-                          {new Date(project.endDate).toLocaleDateString(
-                            "ko-KR",
-                            { year: "numeric", month: "short", day: "numeric" }
-                          )}
-                        </div>
-                      </td>
-                      <td className='py-3 px-4'>
-                        <Badge
-                          className={`${getStatusColor(project.status)} !hover:bg-current !hover:text-current pointer-events-none`}
-                        >
-                          {project.status}
-                        </Badge>
-                      </td>
-                      <td
-                        className='py-3 px-4'
-                        onClick={e => e.stopPropagation()}
-                      >
-                        <div className='flex items-center justify-center'>
-                          <Button
-                            size='sm'
-                            variant='outline'
-                            onClick={() => handleDeleteRequest(project)}
-                          >
-                            <Trash2 className='w-3 h-3' />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+
+          <DataTable
+            data={projects}
+            columns={columns}
+            onRowClick={handleProjectDetail}
+            isLoading={isLoading}
+            emptyMessage='아직 프로젝트가 없습니다.'
+          />
 
           {/* 공통 Pagination 컴포넌트 사용 */}
           {totalPages > 0 && (

@@ -18,7 +18,7 @@ export function ReportHeader({ title, summary }: ReportHeaderProps) {
   const name = nameMatch ? nameMatch[1] : "";
 
   return (
-    <div className='bg-muted/20'>
+    <div>
       <div className='max-w-4xl mx-auto px-8 py-8'>
         {/* 보고서 제목 */}
         <div className='text-center mb-8'>
@@ -30,12 +30,6 @@ export function ReportHeader({ title, summary }: ReportHeaderProps) {
 
         {/* 보고서 정보 */}
         <div className='space-y-4 mb-6'>
-          <div className='flex items-center'>
-            <span className='text-lg font-semibold text-foreground min-w-[100px]'>
-              {name ? `${name}님의` : ""} 데일리 보고서
-            </span>
-          </div>
-
           {date && (
             <div className='flex items-center'>
               <span className='text-muted-foreground min-w-[60px] font-medium'>

@@ -11,6 +11,10 @@ import { Source } from "@/types/reportType";
 import { ReportContent as ReportContentType } from "@/types/weeklyReportType";
 import { formatBoldText } from "@/utils/formatBoldText";
 import { getSourceIcon } from "@/utils/getSourceIcon";
+import {
+  renderSafeContent,
+  renderSectionHeader,
+} from "@/utils/renderReportContent";
 
 interface ReportContentProps {
   contents: ReportContentType[];
@@ -46,40 +50,31 @@ export function ReportContent({ contents }: ReportContentProps) {
                         {getSourceIcon(ev.source as Source)}
                       </Badge>
                     </TooltipTrigger>
-                    <TooltipContent className='bg-popover text-sm px-4 py-3 border border-border shadow-lg max-w-md'>
-                      <div className='space-y-2'>
+                    <TooltipContent
+                      side='right'
+                      sideOffset={10}
+                      className='bg-popover border border-border shadow-lg text-sm px-4 py-3 max-w-lg'
+                    >
+                      <div className='space-y-3'>
                         {/* 출처 섹션 */}
-                        <div className='flex items-start gap-2'>
-                          <div className='mt-0.5'>📋</div>
-                          <div>
-                            <p className='font-semibold text-foreground'>
-                              출처
-                            </p>
-                            {/* <p className='text-sm text-muted-foreground'>
-                              {ev.title}
-                            </p> */}
-                          </div>
+                        {renderSectionHeader("📋", "출처", ev.title)}
+
+                        {/* 출처 내용 */}
+                        <div className='bg-muted/80 p-3 rounded'>
+                          {renderSafeContent(ev.detailed_activities)}
                         </div>
 
-                        {/* 내용 섹션 */}
-                        <div className='text-sm text-muted-foreground bg-muted/50 p-2 rounded'>
-                          {ev.content}
-                        </div>
-
-                        {/* LLM 참조 섹션 */}
+                        {/* AI 분석 근거 */}
                         {ev.LLM_reference && (
                           <>
                             <div className='border-t border-border/50'></div>
-                            <div className='flex items-start gap-2'>
-                              <div className='text-muted-foreground'>🤖</div>
-                              <div>
-                                <p className='font-semibold text-foreground mb-1'>
-                                  AI가 생각한 근거
-                                </p>
-                                <p className='text-sm text-muted-foreground leading-relaxed'>
-                                  {ev.LLM_reference}
-                                </p>
-                              </div>
+                            {renderSectionHeader("🤖", "AI 분석 근거")}
+                            <div className='bg-muted/80 p-3 rounded'>
+                              {renderSafeContent(
+                                ev.LLM_reference,
+                                "▸",
+                                "-ml-0"
+                              )}
                             </div>
                           </>
                         )}

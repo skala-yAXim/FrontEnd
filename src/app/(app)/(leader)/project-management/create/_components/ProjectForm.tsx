@@ -24,6 +24,8 @@ interface ProjectFormProps {
   onSubmit: (form: ProjectCreateForm) => void;
   onCancel: () => void;
   isSubmitting?: boolean;
+  initialData?: ProjectCreateForm; // 추가
+  isEditMode?: boolean; // 추가
 }
 
 // 기간 계산 함수
@@ -42,8 +44,10 @@ export function ProjectForm({
   onSubmit,
   onCancel,
   isSubmitting,
+  initialData, // 추가
+  isEditMode = false, // 추가
 }: ProjectFormProps) {
-  // 폼 상태
+  // 초기값을 initialData 또는 기본값으로 설정
   const [form, setForm] = React.useState<ProjectCreateForm>({
     name: "",
     startDate: "",
@@ -51,6 +55,13 @@ export function ProjectForm({
     description: "",
     files: [],
   });
+
+  // initialData 변경 시 form 업데이트
+  React.useEffect(() => {
+    if (initialData) {
+      setForm(initialData);
+    }
+  }, [initialData]);
 
   // 확인 상태
   const [showConfirmCreate, setShowConfirmCreate] = React.useState(false);
@@ -217,8 +228,8 @@ export function ProjectForm({
       {/* 등록 확인 메시지 */}
       {showConfirmCreate && (
         <ConfirmDialog
-          title='등록'
-          message={`"${form.name}" 프로젝트를 등록하시겠습니까?`}
+          title={isEditMode ? "수정" : "등록"} // 'title' 분기 처리 추가
+          message={`"${form.name}" 프로젝트를 ${isEditMode ? "수정" : "등록"}하시겠습니까?`} // 'message' 분기 처리 추가
           onConfirm={handleCreateConfirm}
           onCancel={handleDismissConfirm}
         />
@@ -404,9 +415,15 @@ export function ProjectForm({
         <Button
           onClick={handleCreateRequest}
           disabled={isDialogOpen || isSubmitting}
-          className='h-10 px-6 bg-blue-600 hover:bg-blue-700'
+          className='h-10 px-6'
         >
-          {isSubmitting ? "등록 중..." : "프로젝트 등록"}
+          {isSubmitting
+            ? isEditMode
+              ? "수정 중..."
+              : "등록 중..."
+            : isEditMode
+              ? "프로젝트 수정"
+              : "프로젝트 등록"}
         </Button>
       </div>
     </div>
