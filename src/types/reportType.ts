@@ -3,7 +3,7 @@ export type Source = "GIT" | "DOCS" | "TEAMS" | "EMAIL";
 export interface Evidence {
   source: Source;
   title: string;
-  content: string;
+  detailed_activities: string;
   llm_reference: string;
 }
 

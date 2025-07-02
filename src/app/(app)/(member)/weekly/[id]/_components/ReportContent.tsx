@@ -61,7 +61,7 @@ export function ReportContent({ contents }: ReportContentProps) {
 
                         {/* 출처 내용 */}
                         <div className='bg-muted/80 p-3 rounded'>
-                          {renderSafeContent(ev.content)}
+                          {renderSafeContent(ev.detailed_activities)}
                         </div>
 
                         {/* AI 분석 근거 */}

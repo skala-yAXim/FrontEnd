@@ -92,7 +92,7 @@ export function WeeklyReportContent({ contents }: WeeklyReportContentProps) {
                       </div>
                     </div>
                     <p className='text-sm text-muted-foreground whitespace-pre-wrap'>
-                      {ev.content}
+                      {ev.detailed_activities}
                     </p>
                   </div>
                 </div>

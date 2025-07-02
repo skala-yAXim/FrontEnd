@@ -16,7 +16,7 @@ export interface WeeklyReport {
 export interface Evidence {
   source: string;
   title: string;
-  content: string;
+  detailed_activities: string;
   LLM_reference: string;
 }
 
