@@ -17,7 +17,6 @@ export default function WeeklyReport({
 }: WeeklyReportType) {
   const weeklyReport = report.weekly_report;
   const weeklyReflection = report.weekly_reflection;
-  const nextWeekSchedule = report.next_week_schedule;
 
   return (
     <ReportLayout>
@@ -45,23 +44,31 @@ export default function WeeklyReport({
 
             {/* 클라이언트 컴포넌트 - 인터랙티브 콘텐츠 */}
             <ReportContent contents={report.contents} />
+
+            {/* 각 프로젝트별 차주 계획 추가 */}
+            {report.next_week_schedule.length > 0 && (
+              <div className='mt-8'>
+                <h3 className='text-lg font-bold text-foreground mb-4'>
+                  [{report.project_name}] 차주 계획
+                </h3>
+                <NextWeekScheduleSection
+                  schedules={report.next_week_schedule}
+                />
+              </div>
+            )}
           </div>
         );
       })}
 
       {/* 주간 회고 */}
       <div className='max-w-4xl mx-auto mb-8 p-6'>
-        <h2 className='text-xl font-bold text-foreground mb-4'>주간 회고</h2>
-        <div className='h-0.5 w-full bg-muted-foreground/50 mb-4'></div>
+        <h2 className='text-xl font-bold text-foreground mb-4'>
+          {weeklyReflection.title}
+        </h2>
         <ReflectionSection content={weeklyReflection.content} />
       </div>
 
-      {/* 차주 계획 */}
-      <div className='max-w-4xl mx-auto mb-8 p-6'>
-        <h2 className='text-xl font-bold text-foreground mb-4'>차주 계획</h2>
-        <div className='h-0.5 w-full bg-muted-foreground/50 mb-4'></div>
-        <NextWeekScheduleSection schedules={nextWeekSchedule} />
-      </div>
+      {/* 기존 차주 계획 섹션 제거*/}
     </ReportLayout>
   );
 }
