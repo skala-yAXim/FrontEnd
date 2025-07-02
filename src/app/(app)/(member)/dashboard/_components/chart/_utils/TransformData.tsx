@@ -38,14 +38,10 @@ export function transformToAvgChartData(
     docs: actualData.map((item, idx) => {
       const day = weekDays[new Date(item.report_date).getDay()];
       const value =
-        safe(item.docs.docx) +
-        safe(item.docs.xlsx) +
-        safe(item.docs.txt) +
-        safe(item.docs.etc);
+        safe(item.docs.docx) + safe(item.docs.xlsx) + safe(item.docs.etc);
       const avg =
         safe(averageData[idx].docs.docx) +
         safe(averageData[idx].docs.xlsx) +
-        safe(averageData[idx].docs.txt) +
         safe(averageData[idx].docs.etc);
       return { day, docs: value, avg };
     }),
@@ -80,10 +76,7 @@ export function aggregateToWeekdayChart(
       safe(item.git.commit) +
       safe(item.git.issue);
     summary[day].docs +=
-      safe(item.docs.docx) +
-      safe(item.docs.xlsx) +
-      safe(item.docs.txt) +
-      safe(item.docs.etc);
+      safe(item.docs.docx) + safe(item.docs.xlsx) + safe(item.docs.etc);
     summary[day].teams += safe(item.teams.post);
   });
 

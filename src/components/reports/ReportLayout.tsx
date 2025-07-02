@@ -13,7 +13,9 @@ interface ReportLayoutProps {
 export function ReportLayout({ children, className = "" }: ReportLayoutProps) {
   return (
     <div className='min-h-screen bg-gray-50 dark:bg-gray-900 p-4'>
-      <div className={`bg-white dark:bg-gray-800 w-full max-w-5xl rounded-lg mx-auto py-8 px-4 sm:px-6 lg:px-16 shadow-lg ${className}`}>
+      <div
+        className={`bg-white dark:bg-gray-800 w-full max-w-5xl rounded-lg mx-auto py-8 px-4 sm:px-6 lg:px-16 shadow-lg ${className}`}
+      >
         {children}
       </div>
     </div>
