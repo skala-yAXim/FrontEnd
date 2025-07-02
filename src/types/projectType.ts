@@ -4,6 +4,7 @@ export interface Project {
   startDate: string;
   endDate: string;
   status: string;
+  progress: number;
 }
 
 // 프로젝트 등록 폼 인터페이스
@@ -16,12 +17,13 @@ export interface ProjectCreateForm {
 }
 
 // 첨부 파일 인터페이스
-export interface ProjectFile {
-  id: string;
-  name: string;
-  size: number;
-  type: string;
-  file: File;
+export interface Files {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  originalFileName: string;
+  fileUrl: string;
+  fileSize: string;
 }
 
 export interface ProjectFileReq {
@@ -29,7 +31,7 @@ export interface ProjectFileReq {
   name: string;
   size: number;
   type: string;
-  file: File;
+  file: Files;
 }
 
 // 에러 타입
@@ -39,18 +41,15 @@ export interface FormErrors {
 
 export type ProjectStatus = "PLANNING" | "IN_PROGRESS" | "COMPLETED";
 
-export interface ProjectFile {
-  id: string;
-  originalFileName: string;
-  fileUrl: string;
-}
-
 export interface ProjectResponse {
   id: number;
+  createdAt: string;
+  updatedAt: string;
   name: string;
   startDate: string; // ISO 8601 날짜 문자열
   endDate: string;
   description: string;
   status: ProjectStatus;
-  files: ProjectFile[];
+  progress: number;
+  files: Files[];
 }

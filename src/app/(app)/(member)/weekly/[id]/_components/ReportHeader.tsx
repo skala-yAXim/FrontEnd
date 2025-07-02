@@ -12,9 +12,6 @@ interface ReportHeaderProps {
  * 서버 컴포넌트 - 정적 제목과 요약 표시
  */
 export function ReportHeader({ title, startDate, endDate }: ReportHeaderProps) {
-  const nameMatch = title.match(/^(.+?)님의/);
-  const name = nameMatch ? nameMatch[1] : "";
-
   return (
     <div>
       <div className='max-w-4xl mx-auto px-8 py-4'>
