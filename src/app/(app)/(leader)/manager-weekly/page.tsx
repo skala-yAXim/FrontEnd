@@ -14,21 +14,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   useGetMemberWeeklyReports,
   useGetTeamMembers,
 } from "@/hooks/useMemberWeeklyQueries";
 import { useServerPagination } from "@/hooks/useServerPagination";
-import { Calendar, ChevronDown, Search, Users, X } from "lucide-react";
+import { useManagerWeeklyFilterStore } from "@/store/filterStore";
+import { Calendar, ChevronDown, Users, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-interface FilterState {
-  selectedMembers: string[];
-  startDate: string;
-  endDate: string;
-}
+// 👇 새로 추가된 imports
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useDateRangeFilter } from "@/hooks/useDateRangeFilter";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
+import { CalendarDays } from "lucide-react";
 
 export default function ManagerWeeklyPage() {
   const router = useRouter();
@@ -40,17 +46,11 @@ export default function ManagerWeeklyPage() {
     initialSort: "createdAt,desc",
   });
 
-  const [filters, setFilters] = React.useState<FilterState>({
-    selectedMembers: [],
-    startDate: "2025-01-01",
-    endDate: "2025-12-31",
-  });
+  const { selectedMembers, addMember, removeMember } =
+    useManagerWeeklyFilterStore();
 
-  const [searchParams, setSearchParams] = React.useState<FilterState>({
-    selectedMembers: [],
-    startDate: "2025-01-01",
-    endDate: "2025-12-31",
-  });
+  // 👇 새로 추가된 Hook
+  const dateFilter = useDateRangeFilter();
 
   // 정렬 상태
   const [sortState, setSortState] = React.useState<SortState<any>>({
@@ -60,9 +60,9 @@ export default function ManagerWeeklyPage() {
 
   const { data: memberReports, isLoading: isLoadingReports } =
     useGetMemberWeeklyReports(pagination.pageRequest, {
-      userId: searchParams.selectedMembers,
-      startDate: searchParams.startDate,
-      endDate: searchParams.endDate,
+      userId: selectedMembers,
+      startDate: dateFilter.currentStartDate,
+      endDate: dateFilter.currentEndDate,
     });
 
   const totalItems = memberReports?.totalElements || 0;
@@ -129,34 +129,21 @@ export default function ManagerWeeklyPage() {
   ];
 
   const handleMemberToggle = (memberId: string) => {
-    setFilters(prev => ({
-      ...prev,
-      selectedMembers: prev.selectedMembers.includes(memberId)
-        ? prev.selectedMembers.filter(id => id !== memberId)
-        : [...prev.selectedMembers, memberId],
-    }));
+    if (selectedMembers.includes(memberId)) {
+      removeMember(memberId);
+    } else {
+      addMember(memberId);
+    }
   };
 
   const handleMemberRemove = (memberId: string) => {
-    setFilters(prev => ({
-      ...prev,
-      selectedMembers: prev.selectedMembers.filter(id => id !== memberId),
-    }));
-  };
-
-  const handleDateChange = (field: "startDate" | "endDate", value: string) => {
-    setFilters(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleSearch = () => {
-    setSearchParams({ ...filters });
-    pagination.onPageChange(1);
+    removeMember(memberId);
   };
 
   const getSelectedMembers = () => {
     return (
       teamMembers?.filter(member =>
-        filters.selectedMembers.includes(member.id.toString())
+        selectedMembers.includes(member.id.toString())
       ) || []
     );
   };
@@ -175,8 +162,8 @@ export default function ManagerWeeklyPage() {
     );
   }
 
-  const selectedMembers = getSelectedMembers();
-  const hasSelectedMembers = searchParams.selectedMembers.length > 0;
+  const selectedMemberObjects = getSelectedMembers();
+  const hasSelectedMembers = selectedMembers.length > 0;
 
   return (
     <div>
@@ -196,9 +183,9 @@ export default function ManagerWeeklyPage() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant='outline' size='sm'>
-                      {filters.selectedMembers.length === 0
+                      {selectedMembers.length === 0
                         ? "전체"
-                        : `${filters.selectedMembers.length}명 선택`}
+                        : `${selectedMembers.length}명 선택`}
                       <ChevronDown className='h-3 w-3 ml-1' />
                     </Button>
                   </DropdownMenuTrigger>
@@ -208,9 +195,7 @@ export default function ManagerWeeklyPage() {
                     {teamMembers?.map(member => (
                       <DropdownMenuCheckboxItem
                         key={member.id}
-                        checked={filters.selectedMembers.includes(
-                          member.id.toString()
-                        )}
+                        checked={selectedMembers.includes(member.id.toString())}
                         onCheckedChange={() =>
                           handleMemberToggle(member.id.toString())
                         }
@@ -228,50 +213,81 @@ export default function ManagerWeeklyPage() {
                 </DropdownMenu>
               </div>
 
-              {/* 날짜 범위 필터 */}
+              {/* 날짜 범위 필터 - 👇 Calendar Popover로 교체됨 */}
               <div className='flex items-center gap-2'>
                 <div className='flex items-center gap-2 text-sm font-medium text-muted-foreground'>
                   <Calendar className='h-4 w-4' />
                   기간:
                 </div>
                 <div className='flex items-center gap-1'>
-                  <Input
-                    type='date'
-                    value={filters.startDate}
-                    onChange={e =>
-                      handleDateChange("startDate", e.target.value)
-                    }
-                    className='h-8 w-36 text-xs'
-                  />
+                  {/* 시작일 Calendar Popover */}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='h-8 w-36 justify-start text-xs'
+                      >
+                        <CalendarDays className='h-3 w-3 mr-1' />
+                        {dateFilter.currentStartDate
+                          ? format(
+                              new Date(dateFilter.currentStartDate),
+                              "yyyy-MM-dd"
+                            )
+                          : "시작일"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className='w-auto p-0'>
+                      <CalendarComponent
+                        mode='single'
+                        selected={dateFilter.tempStartDate}
+                        onSelect={dateFilter.applyStartDate}
+                        locale={ko}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+
                   <span className='text-muted-foreground'>~</span>
-                  <Input
-                    type='date'
-                    value={filters.endDate}
-                    onChange={e => handleDateChange("endDate", e.target.value)}
-                    className='h-8 w-36 text-xs'
-                  />
+
+                  {/* 종료일 Calendar Popover */}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='h-8 w-36 justify-start text-xs'
+                      >
+                        <CalendarDays className='h-3 w-3 mr-1' />
+                        {dateFilter.currentEndDate
+                          ? format(
+                              new Date(dateFilter.currentEndDate),
+                              "yyyy-MM-dd"
+                            )
+                          : "종료일"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className='w-auto p-0'>
+                      <CalendarComponent
+                        mode='single'
+                        selected={dateFilter.tempEndDate}
+                        onSelect={dateFilter.applyEndDate}
+                        locale={ko}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
-
-              {/* 검색 버튼 */}
-              <Button
-                onClick={handleSearch}
-                size='sm'
-                className='ml-auto'
-                disabled={filters.selectedMembers.length === 0}
-              >
-                <Search className='h-3 w-3 mr-1' />
-                검색
-              </Button>
             </div>
 
             {/* 선택된 팀원 태그들 */}
-            {selectedMembers.length > 0 && (
+            {selectedMemberObjects.length > 0 && (
               <div className='flex flex-wrap gap-2 mt-3 pt-3 border-t border-border/50'>
                 <span className='text-xs font-medium text-muted-foreground'>
                   선택된 팀원:
                 </span>
-                {selectedMembers.map(member => (
+                {selectedMemberObjects.map(member => (
                   <Badge
                     key={member.id}
                     variant='secondary'
@@ -291,7 +307,7 @@ export default function ManagerWeeklyPage() {
           </div>
 
           {/* 보고서 테이블 */}
-          {searchParams.selectedMembers.length === 0 ? (
+          {selectedMembers.length === 0 ? (
             <div className='text-center py-12 text-muted-foreground'>
               <Users className='h-12 w-12 mx-auto mb-4 opacity-50' />
               <p className='text-lg font-medium mb-2'>팀원을 선택해주세요</p>
