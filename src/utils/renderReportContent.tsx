@@ -9,32 +9,26 @@ const renderSafeContent = (
   marginClass: string = ""
 ) => {
   if (!content) {
-    return (
-      <p className='text-sm text-muted-foreground italic'>내용이 없습니다.</p>
-    );
+    return <p className='text-sm text-foreground'>내용이 없습니다.</p>;
   }
 
   const contentStr = String(content).trim();
   if (!contentStr) {
-    return (
-      <p className='text-sm text-muted-foreground italic'>
-        내용이 비어있습니다.
-      </p>
-    );
+    return <p className='text-sm text-foreground'>내용이 비어있습니다.</p>;
   }
 
   const formattedItems = formatToReadableList(contentStr);
 
   if (formattedItems.length == 0) {
     return (
-      <p className='text-sm text-muted-foreground leading-relaxed'>
+      <p className='text-sm text-foreground leading-relaxed'>
         {formatBoldTextNew(contentStr)}
       </p>
     );
   }
 
   return (
-    <div className={`text-sm text-muted-foreground space-y-2 ${marginClass}`}>
+    <div className={`text-sm text-foreground space-y-2 ${marginClass}`}>
       {formattedItems.map((item, idx) => (
         <div key={idx} className='pl-4 relative leading-relaxed'>
           <span className='absolute left-0 top-1 text-xs'>{bulletSymbol}</span>
@@ -57,7 +51,7 @@ const renderSectionHeader = (
     </div>
     <div className='flex-1'>
       <p className='font-semibold text-popover-foreground mb-1'>{title}</p>
-      {subtitle && <p className='text-sm text-muted-foreground'>{subtitle}</p>}
+      {subtitle && <p className='text-sm text-foreground'>{subtitle}</p>}
     </div>
   </div>
 );

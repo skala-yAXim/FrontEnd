@@ -7,10 +7,12 @@ import { ReportSkeleton } from "@/components/reports/ReportSkeleton";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useGetTeamWeeklyReport } from "@/hooks/useTeamWeeklyQueries";
+import { useWordDownload } from "@/hooks/useWordDownload";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 import ReportHeader from "./_components/ReportHeader";
 import TeamWeeklyReport from "./_components/TeamWeeklyReport";
 import TeamWeeklyReportDetail from "./_components/TeamWeeklyReportDetail";
@@ -50,6 +52,10 @@ export default function TeamWeeklyDetailPage() {
   const detailContentRef = useRef<HTMLDivElement>(null);
   const detailContainerRef = useRef<HTMLDivElement>(null);
 
+  const { downloadWord } = useWordDownload({
+    filename: `팀 주간 업무 보고서_${new Date().toISOString().split("T")[0]}.docx`,
+  });
+
   const [isOpen, setIsOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -60,11 +66,15 @@ export default function TeamWeeklyDetailPage() {
     isError,
   } = useGetTeamWeeklyReport(Number(reportId));
 
-  // PDF 다운로드 핸들러
-  const handleDownloadPDF = () => {
-    // TODO: API 호출 - PDF 생성 및 다운로드
-    console.log("PDF 다운로드:", reportId);
-    alert("PDF 다운로드 기능은 개발 중입니다.");
+  // MD 다운로드 핸들러
+  const handleDownloadWord = () => {
+    if (reportData?.reportMd) {
+      // 한글 파일명: 팀 주간 업무 보고서_날짜.md
+      const filename = `팀 주간 업무 보고서_${reportData.startDate || new Date().toISOString().split("T")[0]}.docx`;
+      downloadWord(reportData.reportMd, filename);
+    } else {
+      toast.error("마크다운 데이터가 없습니다.");
+    }
   };
 
   // 스크롤 함수
@@ -131,11 +141,12 @@ export default function TeamWeeklyDetailPage() {
   }
 
   return (
-    <div className='space-y-6 bg-muted rounded-2xl '>
+    <div className='space-y-6 bg-muted rounded-2xl'>
       <ReportActions
         backHref='/team-weekly'
         title='팀 주간 보고서 상세'
-        onPdfDownload={handleDownloadPDF}
+        onPdfDownload={handleDownloadWord}
+        pdfButtonText='Word 다운로드'
       />
 
       {/* 보고서 */}

@@ -58,10 +58,10 @@ export function ReportContent({ contents }: ReportContentProps) {
                                 WBS 매칭 작업
                               </h4>
                               <div className='pl-4 relative'>
-                                <span className='absolute left-0 top-1 text-xs text-muted-foreground'>
+                                <span className='absolute left-0 top-1 text-xs text-foreground'>
                                   •
                                 </span>
-                                <p className='text-sm text-muted-foreground leading-relaxed'>
+                                <p className='text-sm text-foreground leading-relaxed'>
                                   {item.task}
                                 </p>
                               </div>
@@ -83,10 +83,10 @@ export function ReportContent({ contents }: ReportContentProps) {
                             </h4>
                             {ev.title && (
                               <div className='pl-4 relative'>
-                                <span className='absolute left-0 top-1 text-xs text-muted-foreground'>
+                                <span className='absolute left-0 top-1 text-xs text-foreground'>
                                   •
                                 </span>
-                                <p className='text-sm text-muted-foreground leading-relaxed'>
+                                <p className='text-sm text-foreground leading-relaxed'>
                                   {ev.title}
                                 </p>
                               </div>
@@ -112,10 +112,10 @@ export function ReportContent({ contents }: ReportContentProps) {
                                       key={activityIdx}
                                       className='pl-4 relative'
                                     >
-                                      <span className='absolute left-0 top-1 text-xs text-muted-foreground'>
+                                      <span className='absolute left-0 top-1 text-xs text-foreground'>
                                         •
                                       </span>
-                                      <p className='text-sm text-muted-foreground leading-relaxed'>
+                                      <p className='text-sm text-foreground leading-relaxed'>
                                         {formatBoldText(activity)}
                                       </p>
                                     </div>
@@ -124,10 +124,10 @@ export function ReportContent({ contents }: ReportContentProps) {
                               </div>
                             ) : (
                               <div className='pl-4 relative'>
-                                <span className='absolute left-0 top-1 text-xs text-muted-foreground'>
+                                <span className='absolute left-0 top-1 text-xs text-foreground'>
                                   •
                                 </span>
-                                <p className='text-sm text-muted-foreground italic leading-relaxed'>
+                                <p className='text-sm text-foreground leading-relaxed'>
                                   상세 활동 내용이 제공되지 않았습니다.
                                 </p>
                               </div>
@@ -146,19 +146,19 @@ export function ReportContent({ contents }: ReportContentProps) {
                             </h4>
                             {ev.llm_reference && ev.llm_reference.trim() ? (
                               <div className='pl-4 relative'>
-                                <span className='absolute left-0 top-1 text-xs text-muted-foreground'>
+                                <span className='absolute left-0 top-1 text-xs text-foreground'>
                                   •
                                 </span>
-                                <div className='text-sm text-muted-foreground leading-relaxed'>
+                                <div className='text-sm text-foreground leading-relaxed'>
                                   {ev.llm_reference}
                                 </div>
                               </div>
                             ) : (
                               <div className='pl-4 relative'>
-                                <span className='absolute left-0 top-1 text-xs text-muted-foreground'>
+                                <span className='absolute left-0 top-1 text-xs text-foreground'>
                                   •
                                 </span>
-                                <p className='text-sm text-muted-foreground italic leading-relaxed'>
+                                <p className='text-sm text-foreground leading-relaxed'>
                                   AI 분석 근거가 제공되지 않았습니다.
                                 </p>
                               </div>

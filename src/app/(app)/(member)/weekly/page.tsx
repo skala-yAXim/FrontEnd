@@ -71,7 +71,7 @@ export default function WeeklyReportsPage() {
           title='위클리 보고서'
           description='지난 위클리 보고서들을 확인하고 새로운 보고서를 자동으로 생성할 수 있습니다.'
         />
-        <CardContent>
+        <CardContent className='p-6 space-y-6'>
           {/* 테이블 */}
           <DataTable
             data={weeklyReports}

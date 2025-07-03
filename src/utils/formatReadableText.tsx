@@ -27,7 +27,7 @@ export const formatToReadableList = (text: any): string[] => {
       .map(item =>
         item.replace(
           /^(feat|refactor|fix|add|update|remove|improve|chore|docs|style|test|build|ci|perf|revert):/i,
-          match => `**${match}**`
+          match => `${match}`
         )
       );
   }

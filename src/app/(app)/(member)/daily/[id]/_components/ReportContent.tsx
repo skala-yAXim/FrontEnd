@@ -7,13 +7,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ReportItem } from "@/types/reportType";
+import { ReportItem, Source } from "@/types/reportType";
 import { formatBoldText } from "@/utils/formatBoldText";
 import { getSourceIcon } from "@/utils/getSourceIcon";
-import {
-  renderSafeContent,
-  renderSectionHeader,
-} from "@/utils/renderReportContent";
+import { renderSafeContent } from "@/utils/renderReportContent";
 
 interface ReportContentProps {
   contents: ReportItem[];
@@ -80,25 +77,59 @@ export function ReportContent({ contents }: ReportContentProps) {
                   </TooltipTrigger>
                   <TooltipContent
                     side='right'
-                    sideOffset={40}
-                    className='bg-popover border border-border shadow-lg text-sm px-4 py-3 max-w-lg'
+                    sideOffset={10}
+                    className='bg-popover border border-border shadow-lg text-sm px-4 py-4 max-w-md'
                   >
-                    <div className='space-y-3'>
-                      {/* 출처 섹션 */}
-                      {renderSectionHeader("📋", "출처", ev.title)}
+                    <div className='space-y-4'>
+                      {/* 출처 섹션 - 기존 renderSectionHeader 내용을 위클리 스타일로 */}
+                      <div className='space-y-2'>
+                        <h4 className='font-semibold text-popover-foreground text-sm flex items-center gap-2'>
+                          <span className='w-4 h-4 flex items-center justify-center text-sm flex-shrink-0'>
+                            {getSourceIcon(ev.source as Source)}
+                          </span>
+                          출처
+                        </h4>
+                        <div className='pl-4 relative'>
+                          <span className='absolute left-0 top-1 text-xs text-foreground'>
+                            •
+                          </span>
+                          <p className='text-sm text-foreground leading-relaxed'>
+                            {ev.title}
+                          </p>
+                        </div>
+                      </div>
 
-                      {/* 출처 내용 */}
-                      <div className='bg-muted/80 p-3 rounded'>
-                        {renderSafeContent(ev.detailed_activities)}
+                      {/* 출처 내용 - 기존 renderSafeContent 결과를 위클리 스타일로 */}
+                      <div className='space-y-2'>
+                        <h4 className='font-semibold text-popover-foreground text-sm flex items-center gap-2'>
+                          <span className='w-4 h-4 flex items-center justify-center text-sm flex-shrink-0'>
+                            📋
+                          </span>
+                          상세 활동
+                        </h4>
+                        <div className='text-sm text-foreground leading-relaxed'>
+                          {renderSafeContent(ev.detailed_activities)}
+                        </div>
                       </div>
 
                       {/* AI 분석 근거 */}
                       {ev.llm_reference && (
                         <>
-                          <div className='border-t border-border/50'></div>
-                          {renderSectionHeader("🤖", "AI 분석 근거")}
-                          <div className='bg-muted/80 p-3 rounded'>
-                            {renderSafeContent(ev.llm_reference, "▸", "-ml-0")}
+                          <div className='border-t border-border/30'></div>
+                          <div className='space-y-2'>
+                            <h4 className='font-semibold text-popover-foreground text-sm flex items-center gap-2'>
+                              <span className='w-4 h-4 flex items-center justify-center text-sm flex-shrink-0'>
+                                🤖
+                              </span>
+                              AI 분석 근거
+                            </h4>
+                            <div className='text-sm text-foreground leading-relaxed'>
+                              {renderSafeContent(
+                                ev.llm_reference,
+                                "▸",
+                                "-ml-0"
+                              )}
+                            </div>
                           </div>
                         </>
                       )}

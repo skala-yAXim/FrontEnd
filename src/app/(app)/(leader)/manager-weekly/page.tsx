@@ -169,8 +169,8 @@ export default function ManagerWeeklyPage() {
     <div>
       <PageHeader title='위클리 보고서' description='팀원 위클리 보고서 목록' />
 
-      <div className='w-full mt-6'>
-        <CardContent className='space-y-6'>
+      <div className='w-full'>
+        <CardContent className='p-6 space-y-6'>
           {/* 현대적인 필터 바 */}
           <div className='bg-muted/30 rounded-xl p-4'>
             <div className='flex flex-wrap items-center gap-4'>
