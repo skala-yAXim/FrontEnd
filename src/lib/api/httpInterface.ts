@@ -85,11 +85,10 @@ export class HttpInterface {
   }
 
   // 프로젝트 수정 API 추가
-  async updateProject<T>(projectId: number, projectData: FormData): Promise<T> {
-    return this.apiClient.patchFormData<T>(
-      `/projects/${projectId}`,
-      projectData
-    );
+  async updateProject<T>(projectData: FormData): Promise<T> {
+    console.log([...projectData.entries()]);
+    console.log(projectData.get("files"));
+    return this.apiClient.patchFormData<T>(`/projects`, projectData);
   }
 
   // 프로젝트 상세 조회 API 추가 (수정 시 기존 데이터 로드용)

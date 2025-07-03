@@ -14,7 +14,7 @@ import {
   MAX_NAME_LENGTH,
 } from "@/const/file";
 import { ProjectCreateForm, ProjectFileReq } from "@/types/projectType";
-import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import { AlertCircle, CheckCircle2, Clock, FileText, X } from "lucide-react";
 import React from "react";
 import { validateForm } from "../_utils/utils";
 import { ConfirmDialog } from "./ConfirmDialog";
@@ -54,11 +54,14 @@ export function ProjectForm({
     endDate: "",
     description: "",
     files: [],
+    deleteFileIds: [], // 삭제할 파일 ID 목록 초기화
   });
 
   // initialData 변경 시 form 업데이트
   React.useEffect(() => {
     if (initialData) {
+      console.log("initialData 설정:", initialData);
+      console.log("기존 파일 목록:", initialData.existingFiles);
       setForm(initialData);
     }
   }, [initialData]);
@@ -67,6 +70,9 @@ export function ProjectForm({
   const [showConfirmCreate, setShowConfirmCreate] = React.useState(false);
   const [showConfirmCancel, setShowConfirmCancel] = React.useState(false);
   const [fileToDelete, setFileToDelete] = React.useState<string | null>(null);
+  const [existingFileToDelete, setExistingFileToDelete] = React.useState<
+    number | null
+  >(null);
 
   // 에러 상태
   const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
@@ -76,7 +82,10 @@ export function ProjectForm({
 
   // 폼 값 변경 핸들러
   const handleFormChange = (
-    field: keyof Omit<ProjectCreateForm, "files">,
+    field: keyof Omit<
+      ProjectCreateForm,
+      "files" | "existingFiles" | "deleteFileIds"
+    >,
     value: string
   ) => {
     setForm(prev => ({
@@ -115,8 +124,10 @@ export function ProjectForm({
     const newFiles: ProjectFileReq[] = [];
     const newErrors: string[] = [];
 
-    // 파일 개수 확인
-    if (form.files.length + files.length > MAX_FILE_COUNT) {
+    // 파일 개수 확인 (기존 파일 + 새 파일 + 업로드할 파일)
+    const totalExistingFiles = form.existingFiles?.length || 0;
+    const totalNewFiles = form.files.length;
+    if (totalExistingFiles + totalNewFiles + files.length > MAX_FILE_COUNT) {
       newErrors.push(`파일은 최대 ${MAX_FILE_COUNT}개까지 첨부할 수 있습니다.`);
     }
 
@@ -139,8 +150,16 @@ export function ProjectForm({
         return;
       }
 
-      // 중복 파일명 확인
+      // 중복 파일명 확인 (새 파일 중에서)
       if (form.files.some(f => f.name === file.name)) {
+        newErrors.push(
+          `${file.name}: 동일한 이름의 파일이 이미 첨부되어 있습니다.`
+        );
+        return;
+      }
+
+      // 중복 파일명 확인 (기존 파일 중에서)
+      if (form.existingFiles?.some(f => f.originalFileName === file.name)) {
         newErrors.push(
           `${file.name}: 동일한 이름의 파일이 이미 첨부되어 있습니다.`
         );
@@ -172,6 +191,11 @@ export function ProjectForm({
     setFileToDelete(fileId);
   };
 
+  // 기존 파일 삭제 요청
+  const handleExistingFileDeleteRequest = (fileId: number) => {
+    setExistingFileToDelete(fileId);
+  };
+
   // 파일 삭제 확정
   const handleFileDeleteConfirm = () => {
     if (fileToDelete) {
@@ -183,14 +207,38 @@ export function ProjectForm({
     }
   };
 
+  // 기존 파일 삭제 확정
+  const handleExistingFileDeleteConfirm = () => {
+    if (existingFileToDelete !== null && form.existingFiles) {
+      console.log("삭제할 파일 ID:", existingFileToDelete);
+      console.log("삭제 전 deleteFileIds:", form.deleteFileIds);
+
+      // 삭제할 파일 ID 목록에 추가
+      const updatedDeleteFileIds = [
+        ...form.deleteFileIds,
+        existingFileToDelete,
+      ];
+
+      console.log("삭제 후 deleteFileIds:", updatedDeleteFileIds);
+
+      setForm(prev => ({
+        ...prev,
+        deleteFileIds: updatedDeleteFileIds,
+      }));
+
+      setExistingFileToDelete(null);
+    }
+  };
+
   // 파일 삭제 취소
   const handleFileDeleteCancel = () => {
     setFileToDelete(null);
+    setExistingFileToDelete(null);
   };
 
   // 프로젝트 등록 요청
   const handleCreateRequest = () => {
-    const formErrors = validateForm(form);
+    const formErrors = validateForm(form, isEditMode);
     if (Object.keys(formErrors).length === 0) {
       setShowConfirmCreate(true);
     } else {
@@ -220,8 +268,15 @@ export function ProjectForm({
   };
 
   const fileToDeleteInfo = form.files.find(f => f.id === fileToDelete);
+  const existingFileToDeleteInfo = form.existingFiles?.find(
+    f => f.id === existingFileToDelete
+  );
+  console.log("삭제할 기존 파일 정보:", existingFileToDeleteInfo);
   const isDialogOpen =
-    showConfirmCreate || showConfirmCancel || fileToDelete !== null;
+    showConfirmCreate ||
+    showConfirmCancel ||
+    fileToDelete !== null ||
+    existingFileToDelete !== null;
 
   return (
     <div className='space-y-7'>
@@ -252,6 +307,17 @@ export function ProjectForm({
           title='삭제'
           message={`"${fileToDeleteInfo.name}" 파일을 삭제하시겠습니까?`}
           onConfirm={handleFileDeleteConfirm}
+          onCancel={handleFileDeleteCancel}
+          variant='destructive'
+        />
+      )}
+
+      {/* 기존 파일 삭제 확인 메시지 */}
+      {existingFileToDelete !== null && existingFileToDeleteInfo && (
+        <ConfirmDialog
+          title='삭제'
+          message={`"${existingFileToDeleteInfo.originalFileName}" 파일을 삭제하시겠습니까?`}
+          onConfirm={handleExistingFileDeleteConfirm}
           onCancel={handleFileDeleteCancel}
           variant='destructive'
         />
@@ -368,14 +434,89 @@ export function ProjectForm({
       <div className='border-t border-gray-100'></div>
 
       {/* 파일 첨부 */}
-      <div className='space-y-1'>
+      <div className='space-y-6'>
+        {/* 총 파일 개수 정보 */}
+        <div className='flex items-center justify-between'>
+          <Label className='text-base font-semibold'>
+            관련 파일 첨부<span className='text-red-500'>*</span>
+            <span className='text-sm text-muted-foreground ml-2'>
+              (최소 1개 이상)
+            </span>
+          </Label>
+          <p className='text-sm text-muted-foreground'>
+            총{" "}
+            {form.files.length +
+              (form.existingFiles?.length || 0) -
+              form.deleteFileIds.length}
+            /{MAX_FILE_COUNT}개
+          </p>
+        </div>
+
         <FileUpload
           files={form.files}
           onFileSelect={handleFileSelect}
           onFileDelete={handleFileDeleteRequest}
           error={errors.files}
           disabled={isDialogOpen}
+          existingFilesCount={
+            (form.existingFiles?.length || 0) - form.deleteFileIds.length
+          }
         />
+
+        {/* 기존 파일 목록 (수정 모드일 때만 표시) */}
+        {isEditMode && (
+          <div className='space-y-2'>
+            {form.existingFiles && form.existingFiles.length > 0 ? (
+              <div className='space-y-2'>
+                <p className='text-sm font-medium'>
+                  기존 첨부 파일 (
+                  {
+                    form.existingFiles.filter(
+                      file => !form.deleteFileIds.includes(file.id)
+                    ).length
+                  }
+                  개)
+                </p>
+                <div className='space-y-2'>
+                  {form.existingFiles
+                    .filter(file => !form.deleteFileIds.includes(file.id))
+                    .map(file => (
+                      <div
+                        key={file.id}
+                        className='flex items-center justify-between p-3 bg-muted/30 rounded-md'
+                      >
+                        <div className='flex items-center gap-3'>
+                          <FileText className='w-4 h-4 text-blue-600' />
+                          <div>
+                            <p className='text-sm font-medium'>
+                              {file.originalFileName}
+                            </p>
+                            <p className='text-xs text-muted-foreground'>
+                              {file.fileSize}
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          size='sm'
+                          variant='outline'
+                          onClick={() =>
+                            handleExistingFileDeleteRequest(file.id)
+                          }
+                          disabled={isDialogOpen}
+                        >
+                          <X className='w-3 h-3' />
+                        </Button>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            ) : (
+              <p className='text-sm text-muted-foreground'>
+                기존 첨부 파일이 없습니다.
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 구분선 */}
@@ -407,14 +548,14 @@ export function ProjectForm({
         <Button
           variant='outline'
           onClick={handleCancelRequest}
-          disabled={isDialogOpen || isSubmitting}
+          disabled={isDialogOpen}
           className='h-10 px-6'
         >
           취소
         </Button>
         <Button
           onClick={handleCreateRequest}
-          disabled={isDialogOpen || isSubmitting}
+          disabled={isDialogOpen}
           className='h-10 px-6'
         >
           {isSubmitting

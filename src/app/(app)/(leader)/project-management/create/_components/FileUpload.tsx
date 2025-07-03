@@ -2,7 +2,6 @@
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { MAX_FILE_COUNT } from "@/const/file";
 import { ProjectFileReq } from "@/types/projectType";
 import { AlertCircle, FileText, Upload, X } from "lucide-react";
@@ -15,6 +14,7 @@ interface FileUploadProps {
   onFileDelete: (fileId: string) => void;
   error?: string;
   disabled?: boolean;
+  existingFilesCount?: number;
 }
 
 export function FileUpload({
@@ -23,8 +23,11 @@ export function FileUpload({
   onFileDelete,
   error,
   disabled,
+  existingFilesCount = 0,
 }: FileUploadProps) {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const totalFilesCount = files.length + existingFilesCount;
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     onFileSelect(e.target.files);
@@ -35,20 +38,13 @@ export function FileUpload({
 
   return (
     <div className='space-y-4'>
-      <Label className='text-base font-semibold'>
-        관련 파일 첨부<span className='text-red-500'>*</span>
-        <span className='text-sm text-muted-foreground ml-2'>
-          (최소 1개 이상)
-        </span>
-      </Label>
-
       {/* 파일 업로드 버튼 */}
       <div className='flex items-center gap-4'>
         <Button
           type='button'
           variant='outline'
           onClick={() => fileInputRef.current?.click()}
-          disabled={disabled || files.length >= MAX_FILE_COUNT}
+          disabled={disabled || totalFilesCount >= MAX_FILE_COUNT}
           className='flex items-center gap-2'
         >
           <Upload className='w-4 h-4' />
@@ -81,7 +77,8 @@ export function FileUpload({
       {files.length > 0 && (
         <div className='space-y-2'>
           <p className='text-sm font-medium'>
-            첨부된 파일 ({files.length}/{MAX_FILE_COUNT})
+            새로 첨부한 파일 ({files.length}/
+            {MAX_FILE_COUNT - existingFilesCount})
           </p>
           <div className='space-y-2'>
             {files.map(file => (

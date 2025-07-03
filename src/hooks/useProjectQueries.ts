@@ -55,13 +55,7 @@ export const useUpdateProject = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: ({
-      projectId,
-      formData,
-    }: {
-      projectId: number;
-      formData: FormData;
-    }) => httpInterface.updateProject(projectId, formData),
+    mutationFn: (formData: FormData) => httpInterface.updateProject(formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       router.push("/project-management");

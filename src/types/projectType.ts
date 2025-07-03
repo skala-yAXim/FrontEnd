@@ -14,6 +14,8 @@ export interface ProjectCreateForm {
   endDate: string;
   description: string;
   files: ProjectFileReq[];
+  existingFiles?: Files[]; // 기존 파일 목록 (수정 시)
+  deleteFileIds: number[]; // 삭제할 파일 ID 목록
 }
 
 // 첨부 파일 인터페이스
