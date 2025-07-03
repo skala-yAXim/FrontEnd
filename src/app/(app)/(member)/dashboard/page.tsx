@@ -1,13 +1,12 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import { containerVariants, itemVariants } from "@/const/animate";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { BarCards } from "./_components/BarCards";
-import { ChartPieLegend } from "./_components/chart/PieChart";
 import { SectionCards } from "./_components/SectionCards";
 import UserComment from "./_components/UserComment";
+import { ChartBarMultiple } from "./_components/chart/MultipleBarChart";
 
 export default function DashboardPage() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -56,17 +55,12 @@ export default function DashboardPage() {
           </motion.div>
 
           <motion.div
-            className='z-10 grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-2'
+            className='z-10 w-full flex-1'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1 }}
-            whileHover={{ scale: 1.01 }}
           >
-            <Card className='border-1 overflow-hidden shadow-none'>
-              <div className='px-4'>
-                <ChartPieLegend />
-              </div>
-            </Card>
+            <ChartBarMultiple />
           </motion.div>
         </div>
       </motion.div>
