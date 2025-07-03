@@ -4,6 +4,7 @@
 import PageHeader from "@/components/PageHeader";
 import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
+import { CardContent } from "@/components/ui/card";
 import { useServerPagination } from "@/hooks/useServerPagination";
 import { useGetTeamWeeklyReports } from "@/hooks/useTeamWeeklyQueries";
 import { Settings } from "lucide-react";
@@ -57,25 +58,34 @@ export default function TeamWeeklyPage() {
 
   return (
     <div>
-      {/* 기존 더미 내용 */}
       <PageHeader
         title='팀 위클리'
         description='팀 위클리 보고서 목록'
         buttonElement={<MyButton />}
       />
 
-      <WeeklyReportTable
-        reports={teamWeeklyReports}
-        onRowClick={handleRowClick}
-        isLoading={isLoading}
-        emptyMessage='아직 생성된 팀 위클리 보고서가 없습니다.'
-      />
-
-      <Pagination
-        {...pagination.getPaginationProps(totalItems)}
-        showPageInfo={true}
-        showResultInfo={true}
-      />
+      <div className='w-full'>
+        {" "}
+        {/* 👈 매니저 위클리와 동일한 래퍼 */}
+        <CardContent className='p-6 space-y-6'>
+          {" "}
+          {/* 👈 CardContent + space-y-6 */}
+          <WeeklyReportTable
+            reports={teamWeeklyReports}
+            onRowClick={handleRowClick}
+            isLoading={isLoading}
+            emptyMessage='아직 생성된 팀 위클리 보고서가 없습니다.'
+          />
+          {/* 페이지네이션 - 조건부 렌더링 */}
+          {totalPages > 0 && (
+            <Pagination
+              {...pagination.getPaginationProps(totalItems)}
+              showPageInfo={true}
+              showResultInfo={true}
+            />
+          )}
+        </CardContent>
+      </div>
     </div>
   );
 }

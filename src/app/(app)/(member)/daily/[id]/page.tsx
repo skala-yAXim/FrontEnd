@@ -21,16 +21,6 @@ export default function DailyReportDetailPage() {
     isError,
   } = useGetDailyReport(Number(reportId));
 
-  // PDF 다운로드 핸들러
-  const handlePdfDownload = async () => {
-    try {
-      // TODO: 실제 PDF 생성 API 호출
-      alert("PDF 다운로드 기능이 구현될 예정입니다.");
-    } catch (error) {
-      console.error("PDF 다운로드 실패:", error);
-    }
-  };
-
   if (isLoading) {
     return <ReportSkeleton />;
   }
@@ -44,13 +34,9 @@ export default function DailyReportDetailPage() {
   }
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 bg-muted rounded-2xl'>
       {/* 클라이언트 컴포넌트 - 액션 버튼들 */}
-      <ReportActions
-        backHref='/daily'
-        title='데일리 보고서 상세'
-        onPdfDownload={handlePdfDownload}
-      />
+      <ReportActions backHref='/daily' title='데일리 보고서 상세' />
 
       {/* 서버 컴포넌트 - 보고서 내용 */}
       <DailyReport {...reportData} />

@@ -8,8 +8,8 @@ export default function ReportHeader(report: TeamWeeklyReportData) {
   const nameMatch = report.title.match(/^(.+?)의/);
   const name = nameMatch ? nameMatch[1] : "";
   return (
-    <div className='bg-muted/20'>
-      <div className='bg-muted/20 max-w-4xl mx-auto px-8 py-8'>
+    <div>
+      <div className='max-w-4xl mx-auto px-8 py-4'>
         <div className='text-center mb-8'>
           <h1 className='text-2xl font-bold text-foreground tracking-tight mb-2'>
             팀 주간 업무 보고서

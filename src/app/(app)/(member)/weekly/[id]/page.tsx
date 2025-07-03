@@ -14,16 +14,6 @@ export default function WeeklyReportDetailPage() {
 
   const { data, isLoading, isError } = useGetUserWeeklyReport(Number(reportId));
 
-  // PDF 다운로드 핸들러
-  const handlePdfDownload = async () => {
-    try {
-      // TODO: 실제 PDF 생성 API 호출
-      alert("PDF 다운로드 기능이 구현될 예정입니다.");
-    } catch (error) {
-      console.error("PDF 다운로드 실패:", error);
-    }
-  };
-
   if (isLoading) {
     return <ReportSkeleton />;
   }
@@ -37,13 +27,9 @@ export default function WeeklyReportDetailPage() {
   }
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 bg-muted rounded-2xl'>
       {/* 공통 ReportActions 컴포넌트 사용 */}
-      <ReportActions
-        backHref='/weekly'
-        title='위클리 보고서 상세'
-        onPdfDownload={handlePdfDownload}
-      />
+      <ReportActions backHref='/weekly' title='위클리 보고서 상세' />
 
       {/* 위클리 보고서 내용 - 새로운 interface에 맞게 수정 */}
       <WeeklyReport report={data as WeeklyReportType} />

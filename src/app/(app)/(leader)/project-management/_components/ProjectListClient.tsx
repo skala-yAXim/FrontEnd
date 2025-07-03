@@ -119,7 +119,7 @@ export default function ProjectListClient() {
       key: "progress",
       label: "진행도",
       render: (value, item) => (
-        <div className='text-center'>
+        <div>
           <span className='text-sm font-medium text-foreground'>
             {item.progress}%
           </span>
@@ -168,9 +168,9 @@ export default function ProjectListClient() {
   }
 
   return (
-    <div className='w-full mt-6'>
+    <div className='w-full'>
       <div className='w-full max-w-none'>
-        <CardContent className='p-6'>
+        <CardContent className='p-6 space-y-6'>
           {projectToDelete && (
             <div className='p-6 border-b'>
               <Alert variant={deleteError ? "destructive" : "warning"}>
@@ -227,13 +227,11 @@ export default function ProjectListClient() {
 
           {/* 공통 Pagination 컴포넌트 사용 */}
           {totalPages > 0 && (
-            <div className='p-6 border-t'>
-              <Pagination
-                {...pagination.getPaginationProps(totalItems)}
-                showPageInfo={true}
-                showResultInfo={true}
-              />
-            </div>
+            <Pagination
+              {...pagination.getPaginationProps(totalItems)}
+              showPageInfo={true}
+              showResultInfo={true}
+            />
           )}
         </CardContent>
       </div>

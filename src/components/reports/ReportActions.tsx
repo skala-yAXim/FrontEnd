@@ -12,7 +12,7 @@ interface ReportActionsProps {
   /** 페이지 제목 (기본값: "보고서 상세") */
   title?: string;
   /** PDF 다운로드 핸들러 */
-  onPdfDownload: () => void;
+  onPdfDownload?: () => void;
   /** PDF 버튼 텍스트 (기본값: "PDF 다운로드") */
   pdfButtonText?: string;
   /** 추가 액션 버튼들 */
@@ -53,10 +53,12 @@ export function ReportActions({
 
       <div className='flex items-center space-x-2 hover:cursor-pointer'>
         {additionalActions}
-        <Button onClick={onPdfDownload} size='sm'>
-          <Download className='mr-2 h-4 w-4' />
-          {pdfButtonText}
-        </Button>
+        {onPdfDownload && ( // 👈 조건부 렌더링 추가
+          <Button onClick={onPdfDownload} size='sm'>
+            <Download className='mr-2 h-4 w-4' />
+            {pdfButtonText}
+          </Button>
+        )}
       </div>
     </div>
   );
