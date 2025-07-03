@@ -47,3 +47,12 @@ export const useGetCommentUser = () => {
 
   return { data: data as UserComment, isLoading, isError };
 };
+
+export const useGetStaticsUserAvg = () => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["staticsUserAvg"],
+    queryFn: () => httpInterface.getDashboardAvgUser<StaticsUserType[]>(),
+  });
+
+  return { data: data as StaticsUserType[], isLoading, isError };
+};

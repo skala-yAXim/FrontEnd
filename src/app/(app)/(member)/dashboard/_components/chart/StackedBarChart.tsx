@@ -1,6 +1,12 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  XAxis,
+} from "recharts";
 
 import {
   Card,
@@ -52,14 +58,12 @@ export function ChartBarStacked() {
 
   if (isLoading) {
     return (
-      <Card>
+      <Card className='flex flex-col flex-1'>
         <CardHeader>
           <CardTitle>일일 업무 활동</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className='flex items-center justify-center h-40 text-muted-foreground'>
-            로딩 중...
-          </div>
+        <CardContent className='flex-1 flex items-center justify-center'>
+          <div className='text-muted-foreground'>로딩 중...</div>
         </CardContent>
       </Card>
     );
@@ -67,12 +71,12 @@ export function ChartBarStacked() {
 
   if (isError) {
     return (
-      <Card>
+      <Card className='flex flex-col flex-1'>
         <CardHeader>
           <CardTitle>일일 업무 활동</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className='flex items-center justify-center h-40 text-destructive'>
+        <CardContent className='flex-1 flex items-center justify-center'>
+          <div className='text-destructive'>
             데이터를 불러오는데 실패했습니다.
           </div>
         </CardContent>
@@ -81,39 +85,44 @@ export function ChartBarStacked() {
   }
 
   return (
-    <Card className='mt-0 border-0 shadow-none bg-transparent'>
+    <Card className='mt-0 border-0 shadow-none bg-transparent flex flex-col flex-1'>
       <CardHeader>
         <CardTitle className='text-lg font-semibold'>주간 활동 요약</CardTitle>
         <CardDescription>일주일 간의 활동 유형별 통계</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey='day'
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={value => value.slice(0, 3)}
-            />
-            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-            <ChartLegend content={<ChartLegendContent />} />
-            <Bar
-              dataKey='email'
-              stackId='a'
-              fill='var(--color-email)'
-              radius={[0, 0, 4, 4]}
-            />
-            <Bar dataKey='git' stackId='a' fill='var(--color-git)' />
-            <Bar dataKey='docs' stackId='a' fill='var(--color-docs)' />
-            <Bar
-              dataKey='teams'
-              stackId='a'
-              fill='var(--color-teams)'
-              radius={[4, 4, 0, 0]}
-            />
-          </BarChart>
+      <CardContent className='flex-1 flex'>
+        <ChartContainer
+          config={chartConfig}
+          className='w-full flex-1 flex flex-col'
+        >
+          <ResponsiveContainer width='100%' height='100%'>
+            <BarChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey='day'
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={value => value.slice(0, 3)}
+              />
+              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Bar
+                dataKey='email'
+                stackId='a'
+                fill='var(--color-email)'
+                radius={[0, 0, 4, 4]}
+              />
+              <Bar dataKey='git' stackId='a' fill='var(--color-git)' />
+              <Bar dataKey='docs' stackId='a' fill='var(--color-docs)' />
+              <Bar
+                dataKey='teams'
+                stackId='a'
+                fill='var(--color-teams)'
+                radius={[4, 4, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
     </Card>

@@ -1,6 +1,12 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  XAxis,
+} from "recharts";
 
 import {
   Card,
@@ -89,14 +95,13 @@ export function ChartBarMultiple() {
   // 로딩/에러 처리
   if (isLoadingUser || isLoadingAvg) {
     return (
-      <Card>
+      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col'>
         <CardHeader>
           <CardTitle>일일 업무 활동</CardTitle>
+          <CardDescription>일별 활동량 비교 분석</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className='flex items-center justify-center h-40 text-muted-foreground'>
-            로딩 중...
-          </div>
+        <CardContent className='flex-1 flex items-center justify-center'>
+          <div className='text-muted-foreground'>로딩 중...</div>
         </CardContent>
       </Card>
     );
@@ -104,12 +109,13 @@ export function ChartBarMultiple() {
 
   if (isErrorUser || isErrorAvg) {
     return (
-      <Card>
+      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col'>
         <CardHeader>
           <CardTitle>일일 업무 활동</CardTitle>
+          <CardDescription>일별 활동량 비교 분석</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className='flex items-center justify-center h-40 text-destructive'>
+        <CardContent className='flex-1 flex items-center justify-center'>
+          <div className='text-destructive'>
             데이터를 불러오는데 실패했습니다.
           </div>
         </CardContent>
@@ -118,14 +124,16 @@ export function ChartBarMultiple() {
   }
 
   return (
-    <Card className='mt-0 border-0 shadow-none bg-transparent'>
+    <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col'>
       <CardHeader className='flex justify-between items-center'>
-        <CardTitle className='text-lg font-semibold '>
-          일별 활동 비교
+        <div>
+          <CardTitle className='text-lg font-semibold'>
+            일별 활동 비교
+          </CardTitle>
           <CardDescription className='mt-1'>
             일별 활동량 비교 분석
           </CardDescription>
-        </CardTitle>
+        </div>
         <div className='flex justify-end items-center'>
           <div className='min-w-[160px]'>
             <Select
@@ -145,24 +153,35 @@ export function ChartBarMultiple() {
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={filteredData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey='day'
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={value => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator='dashed' />}
-            />
-            <Bar dataKey={filter} fill={`var(--color-${filter})`} radius={4} />
-            <Bar dataKey='avg' fill='var(--color-avg)' radius={4} />
-          </BarChart>
+      <CardContent className='flex-1 flex'>
+        <ChartContainer
+          config={chartConfig}
+          className='w-full flex-1 flex flex-col'
+        >
+          <div className='w-full h-full flex-1 px-24'>
+            <ResponsiveContainer width='100%' height='100%'>
+              <BarChart accessibilityLayer data={filteredData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey='day'
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={value => value.slice(0, 3)}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator='dashed' />}
+                />
+                <Bar
+                  dataKey={filter}
+                  fill={`var(--color-${filter})`}
+                  radius={4}
+                />
+                <Bar dataKey='avg' fill='var(--color-avg)' radius={4} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </ChartContainer>
       </CardContent>
     </Card>
