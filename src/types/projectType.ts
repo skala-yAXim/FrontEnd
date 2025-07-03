@@ -31,7 +31,7 @@ export interface ProjectFileReq {
   name: string;
   size: number;
   type: string;
-  file: Files;
+  file: File;
 }
 
 // 에러 타입

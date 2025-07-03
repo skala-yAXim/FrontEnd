@@ -1,12 +1,12 @@
 "use client";
 
+import MemberWeeklyReport from "@/app/(app)/(member)/weekly/[id]/_components/WeeklyReport";
 import { ReportActions } from "@/components/reports/ReportActions";
 import { ReportError } from "@/components/reports/ReportError";
 import { ReportSkeleton } from "@/components/reports/ReportSkeleton";
 import { useGetMemberWeeklyReport } from "@/hooks/useMemberWeeklyQueries";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import MemberWeeklyReport from "./_components/MemberWeeklyReport";
 
 export default function MemberWeeklyReportDetailPage() {
   const reportId = useParams().id as string;
@@ -46,10 +46,10 @@ export default function MemberWeeklyReportDetailPage() {
     <div className='space-y-6'>
       <ReportActions
         backHref='/manager-weekly'
-        title='팀원 위클리 보고서 상세'
+        title={`${reportData.userName}의 위클리 보고서 상세`}
         onPdfDownload={handlePdfDownload}
       />
-      <MemberWeeklyReport report={reportData.report} />
+      <MemberWeeklyReport report={reportData} />
     </div>
   );
 }

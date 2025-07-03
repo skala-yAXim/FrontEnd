@@ -10,6 +10,7 @@ export interface WeeklyReport {
     weekly_report: Report[];
     weekly_reflection: WeeklyReflection;
   };
+  userName: string;
 }
 
 export interface Evidence {

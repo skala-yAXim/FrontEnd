@@ -5,7 +5,6 @@ import { Project, ProjectResponse } from "@/types/projectType";
 import {
   DailyReportData,
   DailyReportList,
-  MemberWeeklyReportData,
   MemberWeeklyReportList,
   TeamWeeklyReportData,
   TeamWeeklyReportList,
@@ -171,8 +170,9 @@ export class HttpInterface {
     );
   }
 
-  async getMemberWeeklyReport(id: number): Promise<MemberWeeklyReportData> {
-    return this.apiClient.get<MemberWeeklyReportData>(
+  //TODO: 타입 맞추기
+  async getMemberWeeklyReport(id: number): Promise<WeeklyReport> {
+    return this.apiClient.get<WeeklyReport>(
       `/reports/team/weekly/member/${id}`
     );
   }
