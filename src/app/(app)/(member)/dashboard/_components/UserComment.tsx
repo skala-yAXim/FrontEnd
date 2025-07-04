@@ -30,8 +30,8 @@ export default function UserComment() {
       <SplitText
         text={comment}
         className='text-3xl font-semibold'
-        delay={100}
-        duration={0.6}
+        delay={70}
+        duration={0.4}
         ease='power3.out'
         splitType='chars'
         from={{ opacity: 0, y: 40 }}

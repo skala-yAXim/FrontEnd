@@ -1,7 +1,7 @@
 export interface DataItem {
   report_date: string;
   teams: { post: number };
-  docs: { docx: number; xlsx: number; txt: number; etc: number };
+  docs: { docx: number; xlsx: number; pptx: number; etc: number };
   email: { receive: number; send: number };
   git: { pull_request: number; commit: number; issue: number };
 }

@@ -1,5 +1,3 @@
-import { NextWeekSchedule } from "./weeklyReportType";
-
 export type Source = "GIT" | "DOCS" | "TEAMS" | "EMAIL";
 
 export interface Evidence {
