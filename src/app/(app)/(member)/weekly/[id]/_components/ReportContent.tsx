@@ -26,18 +26,18 @@ export function ReportContent({ contents }: ReportContentProps) {
       <li key={idx} className='list-disc mb-4'>
         <div className='space-y-2'>
           {/* 메인 업무 내용 */}
-          <div className='text-base'>
+          <div className='text-base flex items-center flex-wrap gap-1'>
             {formatBoldText(item.text)}
             {/* 텍스트 바로 뒤에 공백 없이 툴팁 뱃지들 */}
             {item.evidence && item.evidence.length > 0 && (
-              <>
+              <div className='inline-flex items-center gap-1 ml-2'>
                 {item.evidence.map((ev, i) => (
                   <TooltipProvider key={i}>
                     <Tooltip>
                       <TooltipTrigger>
                         <Badge
                           variant='outline'
-                          className='text-muted-foreground text-xs cursor-pointer'
+                          className='text-muted-foreground text-xs cursor-pointer flex items-center'
                         >
                           {getSourceIcon(ev.source as Source)}
                         </Badge>
@@ -169,7 +169,7 @@ export function ReportContent({ contents }: ReportContentProps) {
                     </Tooltip>
                   </TooltipProvider>
                 ))}
-              </>
+              </div>
             )}
           </div>
         </div>
