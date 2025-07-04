@@ -35,15 +35,9 @@ export default function WeeklyReportsPage() {
     router.push(`/weekly/${item.id}`);
   };
 
-  // 보고서 제목에서 날짜 추출 함수
-  const extractDateFromTitle = (title: string): string => {
-    // "조민서님의 2025-06-02 ~ 2025-06-06 주간 업무 보고서" 형식에서 시작 날짜 추출
-    const dateMatch = title.match(/(\d{4}-\d{2}-\d{2})/);
-    if (dateMatch) {
-      const date = new Date(dateMatch[1]);
-      return date.toLocaleDateString("ko-KR");
-    }
-    return new Date().toLocaleDateString("ko-KR");
+  // ISO 날짜 파싱
+  const formatISODate = (isoString: string): string => {
+    return new Date(isoString).toLocaleDateString("ko-KR");
   };
 
   // 테이블 컬럼 정의
@@ -56,10 +50,8 @@ export default function WeeklyReportsPage() {
     {
       key: "createdAt",
       label: "생성일자",
-      render: (value, item) => (
-        <span className='text-sm text-muted-foreground'>
-          {extractDateFromTitle(item.title)}
-        </span>
+      render: value => (
+        <span className='text-sm text-foreground'>{formatISODate(value)}</span>
       ),
     },
   ];
