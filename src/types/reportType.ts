@@ -119,6 +119,7 @@ export interface ProjectReportItem {
   project_name: string;
   summary: string;
   highlights: TeamWeeklyHighlightItem[];
+  next_week_schedule: NextWeekSchedule[];
   team_progress_overview: {
     overall_progress: number;
     llm_reference: string;
@@ -148,7 +149,6 @@ export interface TeamWeeklyReportData {
   reportJson: {
     report_title: string;
     team_weekly_report: ProjectReportItem[];
-    next_week_schedule: NextWeekSchedule[];
     team_weekly_reflection: TeamWeeklyReflection;
     weekly_short_review: string;
     weekly_report_md: string;
