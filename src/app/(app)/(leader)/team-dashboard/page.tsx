@@ -1,10 +1,9 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import { containerVariants, itemVariants } from "@/const/animate";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { ChartPieLegend } from "../../(member)/dashboard/_components/chart/PieChart";
+import { ChartBarMultiple } from "./_components/chart/MultipleBarChart";
 import { TeamBarCards } from "./_components/TeamBarcards";
 import TeamComment from "./_components/TeamComment";
 import { TeamSectionCards } from "./_components/TeamSectionCards";
@@ -56,17 +55,12 @@ export default function TeamDashboardPage() {
           </motion.div>
 
           <motion.div
-            className='z-10 grid grid-cols-1 gap-4 @xl/main:grid-cols-2 @5xl/main:grid-cols-2'
+            className='z-10 w-full flex-1'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1 }}
-            whileHover={{ scale: 1.01 }}
           >
-            <Card className='border-1 overflow-hidden shadow-none'>
-              <div className='px-4'>
-                <ChartPieLegend />
-              </div>
-            </Card>
+            <ChartBarMultiple />
           </motion.div>
         </div>
       </motion.div>

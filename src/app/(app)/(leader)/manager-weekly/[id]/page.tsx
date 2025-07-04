@@ -16,10 +16,6 @@ export default function MemberWeeklyReportDetailPage() {
     isError,
   } = useGetMemberWeeklyReport(Number(reportId));
 
-  const handlePdfDownload = () => {
-    alert("PDF 다운로드 기능이 구현될 예정입니다.");
-  };
-
   if (isLoading) return <ReportSkeleton />;
   if (isError)
     return <ReportError error={isError.toString()} href='/manager-weekly' />;
@@ -43,11 +39,10 @@ export default function MemberWeeklyReportDetailPage() {
   }
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-6 bg-muted rounded-2xl'>
       <ReportActions
         backHref='/manager-weekly'
         title={`${reportData.userName}의 위클리 보고서 상세`}
-        onPdfDownload={handlePdfDownload}
       />
       <MemberWeeklyReport report={reportData} />
     </div>

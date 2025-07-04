@@ -131,12 +131,13 @@ export function getEmailCards(data: StaticsUserType): DashboardCard[] {
 // Teams 관련 카드 데이터 생성
 export function getTeamsCards(data: StaticsUserType): DashboardCard[] {
   const post = data?.teams.post ?? 0;
+  const reply = data?.teams?.reply ?? 0;
 
   return [
     {
-      title: "Teams 포스트",
+      title: "Teams 포스트와 답글",
       description: "일주일 간 활동 수",
-      value: `${post}개`,
+      value: `${post + reply}개`,
       badge: `${post}`,
       badgeIcon: getSourceIcon("TEAMS"),
       trend: `${calculatePercent(post, post)}%`,
@@ -319,24 +320,14 @@ export function getTeamTeamsCards(
 
   return [
     {
-      title: "팀 Teams 포스트",
+      title: "팀 Teams 포스트와 답글",
       description: "주간 팀 전체 활동",
-      value: `${post}개`,
+      value: `${post + reply}개`,
       badge: `${post}`,
       badgeIcon: getSourceIcon("TEAMS"),
       trend: `${percentage(post, postAvg)}%`,
       trendIcon: getSourceIcon("TEAMS"),
       subtext: `평균 대비 ${percentage(post, postAvg)}%`,
-    },
-    {
-      title: "팀 Teams 답글",
-      description: "주간 팀 전체 활동",
-      value: `${reply}개`,
-      badge: `${reply}`,
-      badgeIcon: getSourceIcon("TEAMS"),
-      trend: `${percentage(reply, replyAvg)}%`,
-      trendIcon: getSourceIcon("TEAMS"),
-      subtext: `평균 대비 ${percentage(reply, replyAvg)}%`,
     },
   ];
 }

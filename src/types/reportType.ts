@@ -1,3 +1,5 @@
+import { NextWeekSchedule } from "./weeklyReportType";
+
 export type Source = "GIT" | "DOCS" | "TEAMS" | "EMAIL";
 
 export interface Evidence {
@@ -127,7 +129,14 @@ export interface ProjectReportItem {
 
 export interface TeamWeeklyReflection {
   content: string[];
-  next_week_schedule: string[];
+}
+
+export interface NextWeekSchedule {
+  task_id: string;
+  task_name: string;
+  start_date: string;
+  end_date: string;
+  description: string;
 }
 
 export interface TeamWeeklyReportData {
@@ -141,6 +150,7 @@ export interface TeamWeeklyReportData {
   reportJson: {
     report_title: string;
     team_weekly_report: ProjectReportItem[];
+    next_week_schedule: NextWeekSchedule[];
     team_weekly_reflection: TeamWeeklyReflection;
     weekly_short_review: string;
     weekly_report_md: string;

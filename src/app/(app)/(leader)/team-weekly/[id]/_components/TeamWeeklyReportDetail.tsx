@@ -9,7 +9,7 @@ const getProgressColor = (progress: number) => {
 
 const ProgressLegend = () => (
   <div className='flex items-center gap-6 mb-4 px-3'>
-    <span className='text-sm font-medium text-gray-600'>진행도 범례:</span>
+    <span className='text-sm font-medium text-black'>진행도 범례:</span>
     <div className='flex items-center gap-4'>
       <div className='flex items-center gap-1'>
         <div className='w-4 h-4 bg-red-500 rounded'></div>
@@ -35,14 +35,15 @@ export default function TeamWeeklyReportDetail({
       <h3 className='text-xl font-bold text-gray-800 mb-2'>
         [{item.project_name}]
       </h3>
-      <div className='w-full h-px bg-gray-300 my-4' />
-
-      <p className='text-gray-700 mb-6 px-3 leading-relaxed'>{item.summary}</p>
+      <div className='flex items-start gap-3 px-4 py-4 border-t border-gray-300'>
+        <span className='text-black font-medium mt-1'>•</span>
+        <p className='text-black leading-relaxed'>{item.summary}</p>
+      </div>
 
       <ProgressLegend />
 
       <div className='flex items-center mb-6 px-3'>
-        <span className='text-sm font-medium text-gray-700 mr-4 whitespace-nowrap'>
+        <span className='text-sm font-medium text-blacck mr-4 whitespace-nowrap'>
           프로젝트 진행도
         </span>
 
@@ -71,9 +72,54 @@ export default function TeamWeeklyReportDetail({
   return (
     <div className='min-h-screen bg-muted/20 py-12 px-4 sm:px-6 lg:px-12'>
       <h2 className='text-2xl font-bold mb-8'>팀 업무 상세</h2>
+      {/* 팀 회고 섹션 - 코리안 보고서 스타일 */}
+      {reportJson.team_weekly_reflection.content.length > 0 && (
+        <div className='mb-12'>
+          <h3 className='text-xl font-semibold mb-4 border-b border-gray-300 pb-2'>
+            주간 리뷰
+          </h3>
+          <div className='space-y-2 ml-4'>
+            {reportJson.team_weekly_reflection.content.map((item, index) => (
+              <div key={index} className='flex items-start gap-3'>
+                <span className='text-black font-medium mt-1'>•</span>
+                <p className='text-black leading-relaxed'>{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {reportJson.team_weekly_report.map((item, index) =>
         renderProjectItem(item, index)
+      )}
+
+      {/* 차주 계획 섹션 - 코리안 보고서 스타일 */}
+      {reportJson.next_week_schedule.length > 0 && (
+        <div className='mb-12'>
+          <h3 className='text-xl font-semibold text-black mb-4 border-b border-gray-300 pb-2'>
+            차주 계획
+          </h3>
+          <div className='space-y-3 ml-4'>
+            {reportJson.next_week_schedule.map((schedule, scheduleIndex) => (
+              <div key={scheduleIndex} className='flex items-start gap-3'>
+                <span className='text-gray-600 font-medium mt-1'>•</span>
+                <div className='flex-1'>
+                  <div className='flex justify-between items-start mb-1'>
+                    <p className='text-black font-medium leading-relaxed'>
+                      {schedule.task_name}
+                    </p>
+                    <span className='text-sm text-gray-500 ml-4 whitespace-nowrap'>
+                      {schedule.start_date} ~ {schedule.end_date}
+                    </span>
+                  </div>
+                  <p className='text-black text-sm leading-relaxed'>
+                    {schedule.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

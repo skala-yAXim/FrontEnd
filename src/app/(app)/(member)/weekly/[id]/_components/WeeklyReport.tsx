@@ -39,7 +39,7 @@ export default function WeeklyReport({ report }: WeeklyReportProps) {
           return (
             <div
               key={projectReport.project_id}
-              className='max-w-4xl mx-auto mb-6 p-6'
+              className='max-w-4xl mx-auto p-6'
             >
               <div className='flex items-center gap-3 pb-6'>
                 <div className='h-0.5 w-6 bg-muted-foreground/50'></div>
@@ -63,7 +63,7 @@ export default function WeeklyReport({ report }: WeeklyReportProps) {
               {projectReport.next_week_schedule?.length > 0 && (
                 <div className='mt-8'>
                   <h3 className='text-lg font-bold text-foreground mb-4'>
-                    [{projectReport.project_name}] 차주 계획
+                    차주 계획
                   </h3>
                   <NextWeekScheduleSection
                     schedules={projectReport.next_week_schedule}
@@ -76,14 +76,12 @@ export default function WeeklyReport({ report }: WeeklyReportProps) {
       )}
 
       {/* 주간 회고 */}
-      <div className='max-w-4xl mx-auto mb-8 p-6'>
+      <div className='max-w-4xl mx-auto p-6'>
         <h2 className='text-xl font-bold text-foreground mb-4'>
           {weeklyReflection?.title || "주간 회고 및 개선점"}
         </h2>
         <ReflectionSection content={weeklyReflection?.content || []} />
       </div>
-
-      {/* 기존 차주 계획 섹션 제거*/}
     </ReportLayout>
   );
 }

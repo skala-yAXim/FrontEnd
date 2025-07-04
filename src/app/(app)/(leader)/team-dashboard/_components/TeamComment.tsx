@@ -29,7 +29,7 @@ export default function TeamComment() {
     <div className='flex flex-col py-10 items-center justify-center'>
       <SplitText
         text={comment}
-        className='text-2xl font-semibold'
+        className='text-3xl font-semibold'
         delay={100}
         duration={0.6}
         ease='power3.out'

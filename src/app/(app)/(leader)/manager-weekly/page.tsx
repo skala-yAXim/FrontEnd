@@ -121,7 +121,7 @@ export default function ManagerWeeklyPage() {
       label: "생성일자",
       sortable: true,
       render: value => (
-        <span className='text-sm text-muted-foreground'>
+        <span className='text-sm text-foreground'>
           {value ? new Date(value).toLocaleDateString("ko-KR") : "-"}
         </span>
       ),
