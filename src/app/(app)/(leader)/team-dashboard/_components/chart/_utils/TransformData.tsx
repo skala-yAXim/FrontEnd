@@ -1,4 +1,4 @@
-import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
+import { StaticsTeamType } from "@/types/dashboardType";
 import {
   MultipleBarChartData,
   StackedBarChartData,
@@ -55,8 +55,56 @@ export function transformToAvgChartData(
   };
 }
 
+// 🎯 핵심 수정: 개인 대시보드 방식으로 변경
+export function transformToTypeBasedChart(
+  actualData: StaticsTeamType,
+  averageData: StaticsTeamType
+) {
+  // 개인 대시보드와 동일한 방식으로 수정
+  if (!actualData || !averageData) return [];
+
+  return [
+    {
+      type: "Email",
+      value: (safe(actualData.email.receive) + safe(actualData.email.send)) / 7,
+      avg: (safe(averageData.email.receive) + safe(averageData.email.send)) / 7,
+    },
+    {
+      type: "Git",
+      value:
+        (safe(actualData.git.pull_request) +
+          safe(actualData.git.commit) +
+          safe(actualData.git.issue)) /
+        7,
+      avg:
+        (safe(averageData.git.pull_request) +
+          safe(averageData.git.commit) +
+          safe(averageData.git.issue)) /
+        7,
+    },
+    {
+      type: "Docs",
+      value:
+        (safe(actualData.docs.docx) +
+          safe(actualData.docs.xlsx) +
+          safe(actualData.docs.etc)) /
+        7,
+      avg:
+        (safe(averageData.docs.docx) +
+          safe(averageData.docs.xlsx) +
+          safe(averageData.docs.etc)) /
+        7,
+    },
+    {
+      type: "Teams",
+      value: safe(actualData.teams.post) / 7,
+      avg: safe(averageData.teams.post) / 7,
+    },
+  ];
+}
+
 export function aggregateToWeekdayChart(
-  data: StaticsUserType[]
+  data: StaticsTeamType[]
 ): StackedBarChartData[] {
   // 초기화된 주간 데이터 (일 ~ 토)
   const summary: Record<string, StackedBarChartData> = weekDays.reduce(

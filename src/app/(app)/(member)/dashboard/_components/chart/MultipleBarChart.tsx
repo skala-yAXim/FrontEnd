@@ -23,8 +23,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import {
-  useGetDashboardUser,
-  useGetDashboardUserAvg,
+  useGetStaticsTeamWeek,
+  useGetStaticsUserWeek,
 } from "@/hooks/useDashboardQueries";
 import { transformToTypeBasedChart } from "./_utils/TransformData";
 
@@ -36,23 +36,22 @@ const chartConfig = {
     color: "hsl(var(--chart-3))",
   },
   avg: {
-    label: "평균 활동량",
+    label: "조직 평균 활동량",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
 export function ChartBarMultiple() {
-  // react-query로 데이터 패칭
   const {
     data: rawData,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useGetDashboardUser();
+  } = useGetStaticsUserWeek();
   const {
     data: avgRawData,
     isLoading: isLoadingAvg,
     isError: isErrorAvg,
-  } = useGetDashboardUserAvg();
+  } = useGetStaticsTeamWeek();
 
   // 데이터 전처리
   const chartData =
@@ -170,7 +169,7 @@ export function ChartBarMultiple() {
                 />
                 <Bar
                   dataKey='avg'
-                  name='평균 활동량'
+                  name='조직 평균 활동량'
                   fill='var(--color-avg)'
                   radius={4}
                   layout='horizontal'

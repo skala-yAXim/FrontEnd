@@ -1,6 +1,6 @@
 "use client";
 
-import { Cell, Pie, PieChart } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 import {
   Card,
@@ -18,7 +18,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-import { useGetStaticsTeamWeek } from "@/hooks/useTeamDashboardQueries";
+import { useGetStaticsTeamWeek } from "@/hooks/useDashboardQueries";
 
 export const description = "A pie chart with a legend";
 
@@ -87,86 +87,99 @@ export function ChartPieLegend() {
 
   if (isLoading) {
     return (
-      <Card className='flex flex-col'>
+      <Card className='flex flex-col flex-1'>
         <CardHeader>
           <CardTitle>로딩 중...</CardTitle>
         </CardHeader>
+        <CardContent className='flex-1 flex items-center justify-center'>
+          <div className='text-muted-foreground'>로딩 중...</div>
+        </CardContent>
       </Card>
     );
   }
 
   if (isError) {
     return (
-      <Card className='flex flex-col'>
+      <Card className='flex flex-col flex-1'>
         <CardHeader>
           <CardTitle>데이터를 불러오는데 실패했습니다.</CardTitle>
         </CardHeader>
+        <CardContent className='flex-1 flex items-center justify-center'>
+          <div className='text-destructive'>
+            데이터를 불러오는데 실패했습니다.
+          </div>
+        </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className='flex flex-col border-0 shadow-none bg-transparent'>
+    <Card className='flex flex-col flex-1 border-0 shadow-none bg-transparent'>
       <CardHeader className='items-center pb-0'>
         <CardTitle className='text-lg font-semibold'>업무 동향</CardTitle>
         <CardDescription>활동 유형별 분포</CardDescription>
       </CardHeader>
 
-      <CardContent>
-        <ChartContainer config={chartConfig} className='mx-auto'>
-          <PieChart>
-            <Pie
-              data={chartData}
-              dataKey='count'
-              nameKey='category'
-              cx='50%'
-              cy='50%'
-              innerRadius='50%'
-              outerRadius='70%'
-              labelLine={false}
-              label={({ x, y, name, value }) => {
-                const percentage = Math.round((value / totalCount) * 100);
-                return (
-                  <text
-                    x={x}
-                    y={y}
-                    fill='hsl(var(--muted-foreground))'
-                    textAnchor='middle'
-                    dominantBaseline='central'
-                    className='text-xs font-medium'
-                  >
-                    {percentage}%
-                  </text>
-                );
-              }}
-            >
-              {chartData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={chartConfig[entry.category].color}
-                />
-              ))}
-            </Pie>
+      <CardContent className='flex-1 flex'>
+        <ChartContainer
+          config={chartConfig}
+          className='mx-auto w-full flex-1 flex flex-col'
+        >
+          <ResponsiveContainer width='100%' height='100%'>
+            <PieChart>
+              <Pie
+                data={chartData}
+                dataKey='count'
+                nameKey='category'
+                cx='50%'
+                cy='50%'
+                innerRadius='30%'
+                outerRadius='70%'
+                labelLine={false}
+                label={({ x, y, name, value }) => {
+                  const percentage = Math.round((value / totalCount) * 100);
+                  return (
+                    <text
+                      x={x}
+                      y={y}
+                      fill='hsl(var(--muted-foreground))'
+                      textAnchor='middle'
+                      dominantBaseline='central'
+                      className='text-xs font-medium'
+                    >
+                      {percentage}%
+                    </text>
+                  );
+                }}
+              >
+                {chartData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={chartConfig[entry.category].color}
+                  />
+                ))}
+              </Pie>
 
-            <ChartLegend
-              content={<ChartLegendContent nameKey='category' />}
-              className='-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center mt-4'
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  nameKey='count'
-                  formatter={(value, name) => {
-                    const label = chartConfig[name as string]?.label || name;
-                    return `${label}: ${value}건`;
-                  }}
-                />
-              }
-            />
-          </PieChart>
+              <ChartLegend
+                content={<ChartLegendContent nameKey='category' />}
+                className='flex-wrap gap-2 *:basis-1/4 *:justify-center'
+              />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    nameKey='count'
+                    formatter={(value, name) => {
+                      const label = chartConfig[name as string]?.label || name;
+                      return `${label}: ${value}건`;
+                    }}
+                  />
+                }
+              />
+            </PieChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
-      <CardFooter className='flex-col items-center gap-1'>
+      <CardFooter className='flex-col items-center gap-1 mt-0'>
         <div className='font-medium'>총 활동: {totalCount}건</div>
       </CardFooter>
     </Card>

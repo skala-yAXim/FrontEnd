@@ -22,34 +22,37 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useGetStaticsTeamWeek } from "@/hooks/useTeamDashboardQueries";
+import {
+  useGetDashboardUser,
+  useGetDashboardUserAvg,
+} from "@/hooks/useDashboardQueries";
 import { transformToTypeBasedChart } from "./_utils/TransformData";
 
 export const description = "A multiple bar chart";
 
 const chartConfig = {
   value: {
-    label: "팀 활동량",
+    label: "나의 활동량",
     color: "hsl(var(--chart-3))",
   },
   avg: {
-    label: "조직 평균 활동량",
+    label: "평균 활동량",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
 export function ChartBarMultiple() {
+  // react-query로 데이터 패칭
   const {
     data: rawData,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useGetStaticsTeamWeek();
-
+  } = useGetDashboardUser();
   const {
     data: avgRawData,
     isLoading: isLoadingAvg,
     isError: isErrorAvg,
-  } = useGetStaticsTeamWeek();
+  } = useGetDashboardUserAvg();
 
   // 데이터 전처리
   const chartData =
@@ -157,7 +160,7 @@ export function ChartBarMultiple() {
                 />
                 <Bar
                   dataKey='value'
-                  name='팀 활동량'
+                  name='나의 활동량'
                   fill='var(--color-value)'
                   radius={4}
                   layout='horizontal'
@@ -167,7 +170,7 @@ export function ChartBarMultiple() {
                 />
                 <Bar
                   dataKey='avg'
-                  name='조직 평균 활동량'
+                  name='평균 활동량'
                   fill='var(--color-avg)'
                   radius={4}
                   layout='horizontal'

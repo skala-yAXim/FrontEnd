@@ -1,10 +1,20 @@
-import { StaticsUserType } from "@/types/dashboardType";
+import {
+  DocsType,
+  EmailType,
+  GitType,
+  StaticsUserType,
+  TeamsType,
+} from "@/types/dashboardType";
 import {
   MultipleBarChartData,
   StackedBarChartData,
 } from "@/types/statisticsType";
 
 const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const emptyTeamsType: TeamsType = { post: 0, reply: 0 };
+const emptyDocsType: DocsType = { docx: 0, xlsx: 0, pptx: 0, etc: 0 };
+const emptyEmailType: EmailType = { receive: 0, send: 0 };
+const emptyGitType: GitType = { pull_request: 0, commit: 0, issue: 0 };
 
 const safe = (v: any) => (typeof v === "number" ? v : 0);
 
@@ -16,9 +26,7 @@ export function transformToAvgChartData(
     email: actualData.map((item, idx) => {
       const day = weekDays[new Date(item.report_date).getDay()];
       const value = safe(item.email.receive) + safe(item.email.send);
-      const avg =
-        safe(averageData[idx].email.receive) +
-        safe(averageData[idx].email.send);
+      const avg = value / 2;
       return { day, email: value, avg };
     }),
 
@@ -28,10 +36,7 @@ export function transformToAvgChartData(
         safe(item.git.pull_request) +
         safe(item.git.commit) +
         safe(item.git.issue);
-      const avg =
-        safe(averageData[idx].git.pull_request) +
-        safe(averageData[idx].git.commit) +
-        safe(averageData[idx].git.issue);
+      const avg = value / 3;
       return { day, git: value, avg };
     }),
 
@@ -39,10 +44,7 @@ export function transformToAvgChartData(
       const day = weekDays[new Date(item.report_date).getDay()];
       const value =
         safe(item.docs.docx) + safe(item.docs.xlsx) + safe(item.docs.etc);
-      const avg =
-        safe(averageData[idx].docs.docx) +
-        safe(averageData[idx].docs.xlsx) +
-        safe(averageData[idx].docs.etc);
+      const avg = value / 3;
       return { day, docs: value, avg };
     }),
 
@@ -56,48 +58,48 @@ export function transformToAvgChartData(
 }
 
 export function transformToTypeBasedChart(
-  actualData: StaticsUserType[],
-  averageData: StaticsUserType[]
+  actualData: StaticsUserType,
+  averageData: StaticsUserType
 ) {
   // 특정 날짜(예: 가장 최근 날짜)의 데이터를 사용
-  if (!actualData.length || !averageData.length) return [];
-
-  // 가장 최근 날짜의 데이터 사용
-  const latestData = actualData[actualData.length - 1];
-  const latestAvg = averageData[averageData.length - 1];
+  if (!actualData || !averageData) return [];
 
   return [
     {
       type: "Email",
-      value: safe(latestData.email.receive) + safe(latestData.email.send),
-      avg: safe(latestAvg.email.receive) + safe(latestAvg.email.send),
+      value: (safe(actualData.email.receive) + safe(actualData.email.send)) / 7,
+      avg: (safe(averageData.email.receive) + safe(averageData.email.send)) / 7,
     },
     {
       type: "Git",
       value:
-        safe(latestData.git.pull_request) +
-        safe(latestData.git.commit) +
-        safe(latestData.git.issue),
+        (safe(actualData.git.pull_request) +
+          safe(actualData.git.commit) +
+          safe(actualData.git.issue)) /
+        7,
       avg:
-        safe(latestAvg.git.pull_request) +
-        safe(latestAvg.git.commit) +
-        safe(latestAvg.git.issue),
+        (safe(averageData.git.pull_request) +
+          safe(averageData.git.commit) +
+          safe(averageData.git.issue)) /
+        7,
     },
     {
       type: "Docs",
       value:
-        safe(latestData.docs.docx) +
-        safe(latestData.docs.xlsx) +
-        safe(latestData.docs.etc),
+        (safe(actualData.docs.docx) +
+          safe(actualData.docs.xlsx) +
+          safe(actualData.docs.etc)) /
+        7,
       avg:
-        safe(latestAvg.docs.docx) +
-        safe(latestAvg.docs.xlsx) +
-        safe(latestAvg.docs.etc),
+        (safe(averageData.docs.docx) +
+          safe(averageData.docs.xlsx) +
+          safe(averageData.docs.etc)) /
+        7,
     },
     {
       type: "Teams",
-      value: safe(latestData.teams.post),
-      avg: safe(latestAvg.teams.post),
+      value: safe(actualData.teams.post) / 7,
+      avg: safe(averageData.teams.post) / 7,
     },
   ];
 }
