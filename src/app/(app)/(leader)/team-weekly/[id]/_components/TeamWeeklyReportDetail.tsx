@@ -40,6 +40,33 @@ export default function TeamWeeklyReportDetail({
         <p className='text-black leading-relaxed'>{item.summary}</p>
       </div>
 
+      {/* 프로젝트별 차주 계획 - 이 부분을 summary 다음에 추가 */}
+      {item.next_week_schedule.length > 0 && (
+        <div className='mb-6'>
+          <h4 className='text-lg font-medium mb-3 px-4'>차주 계획</h4>
+          <div className='space-y-2 ml-4'>
+            {item.next_week_schedule.map((schedule, index) => (
+              <div key={index} className='flex items-start gap-3 px-4'>
+                <span className='text-black font-medium mt-1'>•</span>
+                <div className='flex-1'>
+                  <div className='flex justify-between items-start mb-1'>
+                    <p className='text-black font-medium leading-relaxed'>
+                      {schedule.task_name}
+                    </p>
+                    <span className='text-sm text-gray-500 ml-4 whitespace-nowrap'>
+                      {schedule.start_date} ~ {schedule.end_date}
+                    </span>
+                  </div>
+                  <p className='text-black text-sm leading-relaxed'>
+                    {schedule.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <ProgressLegend />
 
       <div className='flex items-center mb-6 px-3'>
@@ -91,35 +118,6 @@ export default function TeamWeeklyReportDetail({
 
       {reportJson.team_weekly_report.map((item, index) =>
         renderProjectItem(item, index)
-      )}
-
-      {/* 차주 계획 섹션 - 코리안 보고서 스타일 */}
-      {reportJson.next_week_schedule.length > 0 && (
-        <div className='mb-12'>
-          <h3 className='text-xl font-semibold text-black mb-4 border-b border-gray-300 pb-2'>
-            차주 계획
-          </h3>
-          <div className='space-y-3 ml-4'>
-            {reportJson.next_week_schedule.map((schedule, scheduleIndex) => (
-              <div key={scheduleIndex} className='flex items-start gap-3'>
-                <span className='text-gray-600 font-medium mt-1'>•</span>
-                <div className='flex-1'>
-                  <div className='flex justify-between items-start mb-1'>
-                    <p className='text-black font-medium leading-relaxed'>
-                      {schedule.task_name}
-                    </p>
-                    <span className='text-sm text-gray-500 ml-4 whitespace-nowrap'>
-                      {schedule.start_date} ~ {schedule.end_date}
-                    </span>
-                  </div>
-                  <p className='text-black text-sm leading-relaxed'>
-                    {schedule.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       )}
     </div>
   );
