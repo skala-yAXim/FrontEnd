@@ -266,7 +266,7 @@ export default function GitIntegrationClientSection() {
                         "_blank"
                       )
                     }
-                    className='px-3 py-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 shadow-sm hover:shadow group'
+                    className='px-3 py-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-gray-100 transition-all duration-300'
                   >
                     <ExternalLink className='w-4 h-4 mr-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform' />
                     <span>GitHub 보기</span>
