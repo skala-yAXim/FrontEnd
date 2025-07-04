@@ -58,9 +58,10 @@ export function ChartBarStacked() {
 
   if (isLoading) {
     return (
-      <Card className='flex flex-col flex-1'>
+      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col'>
         <CardHeader>
           <CardTitle>일일 업무 활동</CardTitle>
+          <CardDescription>일주일 간의 활동 유형별 통계</CardDescription>
         </CardHeader>
         <CardContent className='flex-1 flex items-center justify-center'>
           <div className='text-muted-foreground'>로딩 중...</div>
@@ -71,9 +72,10 @@ export function ChartBarStacked() {
 
   if (isError) {
     return (
-      <Card className='flex flex-col flex-1'>
+      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col'>
         <CardHeader>
           <CardTitle>일일 업무 활동</CardTitle>
+          <CardDescription>일주일 간의 활동 유형별 통계</CardDescription>
         </CardHeader>
         <CardContent className='flex-1 flex items-center justify-center'>
           <div className='text-destructive'>
@@ -85,44 +87,80 @@ export function ChartBarStacked() {
   }
 
   return (
-    <Card className='mt-0 border-0 shadow-none bg-transparent flex flex-col flex-1'>
+    <Card className='border-0 overflow-hidden shadow-none h-full flex flex-col'>
       <CardHeader>
         <CardTitle className='text-lg font-semibold'>주간 활동 요약</CardTitle>
-        <CardDescription>일주일 간의 활동 유형별 통계</CardDescription>
+        <CardDescription className='mt-1'>
+          일주일 간의 활동 유형별 통계
+        </CardDescription>
       </CardHeader>
-      <CardContent className='flex-1 flex'>
+      <CardContent className='flex-1 flex justify-center'>
         <ChartContainer
           config={chartConfig}
-          className='w-full flex-1 flex flex-col'
+          className='w-full flex-1 flex flex-col items-center'
         >
-          <ResponsiveContainer width='100%' height='100%'>
-            <BarChart accessibilityLayer data={chartData}>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey='day'
-                tickLine={false}
-                tickMargin={10}
-                axisLine={false}
-                tickFormatter={value => value.slice(0, 3)}
-              />
-              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-              <ChartLegend content={<ChartLegendContent />} />
-              <Bar
-                dataKey='email'
-                stackId='a'
-                fill='var(--color-email)'
-                radius={[0, 0, 4, 4]}
-              />
-              <Bar dataKey='git' stackId='a' fill='var(--color-git)' />
-              <Bar dataKey='docs' stackId='a' fill='var(--color-docs)' />
-              <Bar
-                dataKey='teams'
-                stackId='a'
-                fill='var(--color-teams)'
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <div
+            className='w-full h-full flex-1 px-4 md:px-8 py-0 mx-auto'
+            style={{ maxWidth: "900px" }}
+          >
+            <ResponsiveContainer width='100%' height='90%'>
+              <BarChart
+                accessibilityLayer
+                data={chartData}
+                margin={{ top: 10, right: 20, bottom: 20, left: 10 }}
+                barGap={2}
+              >
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey='day'
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={10}
+                  fontSize={12}
+                  tickFormatter={value => value.slice(0, 3)}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Bar
+                  dataKey='email'
+                  stackId='a'
+                  name='Email'
+                  fill='var(--color-email)'
+                  radius={[0, 0, 4, 4]}
+                  minPointSize={3}
+                />
+                <Bar
+                  dataKey='git'
+                  stackId='a'
+                  name='Git'
+                  fill='var(--color-git)'
+                  radius={[0, 0, 0, 0]}
+                  minPointSize={3}
+                />
+                <Bar
+                  dataKey='docs'
+                  stackId='a'
+                  name='Docs'
+                  fill='var(--color-docs)'
+                  radius={[0, 0, 0, 0]}
+                  minPointSize={3}
+                />
+                <Bar
+                  dataKey='teams'
+                  stackId='a'
+                  name='Teams'
+                  fill='var(--color-teams)'
+                  radius={[4, 4, 0, 0]}
+                  minPointSize={3}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <ChartLegend>
+            <ChartLegendContent />
+          </ChartLegend>
         </ChartContainer>
       </CardContent>
     </Card>

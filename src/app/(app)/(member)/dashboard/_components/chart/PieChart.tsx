@@ -133,6 +133,8 @@ export function ChartPieLegend() {
                 nameKey='category'
                 cx='50%'
                 cy='50%'
+                innerRadius='30%'
+                outerRadius='70%'
                 labelLine={false}
                 label={({ x, y, name, value }) => {
                   const percentage = Math.round((value / totalCount) * 100);

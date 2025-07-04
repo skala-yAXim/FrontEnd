@@ -55,6 +55,53 @@ export function transformToAvgChartData(
   };
 }
 
+export function transformToTypeBasedChart(
+  actualData: StaticsUserType[],
+  averageData: StaticsUserType[]
+) {
+  // 특정 날짜(예: 가장 최근 날짜)의 데이터를 사용
+  if (!actualData.length || !averageData.length) return [];
+
+  // 가장 최근 날짜의 데이터 사용
+  const latestData = actualData[actualData.length - 1];
+  const latestAvg = averageData[averageData.length - 1];
+
+  return [
+    {
+      type: "Email",
+      value: safe(latestData.email.receive) + safe(latestData.email.send),
+      avg: safe(latestAvg.email.receive) + safe(latestAvg.email.send),
+    },
+    {
+      type: "Git",
+      value:
+        safe(latestData.git.pull_request) +
+        safe(latestData.git.commit) +
+        safe(latestData.git.issue),
+      avg:
+        safe(latestAvg.git.pull_request) +
+        safe(latestAvg.git.commit) +
+        safe(latestAvg.git.issue),
+    },
+    {
+      type: "Docs",
+      value:
+        safe(latestData.docs.docx) +
+        safe(latestData.docs.xlsx) +
+        safe(latestData.docs.etc),
+      avg:
+        safe(latestAvg.docs.docx) +
+        safe(latestAvg.docs.xlsx) +
+        safe(latestAvg.docs.etc),
+    },
+    {
+      type: "Teams",
+      value: safe(latestData.teams.post),
+      avg: safe(latestAvg.teams.post),
+    },
+  ];
+}
+
 export function aggregateToWeekdayChart(
   data: StaticsUserType[]
 ): StackedBarChartData[] {

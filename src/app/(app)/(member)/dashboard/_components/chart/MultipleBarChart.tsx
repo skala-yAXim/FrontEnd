@@ -2,10 +2,11 @@
 
 import {
   Bar,
-  BarChart,
   CartesianGrid,
+  ComposedChart,
   ResponsiveContainer,
   XAxis,
+  YAxis,
 } from "recharts";
 
 import {
@@ -22,51 +23,23 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   useGetDashboardUser,
   useGetDashboardUserAvg,
 } from "@/hooks/useDashboardQueries";
-import { MultipleBarChartData } from "@/types/statisticsType";
-import { useState } from "react";
-import { transformToAvgChartData } from "./_utils/TransformData";
+import { transformToTypeBasedChart } from "./_utils/TransformData";
 
 export const description = "A multiple bar chart";
 
 const chartConfig = {
-  email: {
-    label: "Email",
-    color: "hsl(var(--chart-3))",
-  },
-  git: {
-    label: "Git",
-    color: "hsl(var(--chart-3))",
-  },
-  docs: {
-    label: "Docs",
-    color: "hsl(var(--chart-3))",
-  },
-  teams: {
-    label: "Teams",
+  value: {
+    label: "나의 활동량",
     color: "hsl(var(--chart-3))",
   },
   avg: {
-    label: "Average",
+    label: "평균 활동량",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
-
-const emptyChartData: MultipleBarChartData = {
-  email: [],
-  git: [],
-  docs: [],
-  teams: [],
-};
 
 export function ChartBarMultiple() {
   // react-query로 데이터 패칭
@@ -82,23 +55,29 @@ export function ChartBarMultiple() {
   } = useGetDashboardUserAvg();
 
   // 데이터 전처리
-  const chartData: MultipleBarChartData =
-    rawData && avgRawData
-      ? transformToAvgChartData(rawData, avgRawData)
-      : emptyChartData;
+  const chartData =
+    rawData && avgRawData ? transformToTypeBasedChart(rawData, avgRawData) : [];
 
-  const [filter, setFilter] = useState<"email" | "git" | "docs" | "teams">(
-    "email"
-  );
-  const filteredData = chartData[filter];
+  // 최대값 계산
+  const calculateMaxValue = () => {
+    if (!chartData.length) return 100;
+
+    const allValues = chartData.flatMap(item => [item.value, item.avg]);
+    const max = Math.max(...allValues);
+
+    // 데이터의 정확한 최대값 사용 (약간의 여백만 추가)
+    return max * 1.05; // 5% 여백 추가
+  };
+
+  const maxDomain = calculateMaxValue();
 
   // 로딩/에러 처리
   if (isLoadingUser || isLoadingAvg) {
     return (
-      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col'>
+      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col max-h-[500px]'>
         <CardHeader>
-          <CardTitle>일일 업무 활동</CardTitle>
-          <CardDescription>일별 활동량 비교 분석</CardDescription>
+          <CardTitle>활동 유형별 비교</CardTitle>
+          <CardDescription>유형별 활동량 비교 분석</CardDescription>
         </CardHeader>
         <CardContent className='flex-1 flex items-center justify-center'>
           <div className='text-muted-foreground'>로딩 중...</div>
@@ -109,10 +88,10 @@ export function ChartBarMultiple() {
 
   if (isErrorUser || isErrorAvg) {
     return (
-      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col'>
+      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col max-h-[500px]'>
         <CardHeader>
-          <CardTitle>일일 업무 활동</CardTitle>
-          <CardDescription>일별 활동량 비교 분석</CardDescription>
+          <CardTitle>활동 유형별 비교</CardTitle>
+          <CardDescription>유형별 활동량 비교 분석</CardDescription>
         </CardHeader>
         <CardContent className='flex-1 flex items-center justify-center'>
           <div className='text-destructive'>
@@ -124,62 +103,82 @@ export function ChartBarMultiple() {
   }
 
   return (
-    <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col'>
-      <CardHeader className='flex justify-between items-center'>
-        <div>
-          <CardTitle className='text-lg font-semibold'>
-            일별 활동 비교
-          </CardTitle>
-          <CardDescription className='mt-1'>
-            일별 활동량 비교 분석
-          </CardDescription>
-        </div>
-        <div className='flex justify-end items-center'>
-          <div className='min-w-[160px]'>
-            <Select
-              value={filter}
-              onValueChange={value => setFilter(value as any)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent sideOffset={4} avoidCollisions={true}>
-                <SelectItem value='email'>Email</SelectItem>
-                <SelectItem value='git'>Git</SelectItem>
-                <SelectItem value='docs'>Docs</SelectItem>
-                <SelectItem value='teams'>Teams</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+    <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col max-h-[500px]'>
+      <CardHeader>
+        <CardTitle className='text-lg font-semibold'>
+          활동 유형별 비교
+        </CardTitle>
+        <CardDescription className='mt-1'>
+          유형별 활동량 비교 분석
+        </CardDescription>
       </CardHeader>
-      <CardContent className='flex-1 flex'>
+      <CardContent className='flex-1 flex justify-center'>
         <ChartContainer
           config={chartConfig}
-          className='w-full flex-1 flex flex-col'
+          className='w-full flex-1 flex flex-col items-center'
         >
-          <div className='w-full h-full flex-1 px-24'>
-            <ResponsiveContainer width='100%' height='100%'>
-              <BarChart accessibilityLayer data={filteredData}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey='day'
+          <div
+            className='w-full h-full flex-1 px-4 md:px-8 py-0 mx-auto'
+            // style={{ maxHeight: "350px" }}
+          >
+            <ResponsiveContainer width='100%' height={400}>
+              <ComposedChart
+                layout='vertical'
+                accessibilityLayer
+                data={chartData}
+                margin={{ top: 10, right: 20, bottom: 10, left: 10 }}
+              >
+                <CartesianGrid horizontal={false} />
+                <YAxis
+                  dataKey='type'
+                  type='category'
                   tickLine={false}
                   tickMargin={10}
                   axisLine={false}
-                  tickFormatter={value => value.slice(0, 3)}
+                  width={50}
+                  fontSize={12}
+                />
+                <XAxis
+                  type='number'
+                  domain={[0, maxDomain]}
+                  tickFormatter={value => Math.round(value).toString()}
+                  tickLine={false}
+                  axisLine={false}
+                  allowDecimals={false}
+                  fontSize={12}
+                  ticks={[
+                    0,
+                    Math.round(maxDomain / 4),
+                    Math.round(maxDomain / 2),
+                    Math.round((maxDomain * 3) / 4),
+                    Math.round(maxDomain),
+                  ]}
                 />
                 <ChartTooltip
                   cursor={false}
                   content={<ChartTooltipContent indicator='dashed' />}
                 />
                 <Bar
-                  dataKey={filter}
-                  fill={`var(--color-${filter})`}
+                  dataKey='value'
+                  name='나의 활동량'
+                  fill='var(--color-value)'
                   radius={4}
+                  layout='horizontal'
+                  barSize={30}
+                  maxBarSize={30}
+                  minPointSize={5}
                 />
-                <Bar dataKey='avg' fill='var(--color-avg)' radius={4} />
-              </BarChart>
+                <Bar
+                  dataKey='avg'
+                  name='평균 활동량'
+                  fill='var(--color-avg)'
+                  radius={4}
+                  layout='horizontal'
+                  barSize={30}
+                  maxBarSize={30}
+                  minPointSize={5}
+                />
+              </ComposedChart>
             </ResponsiveContainer>
           </div>
         </ChartContainer>
