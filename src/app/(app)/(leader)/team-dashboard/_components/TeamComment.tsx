@@ -62,7 +62,7 @@ export default function TeamComment() {
         rootMargin='-100px'
         textAlign='left'
       />
-      <div className='flex items-center gap-2 bg-muted/30 rounded-md'>
+      <div className='flex items-center gap-2 rounded-md'>
         <CalendarIcon className='h-4 w-4 text-primary' />
         <p className='text-sm font-medium'>
           {staticsTerm ? (
