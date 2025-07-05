@@ -8,7 +8,7 @@ import Providers from "./Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "yAXim | 사내 업무 관리 플랫폼",
+  title: "WeeUp | 사내 업무 관리 플랫폼",
   description: "사내 업무 관리 플랫폼",
   icons: {
     icon: "/favicon.ico",

@@ -113,15 +113,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 className='group flex items-center gap-3 transition-all duration-200 ease-out hover:bg-accent/50 hover:text-accent-foreground'
               >
                 <Image
-                  src='/favicon.png'
-                  alt='SK Logo'
+                  src='/favicon.ico'
+                  alt='WeeUp Logo'
                   className='rounded-sm'
                   width={30}
                   height={30}
                 />
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-medium'>yAXim</span>
-                  <span className='truncate text-sm'>
+                  <span className='truncate font-medium'>WeeUp</span>
+                  <span className='truncate text-xs'>
                     사내 업무 관리 플랫폼
                   </span>
                 </div>
