@@ -156,6 +156,18 @@ export function getAllCards(data: StaticsUserType): DashboardCard[] {
   ];
 }
 
+// 기타 문서를 제외한 카드 데이터를 반환하는 함수
+export function getFilteredCards(data: StaticsUserType): DashboardCard[] {
+  const gitCards = getGitCards(data);
+  const docsCards = getDocsCards(data).filter(
+    card => card.title !== "기타 문서"
+  );
+  const emailCards = getEmailCards(data);
+  const teamsCards = getTeamsCards(data);
+
+  return [...gitCards, ...docsCards, ...emailCards, ...teamsCards];
+}
+
 // 팀 대시보드 관련 유틸리티 함수들
 
 // 팀 Git 활동 카드
@@ -343,4 +355,19 @@ export function getAllTeamCards(
     ...getTeamEmailCards(current, avg),
     ...getTeamTeamsCards(current, avg),
   ];
+}
+
+// 기타 문서를 제외한 팀 카드 데이터를 반환하는 함수
+export function getFilteredTeamCards(
+  current: StaticsTeamType,
+  avg: StaticsTeamType
+): DashboardCard[] {
+  const gitCards = getTeamGitCards(current, avg);
+  const docsCards = getTeamDocsCards(current, avg).filter(
+    card => !card.title.includes("기타")
+  );
+  const emailCards = getTeamEmailCards(current, avg);
+  const teamsCards = getTeamTeamsCards(current, avg);
+
+  return [...gitCards, ...docsCards, ...emailCards, ...teamsCards];
 }

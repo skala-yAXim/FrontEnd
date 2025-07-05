@@ -1,4 +1,8 @@
-import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
+import {
+  StaticsTeamType,
+  StaticsTermType,
+  StaticsUserType,
+} from "@/types/dashboardType";
 import type { GitHubInfo } from "@/types/githubType";
 import { PageRequest, PageResponse } from "@/types/pagination";
 import { Project, ProjectResponse } from "@/types/projectType";
@@ -179,6 +183,10 @@ export class HttpInterface {
   // 개인 Weekly
   async getUserWeeklyReport(id: number): Promise<WeeklyReport> {
     return this.apiClient.get(`/reports/user/weekly/${id}`);
+  }
+
+  async getStaticsTerm(): Promise<StaticsTermType> {
+    return this.apiClient.get<StaticsTermType>("/dashboard/statics/term");
   }
 
   // 여기에 다른 API 요청 메소드들을 추가할 수 있습니다.

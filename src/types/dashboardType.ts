@@ -14,6 +14,11 @@ export interface StaticsTeamType {
   git: GitType;
 }
 
+export interface StaticsTermType {
+  startDate: string;
+  endDate: string;
+}
+
 export interface TeamsType {
   post: number;
   reply: number;

@@ -1,5 +1,9 @@
 import { httpInterface } from "@/lib/api/httpInterface";
-import { StaticsTeamType, StaticsUserType } from "@/types/dashboardType";
+import {
+  StaticsTeamType,
+  StaticsTermType,
+  StaticsUserType,
+} from "@/types/dashboardType";
 import { UserComment } from "@/types/userType";
 import { useQuery } from "@tanstack/react-query";
 
@@ -55,4 +59,13 @@ export const useGetStaticsUserAvg = () => {
   });
 
   return { data: data as StaticsUserType[], isLoading, isError };
+};
+
+export const useGetStaticsTerm = () => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["staticsTerm"],
+    queryFn: () => httpInterface.getStaticsTerm(),
+  });
+
+  return { data: data as StaticsTermType, isLoading, isError };
 };

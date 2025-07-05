@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetStaticsUserWeek } from "@/hooks/useDashboardQueries";
-import { DashboardCard, getAllCards } from "@/utils/dashboardUtilFunc";
+import { DashboardCard, getFilteredCards } from "@/utils/dashboardUtilFunc";
 
 // 개별 카드 컴포넌트
 function StatCard({ card }: { card: DashboardCard }) {
   return (
-    <Card className='h-[120px] border-1 overflow-hidden rounded-xl shadow-none'>
+    <div className='border-0 overflow-hidden rounded-xl shadow-none h-full '>
       <CardHeader className='pb-1'>
         <CardDescription className='flex items-center gap-2 pb-3 text-sm font-medium'>
           <span className='flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary'>
@@ -21,11 +21,11 @@ function StatCard({ card }: { card: DashboardCard }) {
           </span>
           <span className='text-foreground/90'>{card.title}</span>
         </CardDescription>
-        <CardTitle className='text-2xl font-semibold tracking-tight tabular-num bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80'>
+        <CardTitle className='text-xl font-semibold tabular-num bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80'>
           {card.value}
         </CardTitle>
       </CardHeader>
-    </Card>
+    </div>
   );
 }
 
@@ -34,8 +34,8 @@ export function SectionCards() {
 
   if (isLoading) {
     return (
-      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4 lg:px-6'>
-        {[...Array(10)].map((_, i) => (
+      <div className='grid grid-cols-3 gap-4 px-4 h-full'>
+        {[...Array(9)].map((_, i) => (
           <div key={i} className='h-[120px] rounded-xl overflow-hidden'>
             <Card className='h-full border-0 shadow-md bg-gradient-to-br from-background to-muted/30'>
               <CardHeader className='pb-0'>
@@ -52,8 +52,8 @@ export function SectionCards() {
 
   if (isError || !data) {
     return (
-      <div className='px-4 lg:px-6'>
-        <Card className='border-0 bg-destructive/10 text-destructive'>
+      <div className='px-4 h-full flex items-center'>
+        <Card className='border-0 bg-destructive/10 text-destructive w-full'>
           <CardHeader>
             <CardTitle>데이터를 불러올 수 없습니다</CardTitle>
             <CardDescription className='text-destructive/80'>
@@ -65,14 +65,19 @@ export function SectionCards() {
     );
   }
 
-  // 유틸 함수를 사용하여 모든 카드 데이터 가져오기
-  const allCards = getAllCards(data);
+  // 유틸 함수를 사용하여 기타 문서를 제외한 카드 데이터 가져오기
+  const filteredCards = getFilteredCards(data);
 
   return (
-    <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4 lg:px-6'>
-      {allCards.map((card, index) => (
-        <StatCard key={index} card={card} />
-      ))}
-    </div>
+    <Card className='border-0 bg-transparent shadow-none h-full flex flex-col'>
+      <CardHeader className='pb-0'>
+        <CardTitle className='px-4'>업무 현황</CardTitle>
+      </CardHeader>
+      <div className='grid grid-cols-3 gap-x-1 gap-y-8 px-4 lg:px-6 shadow-none flex-1'>
+        {filteredCards.map((card, index) => (
+          <StatCard key={index} card={card} />
+        ))}
+      </div>
+    </Card>
   );
 }

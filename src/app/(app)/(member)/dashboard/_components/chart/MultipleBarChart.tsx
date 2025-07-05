@@ -65,7 +65,7 @@ export function ChartBarMultiple() {
     const max = Math.max(...allValues);
 
     // 데이터의 정확한 최대값 사용 (약간의 여백만 추가)
-    return max * 1.05; // 5% 여백 추가
+    return max * 1.1; // 10% 여백 추가
   };
 
   const maxDomain = calculateMaxValue();
@@ -73,9 +73,11 @@ export function ChartBarMultiple() {
   // 로딩/에러 처리
   if (isLoadingUser || isLoadingAvg) {
     return (
-      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col max-h-[500px]'>
+      <Card className='border-0 shadow-none h-full flex flex-col'>
         <CardHeader>
-          <CardTitle>활동 유형별 비교</CardTitle>
+          <CardTitle className='text-lg font-semibold'>
+            활동 유형별 비교
+          </CardTitle>
           <CardDescription>유형별 활동량 비교 분석</CardDescription>
         </CardHeader>
         <CardContent className='flex-1 flex items-center justify-center'>
@@ -87,9 +89,11 @@ export function ChartBarMultiple() {
 
   if (isErrorUser || isErrorAvg) {
     return (
-      <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col max-h-[500px]'>
+      <Card className='border-0 shadow-none h-full flex flex-col'>
         <CardHeader>
-          <CardTitle>활동 유형별 비교</CardTitle>
+          <CardTitle className='text-lg font-semibold'>
+            활동 유형별 비교
+          </CardTitle>
           <CardDescription>유형별 활동량 비교 분석</CardDescription>
         </CardHeader>
         <CardContent className='flex-1 flex items-center justify-center'>
@@ -102,7 +106,7 @@ export function ChartBarMultiple() {
   }
 
   return (
-    <Card className='border-1 overflow-hidden shadow-none h-full flex flex-col max-h-[500px]'>
+    <Card className='border-0 shadow-none h-full flex flex-col'>
       <CardHeader>
         <CardTitle className='text-lg font-semibold'>
           활동 유형별 비교
@@ -116,18 +120,19 @@ export function ChartBarMultiple() {
           config={chartConfig}
           className='w-full flex-1 flex flex-col items-center'
         >
-          <div
-            className='w-full h-full flex-1 px-4 md:px-8 py-0 mx-auto'
-            // style={{ maxHeight: "350px" }}
-          >
-            <ResponsiveContainer width='100%' height={400}>
+          <div className='w-full h-full flex-1 px-2 md:px-4 py-0 mx-auto'>
+            <ResponsiveContainer width='100%' height={350}>
               <ComposedChart
                 layout='vertical'
                 accessibilityLayer
                 data={chartData}
                 margin={{ top: 10, right: 20, bottom: 10, left: 10 }}
               >
-                <CartesianGrid horizontal={false} />
+                <CartesianGrid
+                  horizontal={false}
+                  stroke='var(--border)'
+                  strokeOpacity={0.5}
+                />
                 <YAxis
                   dataKey='type'
                   type='category'
@@ -136,6 +141,7 @@ export function ChartBarMultiple() {
                   axisLine={false}
                   width={50}
                   fontSize={12}
+                  tick={{ fill: "var(--muted-foreground)" }}
                 />
                 <XAxis
                   type='number'
@@ -145,6 +151,7 @@ export function ChartBarMultiple() {
                   axisLine={false}
                   allowDecimals={false}
                   fontSize={12}
+                  tick={{ fill: "var(--muted-foreground)" }}
                   ticks={[
                     0,
                     Math.round(maxDomain / 4),
@@ -163,8 +170,8 @@ export function ChartBarMultiple() {
                   fill='var(--color-value)'
                   radius={4}
                   layout='horizontal'
-                  barSize={30}
-                  maxBarSize={30}
+                  barSize={25}
+                  maxBarSize={25}
                   minPointSize={5}
                 />
                 <Bar
@@ -173,8 +180,8 @@ export function ChartBarMultiple() {
                   fill='var(--color-avg)'
                   radius={4}
                   layout='horizontal'
-                  barSize={30}
-                  maxBarSize={30}
+                  barSize={25}
+                  maxBarSize={25}
                   minPointSize={5}
                 />
               </ComposedChart>

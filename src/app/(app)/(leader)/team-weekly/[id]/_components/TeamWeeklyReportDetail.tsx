@@ -70,7 +70,7 @@ export default function TeamWeeklyReportDetail({
       <ProgressLegend />
 
       <div className='flex items-center mb-6 px-3'>
-        <span className='text-sm font-medium text-blacck mr-4 whitespace-nowrap'>
+        <span className='text-sm font-medium text-black mr-4 whitespace-nowrap'>
           프로젝트 진행도
         </span>
 

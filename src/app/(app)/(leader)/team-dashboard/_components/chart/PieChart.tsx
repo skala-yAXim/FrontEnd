@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 import {
@@ -22,7 +23,6 @@ import { useGetStaticsTeamWeek } from "@/hooks/useDashboardQueries";
 
 export const description = "A pie chart with a legend";
 
-// 색상 값을 직접 정의하여 사용
 const COLORS = [
   "hsl(var(--chart-1))",
   "hsl(var(--chart-2))",
@@ -55,6 +55,7 @@ const chartConfig: Record<string, { label: string; color: string }> = {
 
 export function ChartPieLegend() {
   const { data, isLoading, isError } = useGetStaticsTeamWeek();
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const chartData = data
     ? [
@@ -85,14 +86,22 @@ export function ChartPieLegend() {
 
   const totalCount = chartData.reduce((acc, curr) => acc + curr.count, 0);
 
+  const handlePieEnter = (_: any, index: number) => {
+    setActiveIndex(index);
+  };
+
+  const handlePieLeave = () => {
+    setActiveIndex(null);
+  };
+
   if (isLoading) {
     return (
-      <Card className='flex flex-col flex-1'>
+      <Card className='flex flex-col flex-1 shadow-sm'>
         <CardHeader>
           <CardTitle>로딩 중...</CardTitle>
         </CardHeader>
         <CardContent className='flex-1 flex items-center justify-center'>
-          <div className='text-muted-foreground'>로딩 중...</div>
+          <div className='text-muted-foreground animate-pulse'>로딩 중...</div>
         </CardContent>
       </Card>
     );
@@ -100,13 +109,30 @@ export function ChartPieLegend() {
 
   if (isError) {
     return (
-      <Card className='flex flex-col flex-1'>
+      <Card className='flex flex-col flex-1 shadow-sm'>
         <CardHeader>
           <CardTitle>데이터를 불러오는데 실패했습니다.</CardTitle>
         </CardHeader>
         <CardContent className='flex-1 flex items-center justify-center'>
           <div className='text-destructive'>
             데이터를 불러오는데 실패했습니다.
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (chartData.length === 0) {
+    return (
+      <Card className='flex flex-col flex-1 border-0 shadow-none bg-transparent'>
+        <CardHeader className='items-center pb-0'>
+          <CardTitle className='text-lg font-semibold'>업무 동향</CardTitle>
+          <CardDescription>활동 유형별 분포</CardDescription>
+        </CardHeader>
+        <CardContent className='flex-1 flex items-center justify-center'>
+          <div className='text-muted-foreground text-center'>
+            <p className='mb-2'>데이터가 없습니다</p>
+            <p className='text-sm'>이번 주에 기록된 활동이 없습니다.</p>
           </div>
         </CardContent>
       </Card>
@@ -133,36 +159,53 @@ export function ChartPieLegend() {
                 nameKey='category'
                 cx='50%'
                 cy='50%'
-                innerRadius='30%'
-                outerRadius='70%'
+                innerRadius='40%'
                 labelLine={false}
                 label={({ x, y, name, value }) => {
                   const percentage = Math.round((value / totalCount) * 100);
-                  return (
+                  return percentage > 5 ? (
                     <text
                       x={x}
                       y={y}
-                      fill='hsl(var(--muted-foreground))'
+                      fill='#fff'
                       textAnchor='middle'
                       dominantBaseline='central'
                       className='text-xs font-medium'
                     >
                       {percentage}%
                     </text>
-                  );
+                  ) : null;
                 }}
+                paddingAngle={2}
+                animationBegin={0}
+                animationDuration={800}
+                onMouseEnter={handlePieEnter}
+                onMouseLeave={handlePieLeave}
               >
                 {chartData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={chartConfig[entry.category].color}
+                    stroke='hsl(var(--background))'
+                    strokeWidth={2}
+                    style={{
+                      filter:
+                        activeIndex === index
+                          ? "drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.3))"
+                          : "none",
+                      opacity:
+                        activeIndex === null || activeIndex === index ? 1 : 0.7,
+                      transition: "all 0.3s ease",
+                    }}
                   />
                 ))}
               </Pie>
 
               <ChartLegend
-                content={<ChartLegendContent nameKey='category' />}
-                className='flex-wrap gap-2 *:basis-1/4 *:justify-center'
+                content={
+                  <ChartLegendContent nameKey='category' className='text-sm' />
+                }
+                className='flex-wrap gap-3 *:basis-auto *:justify-center'
               />
               <ChartTooltip
                 content={
@@ -170,8 +213,12 @@ export function ChartPieLegend() {
                     nameKey='count'
                     formatter={(value, name) => {
                       const label = chartConfig[name as string]?.label || name;
-                      return `${label}: ${value}건`;
+                      const percentage = Math.round(
+                        (Number(value) / totalCount) * 100
+                      );
+                      return `${label}: ${value}건 (${percentage}%)`;
                     }}
+                    className='bg-background/95 backdrop-blur-sm border shadow-md p-2 rounded-md'
                   />
                 }
               />
@@ -179,7 +226,7 @@ export function ChartPieLegend() {
           </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
-      <CardFooter className='flex-col items-center gap-1 mt-0'>
+      <CardFooter className='flex-col items-center gap-1 mt-0 pt-2 border-t border-border/50'>
         <div className='font-medium'>총 활동: {totalCount}건</div>
       </CardFooter>
     </Card>
