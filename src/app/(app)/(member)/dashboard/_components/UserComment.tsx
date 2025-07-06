@@ -1,22 +1,25 @@
 import SplitText from "@/components/typography/SplitText";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetCommentUser } from "@/hooks/useDashboardQueries";
+import {
+  useGetCommentUser,
+  useGetStaticsTerm,
+} from "@/hooks/useDashboardQueries";
 import { format, isValid } from "date-fns";
 import { ko } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 
 export default function UserComment() {
   const { data, isLoading, isError } = useGetCommentUser();
-  // const {
-  //   data: staticsTerm,
-  //   isLoading: staticsTermLoading,
-  //   isError: staticsTermError,
-  // } = useGetStaticsTerm();
+  const {
+    data: staticsTerm,
+    isLoading: staticsTermLoading,
+    isError: staticsTermError,
+  } = useGetStaticsTerm();
 
-  const staticsTerm = {
-    startDate: "2025-06-29",
-    endDate: "2025-07-05",
-  };
+  // const staticsTerm = {
+  //   startDate: "2025-06-29",
+  //   endDate: "2025-07-05",
+  // };
 
   if (isLoading) {
     return (
