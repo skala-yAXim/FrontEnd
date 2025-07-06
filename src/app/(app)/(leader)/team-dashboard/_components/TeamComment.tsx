@@ -1,6 +1,6 @@
 import SplitText from "@/components/typography/SplitText";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetCommentTeam } from "@/hooks/useTeamDashboardQueries";
+import { useGetCommentTeam, useGetStaticsTerm } from "@/hooks/useTeamDashboardQueries";
 import { format, isValid } from "date-fns";
 import { ko } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
@@ -8,13 +8,10 @@ import { CalendarIcon } from "lucide-react";
 export default function TeamComment() {
   const { data, isLoading, isError } = useGetCommentTeam();
 
-  // 임시 데이터 (실제로는 API에서 가져와야 함)
-  const staticsTerm = {
-    startDate: "2025-06-29",
-    endDate: "2025-07-05",
-  };
+  const { data: staticsTerm, isLoading: isTermLoading, isError: isTermError } = useGetStaticsTerm();
 
-  if (isLoading) {
+  // 둘 중 하나라도 로딩 중이면 로딩 표시
+  if (isLoading || isTermLoading) {
     return (
       <div className='flex flex-col py-10 items-center justify-center'>
         <Skeleton className='h-12 w-3/4 mb-2' />
@@ -22,7 +19,8 @@ export default function TeamComment() {
     );
   }
 
-  if (isError) {
+  // 둘 중 하나라도 에러면 에러 표시
+  if (isError || isTermError) {
     return (
       <div className='flex flex-col py-10 items-center justify-center'>
         <p className='text-3xl font-semibold text-center text-destructive'>
