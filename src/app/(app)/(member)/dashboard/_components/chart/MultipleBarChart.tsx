@@ -23,11 +23,10 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import {
-  useGetStaticsTeamWeek,
+  useGetStaticsUserAvg,
   useGetStaticsUserWeek,
 } from "@/hooks/useDashboardQueries";
-import { useGetTeamMembers } from "@/hooks/useMemberWeeklyQueries";
-import { transformToTypeBasedChart } from "./_utils/TransformData";
+import { transformToTypeBasedChart, transformToWeeklyTotal } from "./_utils/TransformData";
 
 export const description = "A multiple bar chart";
 
@@ -52,13 +51,14 @@ export function ChartBarMultiple() {
     data: avgRawData,
     isLoading: isLoadingAvg,
     isError: isErrorAvg,
-  } = useGetStaticsTeamWeek();
-
-  const { data: teamMembers } = useGetTeamMembers();
-  const teamMemberCount = teamMembers?.length || 1;
+  } = useGetStaticsUserAvg();
 
   // 데이터 전처리
-  const chartData = rawData && avgRawData ? transformToTypeBasedChart(rawData, avgRawData, teamMemberCount) : [];
+  const avgWeeklyTotal = avgRawData ? transformToWeeklyTotal(avgRawData) : null;
+
+  const chartData = rawData && avgWeeklyTotal 
+    ? transformToTypeBasedChart(rawData, avgWeeklyTotal) 
+    : [];
 
   // 최대값 계산
   const calculateMaxValue = () => {
