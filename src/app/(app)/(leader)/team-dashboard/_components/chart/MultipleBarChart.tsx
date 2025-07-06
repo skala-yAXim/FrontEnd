@@ -119,7 +119,7 @@ export function ChartBarMultiple() {
           className='w-full flex-1 flex flex-col items-center'
         >
           <div className='w-full h-full flex-1 px-2 md:px-4 py-0 mx-auto'>
-            <ResponsiveContainer width='100%' height={350}>
+            <ResponsiveContainer width='100%' height='100%'>
               <ComposedChart
                 layout='vertical'
                 accessibilityLayer
