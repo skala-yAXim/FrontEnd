@@ -59,7 +59,8 @@ export function transformToAvgChartData(
 
 export function transformToTypeBasedChart(
   actualData: StaticsUserType,
-  averageData: StaticsUserType
+  averageData: StaticsUserType,
+  teamMemberCount: number = 1
 ) {
   // 특정 날짜(예: 가장 최근 날짜)의 데이터를 사용
   if (!actualData || !averageData) return [];
@@ -68,38 +69,22 @@ export function transformToTypeBasedChart(
     {
       type: "Email",
       value: (safe(actualData.email.receive) + safe(actualData.email.send)) / 7,
-      avg: (safe(averageData.email.receive) + safe(averageData.email.send)) / 7,
+      avg: (safe(averageData.email.receive) + safe(averageData.email.send)) / 7 / teamMemberCount,
     },
     {
       type: "Git",
-      value:
-        (safe(actualData.git.pull_request) +
-          safe(actualData.git.commit) +
-          safe(actualData.git.issue)) /
-        7,
-      avg:
-        (safe(averageData.git.pull_request) +
-          safe(averageData.git.commit) +
-          safe(averageData.git.issue)) /
-        7,
+      value: (safe(actualData.git.pull_request) + safe(actualData.git.commit) + safe(actualData.git.issue)) / 7,
+      avg: (safe(averageData.git.pull_request) + safe(averageData.git.commit) + safe(averageData.git.issue)) / 7 / teamMemberCount,
     },
     {
-      type: "Docs",
-      value:
-        (safe(actualData.docs.docx) +
-          safe(actualData.docs.xlsx) +
-          safe(actualData.docs.etc)) /
-        7,
-      avg:
-        (safe(averageData.docs.docx) +
-          safe(averageData.docs.xlsx) +
-          safe(averageData.docs.etc)) /
-        7,
+      type: "Docs", 
+      value: (safe(actualData.docs.docx) + safe(actualData.docs.xlsx) + safe(actualData.docs.etc)) / 7,
+      avg: (safe(averageData.docs.docx) + safe(averageData.docs.xlsx) + safe(averageData.docs.etc)) / 7 / teamMemberCount,
     },
     {
       type: "Teams",
       value: safe(actualData.teams.post) / 7,
-      avg: safe(averageData.teams.post) / 7,
+      avg: safe(averageData.teams.post) / 7 / teamMemberCount,
     },
   ];
 }

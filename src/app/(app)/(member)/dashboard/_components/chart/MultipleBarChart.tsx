@@ -26,6 +26,7 @@ import {
   useGetStaticsTeamWeek,
   useGetStaticsUserWeek,
 } from "@/hooks/useDashboardQueries";
+import { useGetTeamMembers } from "@/hooks/useMemberWeeklyQueries";
 import { transformToTypeBasedChart } from "./_utils/TransformData";
 
 export const description = "A multiple bar chart";
@@ -53,9 +54,11 @@ export function ChartBarMultiple() {
     isError: isErrorAvg,
   } = useGetStaticsTeamWeek();
 
+  const { data: teamMembers } = useGetTeamMembers();
+  const teamMemberCount = teamMembers?.length || 1;
+
   // 데이터 전처리
-  const chartData =
-    rawData && avgRawData ? transformToTypeBasedChart(rawData, avgRawData) : [];
+  const chartData = rawData && avgRawData ? transformToTypeBasedChart(rawData, avgRawData, teamMemberCount) : [];
 
   // 최대값 계산
   const calculateMaxValue = () => {
