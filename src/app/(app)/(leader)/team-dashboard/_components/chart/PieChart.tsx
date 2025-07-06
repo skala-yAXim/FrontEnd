@@ -19,7 +19,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-import { useGetStaticsTeamWeek } from "@/hooks/useDashboardQueries";
+import { useGetStaticsTeamWeek } from "@/hooks/useTeamDashboardQueries";
 
 export const description = "A pie chart with a legend";
 
@@ -96,7 +96,7 @@ export function ChartPieLegend() {
 
   if (isLoading) {
     return (
-      <Card className='flex flex-col flex-1 shadow-sm'>
+      <Card className='flex flex-col flex-1 shadow-sm h-full'>
         <CardHeader>
           <CardTitle>로딩 중...</CardTitle>
         </CardHeader>
@@ -109,7 +109,7 @@ export function ChartPieLegend() {
 
   if (isError) {
     return (
-      <Card className='flex flex-col flex-1 shadow-sm'>
+      <Card className='flex flex-col flex-1 shadow-sm h-full'>
         <CardHeader>
           <CardTitle>데이터를 불러오는데 실패했습니다.</CardTitle>
         </CardHeader>
@@ -124,7 +124,7 @@ export function ChartPieLegend() {
 
   if (chartData.length === 0) {
     return (
-      <Card className='flex flex-col flex-1 border-0 shadow-none bg-transparent'>
+      <Card className='flex flex-col flex-1 shadow-sm h-full'>
         <CardHeader className='items-center pb-0'>
           <CardTitle className='text-lg font-semibold'>업무 동향</CardTitle>
           <CardDescription>활동 유형별 분포</CardDescription>
@@ -140,7 +140,7 @@ export function ChartPieLegend() {
   }
 
   return (
-    <Card className='flex flex-col flex-1 border-0 shadow-none bg-transparent'>
+    <Card className='flex flex-col flex-1 border-0 shadow-none bg-transparent h-full'>
       <CardHeader className='items-center pb-0'>
         <CardTitle className='text-lg font-semibold'>업무 동향</CardTitle>
         <CardDescription>활동 유형별 분포</CardDescription>
@@ -160,6 +160,8 @@ export function ChartPieLegend() {
                 cx='50%'
                 cy='50%'
                 innerRadius='40%'
+                outerRadius='65%'
+                cornerRadius={2}
                 labelLine={false}
                 label={({ x, y, name, value }) => {
                   const percentage = Math.round((value / totalCount) * 100);
@@ -200,6 +202,43 @@ export function ChartPieLegend() {
                   />
                 ))}
               </Pie>
+
+              <text
+                x='50%'
+                y='47%'
+                textAnchor='middle'
+                dominantBaseline='middle'
+                className='font-semibold text-2xl text-muted-foreground'
+              >
+                {totalCount}건
+              </text>
+
+              {chartData.length > 0 && (
+                <>
+                  <text
+                    x='50%'
+                    y='40%'
+                    textAnchor='middle'
+                    dominantBaseline='middle'
+                    className='text-xs text-muted-foreground'
+                  >
+                    총 활동
+                  </text>
+                  <text
+                    x='50%'
+                    y='50%'
+                    textAnchor='middle'
+                    dominantBaseline='middle'
+                    className='text-sm font-medium'
+                  >
+                    {
+                      chartConfig[
+                        chartData.sort((a, b) => b.count - a.count)[0].category
+                      ].label
+                    }
+                  </text>
+                </>
+              )}
 
               <ChartLegend
                 content={
