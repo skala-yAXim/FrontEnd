@@ -1,9 +1,5 @@
 import { httpInterface } from "@/lib/api/httpInterface";
-import {
-  StaticsTeamType,
-  StaticsTermType,
-  StaticsUserType,
-} from "@/types/dashboardType";
+import { StaticsTermType, StaticsUserType } from "@/types/dashboardType";
 import { UserComment } from "@/types/userType";
 import { useQuery } from "@tanstack/react-query";
 
@@ -32,15 +28,6 @@ export const useGetStaticsUserWeek = () => {
   });
 
   return { data: data as StaticsUserType, isLoading, isError };
-};
-
-export const useGetStaticsTeamWeek = () => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["staticsTeamWeek"],
-    queryFn: () => httpInterface.getDashboardTeamWeek(),
-  });
-
-  return { data: data as StaticsTeamType, isLoading, isError };
 };
 
 export const useGetCommentUser = () => {

@@ -22,8 +22,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useGetStaticsTeamWeek } from "@/hooks/useTeamDashboardQueries";
-import { transformToTypeBasedChart } from "./_utils/TransformData";
+import {
+  useGetDashboardTeamAvg,
+  useGetStaticsTeamWeek,
+} from "@/hooks/useTeamDashboardQueries";
+import {
+  transformToTypeBasedChart,
+  transformToWeeklyTotal,
+} from "./_utils/TransformData";
 
 export const description = "A multiple bar chart";
 
@@ -41,19 +47,23 @@ const chartConfig = {
 export function ChartBarMultiple() {
   const {
     data: rawData,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
+    isLoading: isLoadingTeam,
+    isError: isErrorTeam,
   } = useGetStaticsTeamWeek();
 
   const {
     data: avgRawData,
     isLoading: isLoadingAvg,
     isError: isErrorAvg,
-  } = useGetStaticsTeamWeek();
+  } = useGetDashboardTeamAvg();
 
   // 데이터 전처리
+  const avgWeeklyTotal = avgRawData ? transformToWeeklyTotal(avgRawData) : null;
+
   const chartData =
-    rawData && avgRawData ? transformToTypeBasedChart(rawData, avgRawData) : [];
+    rawData && avgWeeklyTotal
+      ? transformToTypeBasedChart(rawData, avgWeeklyTotal)
+      : [];
 
   // 최대값 계산
   const calculateMaxValue = () => {
@@ -69,7 +79,7 @@ export function ChartBarMultiple() {
   const maxDomain = calculateMaxValue();
 
   // 로딩/에러 처리
-  if (isLoadingUser || isLoadingAvg) {
+  if (isLoadingTeam || isLoadingAvg) {
     return (
       <Card className='border-0 shadow-none h-full flex flex-col'>
         <CardHeader>
@@ -85,7 +95,7 @@ export function ChartBarMultiple() {
     );
   }
 
-  if (isErrorUser || isErrorAvg) {
+  if (isErrorTeam || isErrorAvg) {
     return (
       <Card className='border-0 shadow-none h-full flex flex-col'>
         <CardHeader>

@@ -1,90 +1,89 @@
-import {
-  DocsType,
-  EmailType,
-  GitType,
-  StaticsUserType,
-  TeamsType,
-} from "@/types/dashboardType";
-import {
-  MultipleBarChartData,
-  StackedBarChartData,
-} from "@/types/statisticsType";
+import { StaticsUserType } from "@/types/dashboardType";
+import { StackedBarChartData } from "@/types/statisticsType";
 
 const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-const emptyTeamsType: TeamsType = { post: 0, reply: 0 };
-const emptyDocsType: DocsType = { docx: 0, xlsx: 0, pptx: 0, etc: 0 };
-const emptyEmailType: EmailType = { receive: 0, send: 0 };
-const emptyGitType: GitType = { pull_request: 0, commit: 0, issue: 0 };
 
 const safe = (v: any) => (typeof v === "number" ? v : 0);
 
-export function transformToAvgChartData(
-  actualData: StaticsUserType[],
-  averageData: StaticsUserType[]
-): MultipleBarChartData {
-  return {
-    email: actualData.map((item, idx) => {
-      const day = weekDays[new Date(item.report_date).getDay()];
-      const value = safe(item.email.receive) + safe(item.email.send);
-      const avg = value / 2;
-      return { day, email: value, avg };
-    }),
+export function transformToWeeklyTotal(
+  weeklyData: StaticsUserType[]
+): StaticsUserType {
+  if (!weeklyData || weeklyData.length === 0) {
+    return {
+      report_date: "",
+      teams: { post: 0, reply: 0 },
+      docs: { docx: 0, xlsx: 0, pptx: 0, etc: 0 },
+      email: { receive: 0, send: 0 },
+      git: { pull_request: 0, commit: 0, issue: 0 },
+    };
+  }
 
-    git: actualData.map((item, idx) => {
-      const day = weekDays[new Date(item.report_date).getDay()];
-      const value =
-        safe(item.git.pull_request) +
-        safe(item.git.commit) +
-        safe(item.git.issue);
-      const avg = value / 3;
-      return { day, git: value, avg };
-    }),
-
-    docs: actualData.map((item, idx) => {
-      const day = weekDays[new Date(item.report_date).getDay()];
-      const value =
-        safe(item.docs.docx) + safe(item.docs.xlsx) + safe(item.docs.etc);
-      const avg = value / 3;
-      return { day, docs: value, avg };
-    }),
-
-    teams: actualData.map((item, idx) => {
-      const day = weekDays[new Date(item.report_date).getDay()];
-      const value = safe(item.teams.post);
-      const avg = safe(averageData[idx].teams.post);
-      return { day, teams: value, avg };
-    }),
-  };
+  return weeklyData.reduce((total, daily) => ({
+    report_date: "weekly_total",
+    teams: {
+      post: total.teams.post + safe(daily.teams.post),
+      reply: total.teams.reply + safe(daily.teams.reply),
+    },
+    docs: {
+      docx: total.docs.docx + safe(daily.docs.docx),
+      xlsx: total.docs.xlsx + safe(daily.docs.xlsx),
+      pptx: total.docs.pptx + safe(daily.docs.pptx),
+      etc: total.docs.etc + safe(daily.docs.etc),
+    },
+    email: {
+      receive: total.email.receive + safe(daily.email.receive),
+      send: total.email.send + safe(daily.email.send),
+    },
+    git: {
+      pull_request: total.git.pull_request + safe(daily.git.pull_request),
+      commit: total.git.commit + safe(daily.git.commit),
+      issue: total.git.issue + safe(daily.git.issue),
+    },
+  }));
 }
 
 export function transformToTypeBasedChart(
   actualData: StaticsUserType,
-  averageData: StaticsUserType,
-  teamMemberCount: number = 1
+  averageData: StaticsUserType
 ) {
-  // 특정 날짜(예: 가장 최근 날짜)의 데이터를 사용
   if (!actualData || !averageData) return [];
 
   return [
     {
       type: "Email",
       value: (safe(actualData.email.receive) + safe(actualData.email.send)) / 7,
-      avg: (safe(averageData.email.receive) + safe(averageData.email.send)) / 7 / teamMemberCount,
+      avg: (safe(averageData.email.receive) + safe(averageData.email.send)) / 7,
     },
     {
       type: "Git",
-      value: (safe(actualData.git.pull_request) + safe(actualData.git.commit) + safe(actualData.git.issue)) / 7,
-      avg: (safe(averageData.git.pull_request) + safe(averageData.git.commit) + safe(averageData.git.issue)) / 7 / teamMemberCount,
+      value:
+        (safe(actualData.git.pull_request) +
+          safe(actualData.git.commit) +
+          safe(actualData.git.issue)) /
+        7,
+      avg:
+        (safe(averageData.git.pull_request) +
+          safe(averageData.git.commit) +
+          safe(averageData.git.issue)) /
+        7,
     },
     {
-      type: "Docs", 
-      value: (safe(actualData.docs.docx) + safe(actualData.docs.xlsx) + safe(actualData.docs.etc)) / 7,
-      avg: (safe(averageData.docs.docx) + safe(averageData.docs.xlsx) + safe(averageData.docs.etc)) / 7 / teamMemberCount,
+      type: "Docs",
+      value:
+        (safe(actualData.docs.docx) +
+          safe(actualData.docs.xlsx) +
+          safe(actualData.docs.etc)) /
+        7,
+      avg:
+        (safe(averageData.docs.docx) +
+          safe(averageData.docs.xlsx) +
+          safe(averageData.docs.etc)) /
+        7,
     },
     {
       type: "Teams",
       value: safe(actualData.teams.post) / 7,
-      avg: safe(averageData.teams.post) / 7 / teamMemberCount,
+      avg: safe(averageData.teams.post) / 7,
     },
   ];
 }
