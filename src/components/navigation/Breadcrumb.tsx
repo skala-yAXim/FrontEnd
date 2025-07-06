@@ -8,7 +8,11 @@ import {
   BreadcrumbSeparator,
   Breadcrumb as BreadcrumbUI,
 } from "@/components/ui/breadcrumb";
+import { useGetMemberWeeklyReport } from "@/hooks/useMemberWeeklyQueries";
+import { useGetProjectDetail } from "@/hooks/useProjectQueries";
+import { useGetTeamWeeklyReport } from "@/hooks/useTeamWeeklyQueries";
 import { useGetDailyReport } from "@/hooks/useUserDailyQueries";
+import { useGetUserWeeklyReport } from "@/hooks/useUserWeeklyQueries";
 import { ChevronRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useMemo } from "react";
@@ -22,6 +26,9 @@ const PATH_LABELS: Record<string, string> = {
   "/weekly": "위클리 보고서",
   "/daily": "데일리 보고서",
   "/mypage": "마이페이지",
+  "/project-management": "프로젝트 관리",
+  "/team-weekly": "팀 주간 보고서",
+  "/manager-weekly": "매니저 위클리 보고서",
   "/settings": "설정",
   "/users": "사용자 관리",
   "/products": "제품 관리",
@@ -33,12 +40,34 @@ const PATH_LABELS: Record<string, string> = {
 export function Breadcrumb() {
   const pathname = usePathname();
 
-  // daily 경로의 ID 추출
+  // 각 보고서 경로의 ID 추출
   const dailyIdMatch = pathname.match(/\/daily\/(\d+)$/);
   const dailyId = dailyIdMatch ? Number(dailyIdMatch[1]) : null;
 
-  // ID가 있으면 데이터 가져오기
-  const { data: reportData } = useGetDailyReport(dailyId!);
+  const weeklyIdMatch = pathname.match(/\/weekly\/(\d+)$/);
+  const weeklyId = weeklyIdMatch ? Number(weeklyIdMatch[1]) : null;
+
+  const teamWeeklyIdMatch = pathname.match(/\/team-weekly\/(\d+)$/);
+  const teamWeeklyId = teamWeeklyIdMatch ? Number(teamWeeklyIdMatch[1]) : null;
+
+  const managerWeeklyIdMatch = pathname.match(/\/manager-weekly\/(\d+)$/);
+  const managerWeeklyId = managerWeeklyIdMatch
+    ? Number(managerWeeklyIdMatch[1])
+    : null;
+
+  const projectIdMatch = pathname.match(/\/project-management\/(\d+)$/);
+  const projectId = projectIdMatch ? Number(projectIdMatch[1]) : null;
+
+  // 각 ID가 있으면 데이터 가져오기
+  const { data: dailyReportData } = useGetDailyReport(dailyId!);
+  const { data: weeklyReportData } = useGetUserWeeklyReport(weeklyId!);
+  const { data: teamWeeklyReportData } = useGetTeamWeeklyReport(teamWeeklyId!);
+  const { data: managerWeeklyReportData } = useGetMemberWeeklyReport(
+    managerWeeklyId!
+  );
+  const { data: projectData } = useGetProjectDetail(
+    projectId?.toString() || null
+  );
 
   // 현재 경로에서 Breadcrumb 생성
   const breadcrumbs = useMemo(() => {
@@ -93,13 +122,13 @@ export function Breadcrumb() {
         // 커스텀 레이블이 있으면 사용, 없으면 세그먼트를 변환하여 사용
         const customLabel = PATH_LABELS[currentPath];
 
-        // daily 경로의 ID인 경우 처리
+        // 각 보고서 타입별 ID 처리
         let displayLabel = customLabel;
         if (!customLabel) {
           if (firstSegment === "/daily" && /^\d+$/.test(segment)) {
-            // 실제 날짜가 있으면 포맷된 날짜 사용, 없으면 기본값
-            if (reportData?.date) {
-              displayLabel = new Date(reportData.date)
+            // Daily: 날짜만 표시
+            if (dailyReportData?.date) {
+              displayLabel = new Date(dailyReportData.date)
                 .toLocaleDateString("ko-KR", {
                   year: "numeric",
                   month: "numeric",
@@ -108,6 +137,43 @@ export function Breadcrumb() {
                 .replace(/\s/g, ""); // "2025. 6. 4." 형태
             } else {
               displayLabel = "보고서 상세";
+            }
+          } else if (firstSegment === "/weekly" && /^\d+$/.test(segment)) {
+            // Weekly: 날짜만 표시
+            if (weeklyReportData?.startDate && weeklyReportData?.endDate) {
+              displayLabel = `${weeklyReportData.startDate} ~ ${weeklyReportData.endDate}`;
+            } else {
+              displayLabel = "위클리 보고서 상세";
+            }
+          } else if (firstSegment === "/team-weekly" && /^\d+$/.test(segment)) {
+            // Team Weekly: 날짜만 표시
+            if (
+              teamWeeklyReportData?.startDate &&
+              teamWeeklyReportData?.endDate
+            ) {
+              displayLabel = `${teamWeeklyReportData.startDate} ~ ${teamWeeklyReportData.endDate}`;
+            } else {
+              displayLabel = "팀 주간 보고서 상세";
+            }
+          } else if (
+            firstSegment === "/manager-weekly" &&
+            /^\d+$/.test(segment)
+          ) {
+            // Manager Weekly: 사용자명만 표시
+            if (managerWeeklyReportData?.userName) {
+              displayLabel = `${managerWeeklyReportData.userName}`;
+            } else {
+              displayLabel = "매니저 위클리 보고서 상세";
+            }
+          } else if (
+            firstSegment === "/project-management" &&
+            /^\d+$/.test(segment)
+          ) {
+            // Project: 프로젝트명만 표시
+            if (projectData?.name) {
+              displayLabel = projectData.name;
+            } else {
+              displayLabel = "프로젝트 상세";
             }
           } else {
             const formattedSegment = segment
@@ -148,13 +214,13 @@ export function Breadcrumb() {
         // 커스텀 레이블이 있으면 사용, 없으면 세그먼트를 변환하여 사용
         const customLabel = PATH_LABELS[currentPath];
 
-        // daily 경로의 ID인 경우 처리
+        // 각 보고서 타입별 ID 처리
         let displayLabel = customLabel;
         if (!customLabel) {
           if (currentPath.includes("/daily/") && /^\d+$/.test(segment)) {
-            // 실제 날짜가 있으면 포맷된 날짜 사용, 없으면 기본값
-            if (reportData?.date) {
-              displayLabel = new Date(reportData.date)
+            // Daily: 날짜만 표시
+            if (dailyReportData?.date) {
+              displayLabel = new Date(dailyReportData.date)
                 .toLocaleDateString("ko-KR", {
                   year: "numeric",
                   month: "numeric",
@@ -163,6 +229,49 @@ export function Breadcrumb() {
                 .replace(/\s/g, ""); // "2025. 6. 4." 형태
             } else {
               displayLabel = "보고서 상세";
+            }
+          } else if (
+            currentPath.includes("/weekly/") &&
+            /^\d+$/.test(segment)
+          ) {
+            // Weekly: 날짜만 표시
+            if (weeklyReportData?.startDate && weeklyReportData?.endDate) {
+              displayLabel = `${weeklyReportData.startDate} ~ ${weeklyReportData.endDate}`;
+            } else {
+              displayLabel = "위클리 보고서 상세";
+            }
+          } else if (
+            currentPath.includes("/team-weekly/") &&
+            /^\d+$/.test(segment)
+          ) {
+            // Team Weekly: 날짜만 표시
+            if (
+              teamWeeklyReportData?.startDate &&
+              teamWeeklyReportData?.endDate
+            ) {
+              displayLabel = `${teamWeeklyReportData.startDate} ~ ${teamWeeklyReportData.endDate}`;
+            } else {
+              displayLabel = "팀 주간 보고서 상세";
+            }
+          } else if (
+            currentPath.includes("/manager-weekly/") &&
+            /^\d+$/.test(segment)
+          ) {
+            // Manager Weekly: 사용자명만 표시
+            if (managerWeeklyReportData?.userName) {
+              displayLabel = `${managerWeeklyReportData.userName}`;
+            } else {
+              displayLabel = "매니저 위클리 보고서 상세";
+            }
+          } else if (
+            currentPath.includes("/project-management/") &&
+            /^\d+$/.test(segment)
+          ) {
+            // Project: 프로젝트명만 표시
+            if (projectData?.name) {
+              displayLabel = projectData.name;
+            } else {
+              displayLabel = "프로젝트 상세";
             }
           } else {
             const formattedSegment = segment
@@ -183,7 +292,14 @@ export function Breadcrumb() {
 
       return items;
     }
-  }, [pathname, reportData]); // reportData 의존성 추가
+  }, [
+    pathname,
+    dailyReportData,
+    weeklyReportData,
+    teamWeeklyReportData,
+    managerWeeklyReportData,
+    projectData,
+  ]); // 모든 데이터 의존성 추가
 
   // 모바일에서는 마지막 항목만, 데스크톱에서는 모든 항목 표시
   const displayedBreadcrumbs = useMemo(() => {

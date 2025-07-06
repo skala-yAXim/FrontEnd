@@ -23,7 +23,7 @@ export default function TeamWeeklyPage() {
   // 페이지네이션 훅 사용
   const pagination = useServerPagination({
     initialPage: 0,
-    initialSize: 7,
+    initialSize: 10,
     initialSort: "createdAt,desc",
   });
 
