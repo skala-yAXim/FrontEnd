@@ -135,7 +135,7 @@ export function getTeamsCards(data: StaticsUserType): DashboardCard[] {
 
   return [
     {
-      title: "Teams 포스트와 답글",
+      title: "게시물과 답글",
       description: "일주일 간 활동 수",
       value: `${post + reply}개`,
       badge: `${post}`,
@@ -332,7 +332,7 @@ export function getTeamTeamsCards(
 
   return [
     {
-      title: "팀 Teams 포스트와 답글",
+      title: "게시물과 답글",
       description: "주간 팀 전체 활동",
       value: `${post + reply}개`,
       badge: `${post}`,
