@@ -35,37 +35,9 @@ export default function TeamWeeklyReportDetail({
       <h3 className='text-xl font-bold text-gray-800 mb-2'>
         [{item.project_name}]
       </h3>
-      <div className='flex items-start gap-3 px-4 py-4 border-t border-gray-300'>
-        <span className='text-black font-medium mt-1'>•</span>
+      <div className='flex items-start gap-3 px-8 py-4 border-t border-gray-300 mb-10'>
         <p className='text-black leading-relaxed'>{item.summary}</p>
       </div>
-
-      {/* 프로젝트별 차주 계획 - 이 부분을 summary 다음에 추가 */}
-      {item.next_week_schedule.length > 0 && (
-        <div className='mb-6'>
-          <h4 className='text-lg font-medium mb-3 px-4'>차주 계획</h4>
-          <div className='space-y-2 ml-4'>
-            {item.next_week_schedule.map((schedule, index) => (
-              <div key={index} className='flex items-start gap-3 px-4'>
-                <span className='text-black font-medium mt-1'>•</span>
-                <div className='flex-1'>
-                  <div className='flex justify-between items-start mb-1'>
-                    <p className='text-black font-medium leading-relaxed'>
-                      {schedule.task_name}
-                    </p>
-                    <span className='text-sm text-gray-500 ml-4 whitespace-nowrap'>
-                      {schedule.start_date} ~ {schedule.end_date}
-                    </span>
-                  </div>
-                  <p className='text-black text-sm leading-relaxed'>
-                    {schedule.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       <ProgressLegend />
 
@@ -88,11 +60,37 @@ export default function TeamWeeklyReportDetail({
         </span>
       </div>
 
-      <div className='grid grid-cols-1 gap-6'>
+      <div className='grid grid-cols-1 gap-6 mb-10'>
         {item.highlights.map((highlight, index) => (
           <HighlightsCard key={index} highlight={highlight} />
         ))}
       </div>
+      {/* 프로젝트별 차주 계획 - 이 부분을 summary 다음에 추가 */}
+      {item.next_week_schedule.length > 0 && (
+        <div className='mb-20'>
+          <h4 className='text-lg font-medium mb-3 px-4'>차주 계획</h4>
+          <div className='space-y-2 ml-4'>
+            {item.next_week_schedule.map((schedule, index) => (
+              <div key={index} className='flex items-start gap-3 px-4 py-2'>
+                <span className='text-black font-medium mt-1'>•</span>
+                <div className='flex-1'>
+                  <div className='flex justify-between items-start mb-1'>
+                    <p className='text-black font-medium leading-relaxed'>
+                      {schedule.task_name}
+                    </p>
+                    <span className='text-sm text-gray-500 ml-4 whitespace-nowrap'>
+                      {schedule.start_date} ~ {schedule.end_date}
+                    </span>
+                  </div>
+                  <p className='text-black text-sm leading-relaxed'>
+                    {schedule.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 
@@ -107,7 +105,7 @@ export default function TeamWeeklyReportDetail({
           </h3>
           <div className='space-y-2 ml-4'>
             {reportJson.team_weekly_reflection.content.map((item, index) => (
-              <div key={index} className='flex items-start gap-3'>
+              <div key={index} className='flex items-start gap-3 py-2'>
                 <span className='text-black font-medium mt-1'>•</span>
                 <p className='text-black leading-relaxed'>{item}</p>
               </div>
