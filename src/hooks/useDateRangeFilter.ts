@@ -1,6 +1,6 @@
 import { useManagerWeeklyFilterStore } from "@/store/filterStore";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
-
 // 타입 정의
 interface DateRangeFilterReturn {
   tempStartDate: Date | undefined;
@@ -40,7 +40,7 @@ export const useDateRangeFilter = (): DateRangeFilterReturn => {
   // 시작일 적용 (달력 닫힐 때)
   const applyStartDate = (date: Date | undefined) => {
     if (date) {
-      const dateString = date.toISOString().split("T")[0];
+      const dateString = format(date, "yyyy-MM-dd");
       setDateRange(dateString, endDate);
       setTempStartDate(date);
     }
@@ -49,7 +49,7 @@ export const useDateRangeFilter = (): DateRangeFilterReturn => {
   // 종료일 적용 (달력 닫힐 때)
   const applyEndDate = (date: Date | undefined) => {
     if (date) {
-      const dateString = date.toISOString().split("T")[0];
+      const dateString = format(date, "yyyy-MM-dd");
       setDateRange(startDate, dateString);
       setTempEndDate(date);
     }

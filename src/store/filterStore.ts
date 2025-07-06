@@ -1,3 +1,4 @@
+import { format, subWeeks } from "date-fns";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -21,8 +22,8 @@ interface ManagerWeeklyFilterState extends FilterState {
 
 const defaultFilters: FilterState = {
   selectedMembers: [],
-  startDate: "2025-01-01",
-  endDate: "2025-12-31",
+  startDate: format(subWeeks(new Date(), 1), "yyyy-MM-dd"),
+  endDate: format(new Date(), "yyyy-MM-dd"),
 };
 
 export const useManagerWeeklyFilterStore = create(
