@@ -38,3 +38,12 @@ export const useGetCommentTeam = () => {
 
   return { data: data as TeamComment, isLoading, isError };
 };
+
+export const useGetStaticsTerm = () => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["staticsTerm"],
+    queryFn: () => httpInterface.getStaticsTerm(),
+  });
+
+  return { data, isLoading, isError };
+};
