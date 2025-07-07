@@ -2,7 +2,6 @@
 
 import { Breadcrumb as AppBreadcrumb } from "@/components/navigation/Breadcrumb";
 import { AppSidebar } from "@/components/sidebar/AppSidebar";
-import { ThemeToggleButton } from "@/components/theme/ThemeToggleButton";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -72,7 +71,7 @@ export default function AppGroupLayout({
 
             {/* 오른쪽 요소 그룹 (다크모드 버튼) */}
             <div className='flex items-center'>
-              <ThemeToggleButton />
+              {/* <ThemeToggleButton /> */}
             </div>
           </div>
         </header>

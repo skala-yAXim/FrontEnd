@@ -1,6 +1,5 @@
 "use client";
 
-import { ThemeToggleButton } from "@/components/theme/ThemeToggleButton";
 import { motion } from "framer-motion";
 import { BrandingSection } from "./components/BrandingSection";
 import { LoginForm } from "./components/LoginForm";
@@ -56,7 +55,7 @@ export default function LoginPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
       >
-        <ThemeToggleButton />
+        {/* <ThemeToggleButton /> */}
       </motion.div>
 
       {/* 좌측 브랜딩 영역 */}
