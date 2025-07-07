@@ -66,7 +66,6 @@ src/
 ├── lib/                    # 유틸리티 라이브러리
 │   └── api/                # API 클라이언트
 │       └── server/         # 서버 사이드 API
-├── services/               # 서비스 로직
 ├── store/                  # Zustand 스토어
 ├── types/                  # 타입 정의
 └── utils/                  # 유틸리티 함수
@@ -83,10 +82,11 @@ API 클라이언트는 다음과 같은 구조로 구성되어 있습니다:
 
 ## 환경 설정
 
-`.env.local` 파일에 다음 환경 변수를 설정하세요:
+`.env.development.local` `.env.production` 파일에 다음 환경 변수를 설정하세요:
 
 ```
 NEXT_PUBLIC_API_URL=백엔드 API URL
+NEXT_PUBLIC_SERVER_CLIENT_SIDE_URL=백엔드 API URL
 ```
 
 ## Docker 배포
