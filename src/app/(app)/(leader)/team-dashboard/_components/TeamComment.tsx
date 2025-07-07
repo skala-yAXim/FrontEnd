@@ -1,6 +1,9 @@
 import SplitText from "@/components/typography/SplitText";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetCommentTeam, useGetStaticsTerm } from "@/hooks/useTeamDashboardQueries";
+import {
+  useGetCommentTeam,
+  useGetStaticsTerm,
+} from "@/hooks/useTeamDashboardQueries";
 import { format, isValid } from "date-fns";
 import { ko } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
@@ -8,7 +11,11 @@ import { CalendarIcon } from "lucide-react";
 export default function TeamComment() {
   const { data, isLoading, isError } = useGetCommentTeam();
 
-  const { data: staticsTerm, isLoading: isTermLoading, isError: isTermError } = useGetStaticsTerm();
+  const {
+    data: staticsTerm,
+    isLoading: isTermLoading,
+    isError: isTermError,
+  } = useGetStaticsTerm();
 
   // 둘 중 하나라도 로딩 중이면 로딩 표시
   if (isLoading || isTermLoading) {

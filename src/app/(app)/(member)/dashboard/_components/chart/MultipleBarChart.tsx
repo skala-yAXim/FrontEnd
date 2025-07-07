@@ -26,7 +26,10 @@ import {
   useGetStaticsUserAvg,
   useGetStaticsUserWeek,
 } from "@/hooks/useDashboardQueries";
-import { transformToTypeBasedChart, transformToWeeklyTotal } from "./_utils/TransformData";
+import {
+  transformToTypeBasedChart,
+  transformToWeeklyTotal,
+} from "./_utils/TransformData";
 
 export const description = "A multiple bar chart";
 
@@ -56,9 +59,10 @@ export function ChartBarMultiple() {
   // 데이터 전처리
   const avgWeeklyTotal = avgRawData ? transformToWeeklyTotal(avgRawData) : null;
 
-  const chartData = rawData && avgWeeklyTotal 
-    ? transformToTypeBasedChart(rawData, avgWeeklyTotal) 
-    : [];
+  const chartData =
+    rawData && avgWeeklyTotal
+      ? transformToTypeBasedChart(rawData, avgWeeklyTotal)
+      : [];
 
   // 최대값 계산
   const calculateMaxValue = () => {
