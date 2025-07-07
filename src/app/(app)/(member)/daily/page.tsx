@@ -26,7 +26,7 @@ export default function DailyReportsPage() {
   // 페이지네이션 훅 사용
   const pagination = useServerPagination({
     initialPage: 0,
-    initialSize: 5,
+    initialSize: 10,
     initialSort: "createdAt,desc",
   });
 
